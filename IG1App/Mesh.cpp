@@ -111,3 +111,29 @@ Mesh::createRGBAxes(GLdouble l)
 
 	return mesh;
 }
+// Create a regular polygon with num vertices and radius r
+Mesh *	
+Mesh::generateRegularPolygon(GLuint num, GLdouble r)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_LINE_LOOP;
+	mesh->mNumVertices = num;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	float alpha = 90;
+	float step = 360 / num;
+	for (int i = 0; i < num; i++) {
+		double x = r * cos(radians(alpha));
+		double y = r * sin(radians(alpha));
+		mesh->vVertices.emplace_back(x, y, 0.0);
+		alpha += step;
+	}
+
+	mesh->vColors.reserve(mesh->mNumVertices);
+	
+	for (int i = 0; i < num; i++) {
+		mesh->vColors.emplace_back(1.0, 1.0, 1.0, 1.0);
+	}
+
+	return mesh;
+
+}
