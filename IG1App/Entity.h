@@ -76,4 +76,13 @@ public:
 
 
 };
+
+class RGBTriangle : public EntityWithColors
+{
+	// Constructor
+	public:
+		explicit RGBTriangle(GLdouble l);
+
+
+};
 #endif //_H_Entities_H_

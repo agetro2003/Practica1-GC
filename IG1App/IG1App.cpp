@@ -56,9 +56,12 @@ IG1App::init()
 	mViewPort = new Viewport(mWinW, mWinH);
 	mCamera = new Camera(mViewPort);
 	mScenes.push_back(new Scene);
-
 	mCamera->set2D();
 	mScenes[0]->init();
+	//aiuda sccene falla :(
+	//mScenes[1]->init();
+
+
 }
 
 void

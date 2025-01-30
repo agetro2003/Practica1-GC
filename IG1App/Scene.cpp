@@ -16,7 +16,13 @@ Scene::init()
 
 	// Graphics objects (entities) of the scene
 	gObjects.push_back(new RGBAxes(400.0));
+	//Heptagono negro
 	gObjects.push_back(new RegularPolygon(7, 200.0, glm::dvec4(0.0, 0.0, 0.0, 1.0)));
+
+	//Triangulo verde
+	gObjects.push_back(new RegularPolygon(3, 200.0, glm::dvec4(0.0, 1.0, 0.0, 1.0)));
+	// circulo magenta
+	gObjects.push_back(new RegularPolygon(40, 200.0, glm::dvec4(1.0, 0.0, 1.0, 1.0)));
 }
 
 Scene::~Scene()

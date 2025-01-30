@@ -72,6 +72,8 @@ void SingleColorEntity::render(const glm::mat4& modelViewMat) const
 		mShader->use();
 		upload(aMat);
 		mShader->setUniform("color", glm::vec4(mColor));
+		//mShader->setUniform("color", mColor);
+
 		mMesh->render();
 	}
 }
@@ -82,4 +84,12 @@ RegularPolygon::RegularPolygon(GLuint num, GLdouble r, glm::dvec4 mColor)
 	mShader = Shader::get("simple");
 	mMesh = Mesh::generateRegularPolygon(num, r);
 	load();
+}
+
+RGBTriangle::RGBTriangle(GLdouble l)
+{
+	mShader = Shader::get("simple");
+	mMesh = Mesh::generateRegularPolygon(3, l);
+	load();
+
 }
