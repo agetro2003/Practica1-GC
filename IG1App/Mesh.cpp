@@ -137,3 +137,28 @@ Mesh::generateRegularPolygon(GLuint num, GLdouble r)
 	return mesh;
 
 }
+
+// Create a RGB triangle with radius r
+Mesh*
+Mesh::generateRGBTriangle(GLdouble r)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLES;
+	mesh->mNumVertices = 3;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	float alpha = 90;
+	float step = 120;
+	for (int i = 0; i < 3; i++) {
+		double x = r * cos(radians(alpha));
+		double y = r * sin(radians(alpha));
+		mesh->vVertices.emplace_back(x, y, 0.0);
+		alpha += step;
+	}
+	mesh->vColors.reserve(mesh->mNumVertices);
+
+	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0);
+
+	return mesh;
+}

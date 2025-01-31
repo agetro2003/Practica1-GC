@@ -88,8 +88,13 @@ RegularPolygon::RegularPolygon(GLuint num, GLdouble r, glm::dvec4 mColor)
 
 RGBTriangle::RGBTriangle(GLdouble l)
 {
-	mShader = Shader::get("simple");
-	mMesh = Mesh::generateRegularPolygon(3, l);
+	
+	mShader = Shader::get("vcolors");
+	//rellenar el triangulo
+	mMesh = Mesh::generateRGBTriangle(l);
+
+	
+
 	load();
 
 }
