@@ -82,6 +82,7 @@ class RGBTriangle : public EntityWithColors
 	// Constructor
 	public:
 		explicit RGBTriangle(GLdouble l);
+		void render(const glm::mat4& modelViewMat) const override;
 
 
 };
