@@ -5,6 +5,8 @@
 
 using namespace glm;
 
+
+
 void
 Scene0::init()
 {
@@ -41,6 +43,8 @@ Scene::~Scene()
 	destroy();
 	resetGL();
 }
+
+ 
 
 void
 Scene::destroy()
@@ -89,3 +93,12 @@ Scene::render(Camera const& cam) const
 	for (Abs_Entity* el : gObjects)
 		el->render(cam.viewMat());
 }
+
+void 
+Scene::update()
+{
+	//update gObjects
+	for (Abs_Entity* el : gObjects)
+		el->update();
+
+	}

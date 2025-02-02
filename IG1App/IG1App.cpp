@@ -38,6 +38,15 @@ IG1App::run() // enters the main event processing loop
 			mNeedsRedisplay = false;
 		}
 
+		// Update the objects of the scene
+		if (mScenes[mCurrentScene]->mUpdateEnabled && glfwGetTime() > mScenes[mCurrentScene]->mNextUpdate) {
+			mScenes[mCurrentScene]->update();
+			mScenes[mCurrentScene]->mNextUpdate = glfwGetTime() + mScenes[mCurrentScene]->FRAME_DURATION;
+			mNeedsRedisplay = true;
+		}
+
+		glfwWaitEventsTimeout(mScenes[mCurrentScene]->mNextUpdate - glfwGetTime());
+
 		// Stop and wait for new events
 		glfwWaitEvents();
 	}
@@ -160,6 +169,10 @@ IG1App::key(unsigned int key)
 			break;
 		case 'o':
 			mCamera->set2D();
+			break;
+			//update the scene
+		case 'u':
+			mScenes[mCurrentScene]->mUpdateEnabled = !mScenes[mCurrentScene]->mUpdateEnabled;
 			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))

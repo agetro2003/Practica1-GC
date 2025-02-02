@@ -28,6 +28,9 @@ public:
 	void load();
 	void unload();
 
+	//update the model matrix
+	virtual void update() {};
+
 protected:
 	Mesh* mMesh = nullptr; // the mesh
 	glm::mat4 mModelMat;  // modeling matrix
@@ -83,6 +86,7 @@ class RGBTriangle : public EntityWithColors
 	public:
 		explicit RGBTriangle(GLdouble l);
 		void render(const glm::mat4& modelViewMat) const override;
+		void update() override;
 
 
 };

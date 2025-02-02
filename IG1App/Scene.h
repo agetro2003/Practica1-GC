@@ -19,12 +19,21 @@ public:
 	Scene& operator=(const Scene& s) = delete; // no copy assignment
 
 	virtual void init() = 0;
-
+	//update gObjects 
+	virtual void update();
 	void render(Camera const& cam) const;
 
 	// load or unload scene data into the GPU
 	void load();
 	void unload();
+
+	// Constant Frame duration in seconds
+	double FRAME_DURATION = 0.2;
+	// Bool to enable update
+	bool mUpdateEnabled = false;
+	// Next update double
+	double mNextUpdate = 0;
+	
 
 protected:
 	void destroy();

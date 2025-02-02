@@ -127,6 +127,27 @@ void RGBTriangle::render(const glm::mat4& modelViewMat) const
 	}
 }
 
+//update the RGBTriangle
+void RGBTriangle::update()
+{
+	glm::mat4 orbitMat = glm::rotate(glm::mat4(1.0), glm::radians(9.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+
+	glm::mat4 orbited = orbitMat * mModelMat;
+
+	glm::vec3 initialPos = glm::vec3(orbited[3]);
+
+	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(18.0f),  glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
+
+	mModelMat = toPos * rotateMat * toOrigin * orbited;
+
+
+
+
+	
+}
+
 // Constructor
 RGBRectangle::RGBRectangle(GLdouble w, GLdouble h)
 {
