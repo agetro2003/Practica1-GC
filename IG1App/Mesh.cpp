@@ -141,9 +141,39 @@ Mesh::generateRGBTriangle(GLdouble r)
 	mesh->mPrimitive = GL_TRIANGLES;	
 	mesh->vColors.reserve(mesh->mNumVertices);
 
+	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0); // red
+	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0); // green
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0); // blue
+
+	return mesh;
+}
+
+// Create a rectangle with width w and height h
+Mesh*
+Mesh::generateRectangle(GLdouble w, GLdouble h)
+{
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 4;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vVertices.emplace_back(w * 0.5, h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(-w * 0.5, h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(w * 0.5, -h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(-w * 0.5, -h * 0.5, 0.0);
+	
+	return mesh;
+}
+
+// Create a RGB rectangle with width w, height h, one vertex red, one blue and two green
+Mesh*
+Mesh::generateRGBRectangle(GLdouble w, GLdouble h)
+{
+	Mesh* mesh = generateRectangle(w, h);
+	mesh->vColors.reserve(mesh->mNumVertices);
 	mesh->vColors.emplace_back(1.0, 0.0, 0.0, 1.0);
 	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0);
-	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 1.0, 0.0, 1.0);
+	mesh->vColors.emplace_back(0.0, 0.0, 1.0, 1.0); 
 
 	return mesh;
 }

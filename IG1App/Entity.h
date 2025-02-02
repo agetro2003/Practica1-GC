@@ -86,4 +86,12 @@ class RGBTriangle : public EntityWithColors
 
 
 };
+
+class RGBRectangle : public EntityWithColors
+{
+	// Constructor
+public:
+	explicit RGBRectangle(GLdouble w, GLdouble h);
+	void render(const glm::mat4& modelViewMat) const override;
+};
 #endif //_H_Entities_H_

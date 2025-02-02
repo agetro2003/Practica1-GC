@@ -25,7 +25,9 @@ Scene::init()
 	//gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 0.0, 1.0, 1.0)));
 
 	//RGB Triangle
-	gObjects.push_back(new RGBTriangle(200));
+	//gObjects.push_back(new RGBTriangle(200));
+	//RGB Rectangle
+	gObjects.push_back(new RGBRectangle(500, 200));
 }
 
 Scene::~Scene()
