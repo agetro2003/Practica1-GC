@@ -105,10 +105,12 @@ RGBTriangle::RGBTriangle(GLdouble l)
 //render the RGBTriangle
 void RGBTriangle::render(const glm::mat4& modelViewMat) const
 {
-
+	
 	
 		if (mMesh != nullptr) {
-		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+			//translate the triangle 200 units in the x axis
+		mat4 translateMatrix = glm::translate(mModelMat, glm::vec3(-200.0f, 0.0f, 0.0f));
+		mat4 aMat = modelViewMat * translateMatrix; // glm matrix multiplication
 		mShader->use();
 		upload(aMat);
 		glEnable(GL_CULL_FACE);
@@ -119,6 +121,7 @@ void RGBTriangle::render(const glm::mat4& modelViewMat) const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
 		glDisable(GL_CULL_FACE);
+
 
 
 	}
@@ -140,10 +143,10 @@ void RGBRectangle::render(const glm::mat4& modelViewMat) const
 		upload(aMat);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE );
 		mMesh->render();
 		glCullFace(GL_FRONT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL );
 		mMesh->render();
 		glDisable(GL_CULL_FACE);
 	}

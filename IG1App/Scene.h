@@ -13,12 +13,12 @@ class Scene
 {
 public:
 	Scene() = default;
-	~Scene();
+	virtual ~Scene();
 
 	Scene(const Scene& s) = delete;            // no copy constructor
 	Scene& operator=(const Scene& s) = delete; // no copy assignment
 
-	void init();
+	virtual void init() = 0;
 
 	void render(Camera const& cam) const;
 
@@ -32,6 +32,16 @@ protected:
 	void resetGL();
 
 	std::vector<Abs_Entity*> gObjects; // Entities (graphic objects) of the scene
+};
+
+//scene0
+class Scene0 : public Scene
+{
+public:
+	Scene0() = default;
+	~Scene0() = default;
+
+	void init() override; 
 };
 
 #endif //_H_Scene_H_

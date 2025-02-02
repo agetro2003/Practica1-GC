@@ -55,12 +55,9 @@ IG1App::init()
 	// allocate memory and resources
 	mViewPort = new Viewport(mWinW, mWinH);
 	mCamera = new Camera(mViewPort);
-	mScenes.push_back(new Scene);
+	mScenes.push_back(new Scene0);
 	mCamera->set2D();
 	mScenes[0]->init();
-	//aiuda sccene falla :(
-	//mScenes[1]->init();
-
 
 }
 
