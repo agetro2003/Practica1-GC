@@ -27,7 +27,7 @@ x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
-[Bb]in/
+#[Bb]in/ comentado para que no ignore la carpeta bin y pueda subir los archivos .dll
 [Oo]bj/
 [Oo]ut/
 [Ll]og/
