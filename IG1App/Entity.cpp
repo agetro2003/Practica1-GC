@@ -173,3 +173,33 @@ void RGBRectangle::render(const glm::mat4& modelViewMat) const
 	}
 }
 
+
+//Constructor
+Cube::Cube(GLdouble lenght, glm::dvec4 mColor)
+{
+
+	mShader = Shader::get("vcolors");
+	//create cube
+	mMesh = Mesh::generateCube(lenght);
+
+
+	load();
+
+}
+
+void Cube::render(const glm::mat4& modelViewMat) const {
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("color", glm::vec4(mColor));
+		//mShader->setUniform("color", mColor);
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		mMesh->render();
+
+	}
+
+}
+

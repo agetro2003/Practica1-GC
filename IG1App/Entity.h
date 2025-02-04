@@ -98,4 +98,14 @@ public:
 	explicit RGBRectangle(GLdouble w, GLdouble h);
 	void render(const glm::mat4& modelViewMat) const override;
 };
+
+class Cube : public SingleColorEntity 
+{
+public:
+	// Constructor
+	Cube(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
+	void render(const glm::mat4& modelViewMat) const override;
+
+};
+
 #endif //_H_Entities_H_
