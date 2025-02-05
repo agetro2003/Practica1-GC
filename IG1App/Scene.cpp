@@ -32,20 +32,46 @@ Scene0::init()
 	//gObjects.push_back(new RGBRectangle(500, 200));
 
 	//apartado 10 
-	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
-	gObjects.push_back(new RGBTriangle(40));
-	gObjects.push_back(new RGBRectangle(400, 200));
-	gObjects.push_back(new Cube(250));
+	//gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
+	//gObjects.push_back(new RGBTriangle(40));
+	//gObjects.push_back(new RGBRectangle(400, 200));
+	
+	//Cubo Apartado 15
+	//gObjects.push_back(new Cube(250));
 	
 }
-
 
 void
 Scene1::init()
 {
 	setGL();
-	//gObjects.push_back(new RGBAxes(400.0));
-	//gObjects.push_back(new Cube(250));
+	gObjects.push_back(new RGBAxes(400.0));
+	//Triangulo verde
+	gObjects.push_back(new RegularPolygon(3, 200.0, glm::dvec4(0.0, 1.0, 0.0, 1.0)));
+	//Circunferencia magenta
+	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 0.0, 1.0, 1.0)));
+
+}
+
+void
+Scene2::init()
+{
+	setGL();
+	gObjects.push_back(new RGBAxes(400.0));
+	//apartado 10 
+	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
+	gObjects.push_back(new RGBTriangle(40));
+	gObjects.push_back(new RGBRectangle(400, 200));
+
+}
+
+void
+Scene3::init()
+{
+	setGL();
+	gObjects.push_back(new RGBAxes(400.0));
+	//cubo del apartado 15
+	gObjects.push_back(new Cube(250));
 
 }
 

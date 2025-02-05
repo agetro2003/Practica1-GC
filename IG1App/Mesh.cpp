@@ -30,7 +30,7 @@ Mesh::draw() const
 void
 Mesh::load()
 {
-	assert(mVBO == NONE); // not already loaded
+	//assert(mVBO == NONE); // not already loaded
 
 	if (vVertices.size() > 0) { // transfer data
 		glGenBuffers(1, &mVBO);

@@ -65,11 +65,14 @@ IG1App::init()
 	mViewPort = new Viewport(mWinW, mWinH);
 	mCamera = new Camera(mViewPort);
 	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene1);
+	mScenes.push_back(new Scene2);
+	mScenes.push_back(new Scene3);
 	mCamera->set2D();
 	mScenes[0]->init();
-
-	mScenes.push_back(new Scene1);
 	mScenes[1]->init();
+	mScenes[2]->init();
+	mScenes[3]->init();
 
 }
 
@@ -243,6 +246,9 @@ IG1App::changeScene(size_t sceneNr)
 		mScenes[mCurrentScene]->unload();
 		mCurrentScene = sceneNr;
 		mScenes[mCurrentScene]->load();
+
+		//Para que se refresque al cambiar de escena
+		mScenes[mCurrentScene]->mUpdateEnabled = !mScenes[mCurrentScene]->mUpdateEnabled;
 	}
 
 	return true;
