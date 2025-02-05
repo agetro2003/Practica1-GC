@@ -195,9 +195,17 @@ void Cube::render(const glm::mat4& modelViewMat) const {
 		mShader->setUniform("color", glm::vec4(mColor));
 		//mShader->setUniform("color", mColor);
 
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//mMesh->render();
 
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT );
 		mMesh->render();
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+		glDisable(GL_CULL_FACE);
 
 	}
 

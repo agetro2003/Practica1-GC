@@ -36,6 +36,16 @@ Scene0::init()
 	gObjects.push_back(new RGBTriangle(40));
 	gObjects.push_back(new RGBRectangle(400, 200));
 	gObjects.push_back(new Cube(250));
+	
+}
+
+
+void
+Scene1::init()
+{
+	setGL();
+	//gObjects.push_back(new RGBAxes(400.0));
+	//gObjects.push_back(new Cube(250));
 
 }
 

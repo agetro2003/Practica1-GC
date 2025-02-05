@@ -68,6 +68,9 @@ IG1App::init()
 	mCamera->set2D();
 	mScenes[0]->init();
 
+	mScenes.push_back(new Scene1);
+	mScenes[1]->init();
+
 }
 
 void
