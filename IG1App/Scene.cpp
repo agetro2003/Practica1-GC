@@ -71,7 +71,9 @@ Scene3::init()
 	setGL();
 	gObjects.push_back(new RGBAxes(400.0));
 	//cubo del apartado 15
-	gObjects.push_back(new Cube(250));
+	//gObjects.push_back(new Cube(250));
+	//cubo del apartado 16
+	gObjects.push_back(new RGBCube(250));
 
 }
 
@@ -114,6 +116,9 @@ Scene::setGL()
 	//glClearColor(1.0, 1.0, 1.0, 1.0); // background color (alpha=1 -> opaque) 
 	glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);          // enable Depth test
+
+	//glDepthFunc(GL_LESS);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void
 Scene::resetGL()

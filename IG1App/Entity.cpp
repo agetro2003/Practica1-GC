@@ -180,8 +180,8 @@ Cube::Cube(GLdouble lenght, glm::dvec4 mColor)
 
 	mShader = Shader::get("vcolors");
 	//create cube
-	mMesh = Mesh::generateCube(lenght);
-
+	//mMesh = Mesh::generateCube(lenght);	//Cubo generado con 14 vértices y GL_TRIANGLE_STRIP como primitiva, usado en el apartado 15 de la práctica 1
+	mMesh = Mesh::generateCube2(lenght);	//Cubo gnerado con 64 vértices GL_TRIANGLES como primitiva, usado en el apartado 16 de la práctica 1
 
 	load();
 
@@ -208,6 +208,45 @@ void Cube::render(const glm::mat4& modelViewMat) const {
 		glDisable(GL_CULL_FACE);
 
 	}
+
+}
+
+
+// Constructor
+RGBCube::RGBCube(GLdouble l)
+{
+
+	mShader = Shader::get("vcolors");
+	//create RGB Cube
+	mMesh = Mesh::generateRGBCubeTriangles(l);
+
+	load();
+
+}
+
+void RGBCube::render(const glm::mat4& modelViewMat) const {
+
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		mMesh->render();
+		glCullFace(GL_FRONT);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
+		mMesh->render();
+		glDisable(GL_CULL_FACE);
+
+
+
+
+	}
+
 
 }
 

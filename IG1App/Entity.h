@@ -108,4 +108,13 @@ public:
 
 };
 
+class RGBCube : public EntityWithColors 
+{
+public:
+	// Constructor
+	RGBCube(GLdouble lenght);
+	void render(const glm::mat4& modelViewMat) const override;
+
+};
+
 #endif //_H_Entities_H_
