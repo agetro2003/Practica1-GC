@@ -60,7 +60,13 @@ Scene2::init()
 	gObjects.push_back(new RGBAxes(400.0));
 	//apartado 10 
 	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
-	gObjects.push_back(new RGBTriangle(40));
+	// declarar triangulo en una variable
+	RGBTriangle* t = new RGBTriangle(40);
+	// setear la posicion del triangulo
+	t->setPos(glm::vec3(-200, 0, 0));
+	gObjects.push_back(t);
+
+	
 	gObjects.push_back(new RGBRectangle(400, 200));
 
 }

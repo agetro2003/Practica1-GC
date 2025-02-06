@@ -102,15 +102,40 @@ RGBTriangle::RGBTriangle(GLdouble l)
 
 }
 
+
+void RGBTriangle::setPos(glm::vec3 pos)
+{
+	mModelMat = glm::translate(mModelMat, pos);
+}
+
+void RGBTriangle::rotate()
+{
+	//Move to the origin
+	glm::vec3 initialPos = glm::vec3(mModelMat[3]);
+	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+	//Rotate clockwise
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(18.0f), glm::vec3(0.0f, 0.0f, -1.0f));
+	//Move back to the initial position
+	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
+
+	mModelMat = toPos * rotateMat * toOrigin * mModelMat;
+
+}
+
+void RGBTriangle::orbit()
+{
+	// orbit the triangle around the origin counterclockwise
+	glm::mat4 orbitMat = glm::rotate(glm::mat4(1.0), glm::radians(10.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMat = orbitMat * mModelMat;
+}
+
 //render the RGBTriangle
 void RGBTriangle::render(const glm::mat4& modelViewMat) const
 {
 	
 	
 		if (mMesh != nullptr) {
-			//translate the triangle 200 units in the x axis
-		mat4 translateMatrix = glm::translate(mModelMat, glm::vec3(-200.0f, 0.0f, 0.0f));
-		mat4 aMat = modelViewMat * translateMatrix; // glm matrix multiplication
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 		mShader->use();
 		upload(aMat);
 		glEnable(GL_CULL_FACE);
@@ -130,22 +155,8 @@ void RGBTriangle::render(const glm::mat4& modelViewMat) const
 //update the RGBTriangle
 void RGBTriangle::update()
 {
-	glm::mat4 orbitMat = glm::rotate(glm::mat4(1.0), glm::radians(9.0f), glm::vec3(0.0f, 0.0f, -1.0f));
-
-	glm::mat4 orbited = orbitMat * mModelMat;
-
-	glm::vec3 initialPos = glm::vec3(orbited[3]);
-
-	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(18.0f),  glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
-
-	mModelMat = toPos * rotateMat * toOrigin * orbited;
-
-
-
-
-	
+	rotate();
+	orbit();
 }
 
 // Constructor

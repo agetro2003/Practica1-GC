@@ -87,6 +87,12 @@ class RGBTriangle : public EntityWithColors
 		explicit RGBTriangle(GLdouble l);
 		void render(const glm::mat4& modelViewMat) const override;
 		void update() override;
+		// method to set the position of the triangle
+		void setPos(glm::vec3 pos);
+		// method to rotate the triangle over the z axis
+		void rotate();
+		//method to orbit the triangle around the origin
+		void orbit();
 
 
 };
