@@ -288,7 +288,7 @@ Mesh::generateCube2(GLdouble length)
 Mesh*
 Mesh::generateRGBCubeTriangles(GLdouble length) {
 
-	Mesh* mesh = generateCube(length);
+	Mesh* mesh = generateCube2(length);
 	mesh->vColors.reserve(mesh->mNumVertices);
 
 	//Cara z+ (0-1-2 + 1-2-3) (roja)

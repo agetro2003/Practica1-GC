@@ -123,8 +123,6 @@ Scene::setGL()
 	glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);          // enable Depth test
 
-	//glDepthFunc(GL_LESS);
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void
 Scene::resetGL()
