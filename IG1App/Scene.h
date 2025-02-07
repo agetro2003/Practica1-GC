@@ -27,12 +27,6 @@ public:
 	void load();
 	void unload();
 
-	// Constant Frame duration in seconds
-	double FRAME_DURATION = 0.2;
-	// Bool to enable update
-	bool mUpdateEnabled = false;
-	// Next update double
-	double mNextUpdate = 0;
 	
 
 protected:

@@ -28,6 +28,14 @@ public:
 	// Change to the given scene
 	bool changeScene(size_t sceneNr);
 
+	// Constant Frame duration in seconds
+	double FRAME_DURATION = 0.01;
+	// Bool to enable update
+	bool mUpdateEnabled = false;
+	// Next update double
+	double mNextUpdate = 0;
+
+
 	void run();   // the main event processing loop
 	void close(); // the application
 

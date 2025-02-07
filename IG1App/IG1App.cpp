@@ -39,16 +39,20 @@ IG1App::run() // enters the main event processing loop
 		}
 
 		// Update the objects of the scene
-		if (mScenes[mCurrentScene]->mUpdateEnabled && glfwGetTime() > mScenes[mCurrentScene]->mNextUpdate) {
+		if (mUpdateEnabled && glfwGetTime() > mNextUpdate) {
+			double time = glfwGetTime();
 			mScenes[mCurrentScene]->update();
-			mScenes[mCurrentScene]->mNextUpdate = glfwGetTime() + mScenes[mCurrentScene]->FRAME_DURATION;
+			mNextUpdate = time + FRAME_DURATION;
 			mNeedsRedisplay = true;
 		}
-
-		glfwWaitEventsTimeout(mScenes[mCurrentScene]->mNextUpdate - glfwGetTime());
-
-		// Stop and wait for new events
-		glfwWaitEvents();
+		if (mUpdateEnabled)
+			glfwWaitEventsTimeout(mNextUpdate - glfwGetTime());
+		else
+		{
+			// Stop and wait for new events
+			glfwWaitEvents(); 
+		}
+		
 	}
 
 	destroy();
@@ -70,6 +74,7 @@ IG1App::init()
 	mScenes.push_back(new Scene3);
 	mCamera->set2D();
 	mScenes[0]->init();
+	mScenes[0]->load();
 	mScenes[1]->init();
 	mScenes[2]->init();
 	mScenes[3]->init();
@@ -178,7 +183,7 @@ IG1App::key(unsigned int key)
 			break;
 			//update the scene
 		case 'u':
-			mScenes[mCurrentScene]->mUpdateEnabled = !mScenes[mCurrentScene]->mUpdateEnabled;
+			mUpdateEnabled = !mUpdateEnabled;
 			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
@@ -248,7 +253,13 @@ IG1App::changeScene(size_t sceneNr)
 		mScenes[mCurrentScene]->load();
 
 		//Para que se refresque al cambiar de escena
-		mScenes[mCurrentScene]->mUpdateEnabled = !mScenes[mCurrentScene]->mUpdateEnabled;
+		mNeedsRedisplay = true;
+		if (mCurrentScene == 2) {
+			FRAME_DURATION = 0.08;
+		}
+		else {
+			FRAME_DURATION = 0.04;
+		}
 	}
 
 	return true;

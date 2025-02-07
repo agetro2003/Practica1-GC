@@ -183,7 +183,7 @@ Mesh*
 Mesh::generateCube(GLdouble length) 
 {
 	Mesh* mesh = new Mesh();
-	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mPrimitive = 2;
 	mesh->mNumVertices = 14;
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	GLdouble l = length * 0.5;
@@ -218,7 +218,7 @@ Mesh::generateCube(GLdouble length)
 }
 
 
-//P1-Apartado 16 -> Cubo con 64 vértices y GL_TRIANGLES como primitiva para poder asignar colores a vértices (y no queden caras de colores mezclados)
+//P1-Apartado 16 -> Cubo con 36 vértices y GL_TRIANGLES como primitiva para poder asignar colores a vértices (y no queden caras de colores mezclados)
 Mesh*
 Mesh::generateCube2(GLdouble length)
 {

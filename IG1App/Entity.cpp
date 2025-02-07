@@ -49,7 +49,7 @@ RGBAxes::RGBAxes(GLdouble l)
 {
 	mShader = Shader::get("vcolors");
 	mMesh = Mesh::createRGBAxes(l);
-	load();
+	//load();
 }
 
 // Constructor with a color.
@@ -192,7 +192,7 @@ Cube::Cube(GLdouble lenght, glm::dvec4 mColor)
 	mShader = Shader::get("vcolors");
 	//create cube
 	mMesh = Mesh::generateCube(lenght);	//Cubo generado con 14 vértices y GL_TRIANGLE_STRIP como primitiva, usado en el apartado 15 de la práctica 1
-	//mMesh = Mesh::generateCube2(lenght);	//Cubo generado con 64 vértices GL_TRIANGLES como primitiva, usado en el apartado 16 de la práctica 1
+	//mMesh = Mesh::generateCube2(lenght);	//Cubo generado con 36 vértices GL_TRIANGLES como primitiva, usado en el apartado 16 de la práctica 1
 
 	load();
 
@@ -258,3 +258,58 @@ void RGBCube::render(const glm::mat4& modelViewMat) const {
 
 }
 
+//Funciones para rotación del apartado 17 ç8práctica 1)
+
+void RGBCube::setPos(glm::vec3 pos)
+{
+	mModelMat = glm::translate(mModelMat, pos);
+}
+
+//Rotar en x
+void RGBCube::rotatex( )
+{
+	glm::vec3 Pos = glm::vec3(mModelMat[3]);
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(2.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMat = rotateMat * mModelMat;
+}
+
+//Rotar en y
+void RGBCube::rotatey()
+{
+	glm::vec3 Pos = glm::vec3(mModelMat[3]);
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(2.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	mModelMat = rotateMat * mModelMat;
+}
+
+//Rotar en z
+void RGBCube::rotatez()
+{
+	glm::vec3 Pos = glm::vec3(mModelMat[3]);
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(2.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMat = rotateMat * mModelMat;
+}
+
+//Rota en x 180 grados, luego en y 180 grados en y, luego 180 grados en z y vuelve a empezar2
+void RGBCube::update() {
+	if (alpha < 180)
+	{
+		rotatex();
+		alpha += 2;
+	}
+	else if (alpha < 360)
+	{
+		rotatez();
+		alpha += 2;
+	}
+	else if (alpha < 540)
+	{
+		rotatey();
+		alpha += 2;
+	} 
+	else 
+	{
+		alpha = 0;
+		rotatex();
+		alpha += 2;
+	}
+}

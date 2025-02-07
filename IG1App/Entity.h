@@ -119,7 +119,20 @@ class RGBCube : public EntityWithColors
 public:
 	// Constructor
 	RGBCube(GLdouble lenght);
+
+	GLdouble alpha = 0;//Contador de ángulo para rotación
+
 	void render(const glm::mat4& modelViewMat) const override;
+
+	// method to set the position of the cube
+	void setPos(glm::vec3 pos);
+	// method to rotate the cube over the axis
+	void rotatex();
+	void rotatey();
+	void rotatez();
+
+	void update() override;
+
 
 };
 

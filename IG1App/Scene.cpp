@@ -59,14 +59,12 @@ Scene2::init()
 	setGL();
 	gObjects.push_back(new RGBAxes(400.0));
 	//apartado 10 
-	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
 	// declarar triangulo en una variable
 	RGBTriangle* t = new RGBTriangle(40);
 	// setear la posicion del triangulo
-	t->setPos(glm::vec3(-200, 0, 0));
+	t->setPos(glm::vec3(200, 0, 0));
 	gObjects.push_back(t);
-
-	
+	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 1.0, 1.0, 1.0)));
 	gObjects.push_back(new RGBRectangle(400, 200));
 
 }
@@ -78,8 +76,12 @@ Scene3::init()
 	gObjects.push_back(new RGBAxes(400.0));
 	//cubo del apartado 15
 	//gObjects.push_back(new Cube(250));
-	//cubo del apartado 16
-	gObjects.push_back(new RGBCube(250));
+	//cubo del apartado 16/17
+	GLdouble lenght = 250;
+	GLdouble l = lenght / 2;
+	RGBCube* c = new RGBCube(lenght);
+	c->setPos(glm::vec3(l, l, -l));
+	gObjects.push_back(c);
 
 }
 
@@ -88,8 +90,6 @@ Scene::~Scene()
 	destroy();
 	resetGL();
 }
-
- 
 
 void
 Scene::destroy()
@@ -146,5 +146,4 @@ Scene::update()
 	//update gObjects
 	for (Abs_Entity* el : gObjects)
 		el->update();
-
-	}
+}
