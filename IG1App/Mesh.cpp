@@ -376,22 +376,6 @@ Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 	mesh->vTexCoords.emplace_back(0, 1);
 	mesh->vTexCoords.emplace_back(1, 0);
 	mesh->vTexCoords.emplace_back(0, 0);
-	/*
-	Mesh* mesh = new Mesh();
-	mesh->mPrimitive = GL_TRIANGLE_STRIP;
-	mesh->mNumVertices = 4;
-	mesh->vVertices.reserve(mesh->mNumVertices);
-	mesh->vVertices.emplace_back(-w * 0.5, -h * 0.5, 0.0);
-	mesh->vVertices.emplace_back(-w * 0.5, h * 0.5, 0.0);
-	mesh->vVertices.emplace_back(w * 0.5, -h * 0.5, 0.0);
-	mesh->vVertices.emplace_back(w * 0.5, h * 0.5, 0.0);
-
-	mesh->vTexCoords.reserve(mesh->mNumVertices);
-	mesh->vTexCoords.emplace_back(0, 0);
-	mesh->vTexCoords.emplace_back(0, 1);
-	mesh->vTexCoords.emplace_back(1,0);
-	mesh->vTexCoords.emplace_back(1,1);*/
-
 
 	//(w * 0.5, h * 0.5);
 	//(-w * 0.5, h * 0.5);

@@ -344,7 +344,7 @@ Ground::Ground(GLdouble lenght) {
 	//create Ground
 	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
 	mTexture=new Texture();
-	mTexture->load("Recuerda poner la URL");
+	mTexture->load("../assets/images/baldosaC.png");
 
 }
 
