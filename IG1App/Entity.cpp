@@ -337,13 +337,14 @@ void EntityWithTexture::render(mat4 const& modelViewMat) const
 	}
 }
 
-
+// Constructor de la clase Ground
 Ground::Ground(GLdouble lenght) {
 
 	mShader = Shader::get("texture");
 	//create Ground
 	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
 	mTexture=new Texture();
+	//ruta relativa de la imagen
 	mTexture->load("../assets/images/baldosaC.png");
 
 }
@@ -360,6 +361,7 @@ void Ground::render(const glm::mat4& modelViewMat) const {
 		
 		glCullFace(GL_BACK);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
 		if (mTexture != nullptr) {
 			mTexture->bind();
 		}
