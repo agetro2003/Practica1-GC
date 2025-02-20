@@ -46,8 +46,8 @@ Scene1::init()
 {
 	setGL();
 	gObjects.push_back(new RGBAxes(400.0));
-	//Triangulo verde
-	gObjects.push_back(new RegularPolygon(3, 200.0, glm::dvec4(0.0, 1.0, 0.0, 1.0)));
+	//Triangulo cian
+	gObjects.push_back(new RegularPolygon(3, 200.0, glm::dvec4(0.0, 1.0, 1.0, 1.0)));
 	//Circunferencia magenta
 	gObjects.push_back(new RegularPolygon(360, 200.0, glm::dvec4(1.0, 0.0, 1.0, 1.0)));
 
@@ -83,6 +83,16 @@ Scene3::init()
 	c->setPos(glm::vec3(l, l, -l));
 	gObjects.push_back(c);
 
+}
+
+void
+Scene4::init()
+{
+	setGL(); // OpenGL settings
+	gObjects.push_back(new RGBAxes(400.0));
+	Ground* ground = new Ground(300.0);
+	ground->rotate();
+	gObjects.push_back(ground);
 }
 
 Scene::~Scene()
@@ -122,13 +132,14 @@ Scene::setGL()
 	//glClearColor(1.0, 1.0, 1.0, 1.0); // background color (alpha=1 -> opaque) 
 	glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);          // enable Depth test
-
+//	glEnable(GL_TEXTURE_2D);
 }
 void
 Scene::resetGL()
 {
 	glClearColor(.0, .0, .0, .0); // background color (alpha=1 -> opaque)
 	glDisable(GL_DEPTH_TEST);     // disable Depth test
+	//glDisable(GL_TEXTURE_2D);
 }
 
 void

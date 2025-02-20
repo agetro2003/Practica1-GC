@@ -30,7 +30,7 @@ Mesh::draw() const
 void
 Mesh::load()
 {
-	//assert(mVBO == NONE); // not already loaded
+	assert(mVBO == NONE); // not already loaded
 
 	if (vVertices.size() > 0) { // transfer data
 		glGenBuffers(1, &mVBO);
@@ -50,6 +50,13 @@ Mesh::load()
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vec4), nullptr);
 			glEnableVertexAttribArray(1);
 		}
+		if (vTexCoords.size() > 0) {
+			glGenBuffers(1, &mTCO);
+			glBindBuffer(GL_ARRAY_BUFFER, mTCO);
+			glBufferData(GL_ARRAY_BUFFER, vTexCoords.size() * sizeof(vec2), vTexCoords.data(), GL_STATIC_DRAW);
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vec2), nullptr);
+			glEnableVertexAttribArray(2);
+		}
 	}
 }
 
@@ -65,6 +72,10 @@ Mesh::unload()
 		if (mCBO != NONE) {
 			glDeleteBuffers(1, &mCBO);
 			mCBO = NONE;
+		}
+		if (mTCO != NONE) {
+			glDeleteBuffers(1, &mTCO);
+			mTCO = NONE;
 		}
 	}
 }
@@ -348,4 +359,43 @@ Mesh::generateRGBCubeTriangles(GLdouble length) {
 	
 	return mesh;
 
+}
+
+Mesh *
+Mesh::generateGround(GLdouble lenght) {
+	Mesh* mesh = generateRectangle(lenght, lenght);
+	return mesh;
+}
+
+Mesh*
+Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
+	Mesh* mesh = generateRectangle(w, h);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 0);
+	/*
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 4;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	mesh->vVertices.emplace_back(-w * 0.5, -h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(-w * 0.5, h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(w * 0.5, -h * 0.5, 0.0);
+	mesh->vVertices.emplace_back(w * 0.5, h * 0.5, 0.0);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(1,0);
+	mesh->vTexCoords.emplace_back(1,1);*/
+
+
+	//(w * 0.5, h * 0.5);
+	//(-w * 0.5, h * 0.5);
+	//(w * 0.5, -h * 0.5);
+	//(-w * 0.5, -h * 0.5);
+	return mesh;
 }

@@ -6,6 +6,7 @@
 
 #include "Mesh.h"
 #include "Shader.h"
+#include "Texture.h"
 
 class Abs_Entity // abstract class
 {
@@ -67,6 +68,8 @@ class SingleColorEntity : public Abs_Entity
 
 		// Render
 		void render(const glm::mat4& modelViewMat) const override;
+
+
 	protected:
 		glm::dvec4 mColor;
 };
@@ -135,5 +138,29 @@ public:
 
 
 };
+
+
+class EntityWithTexture : public Abs_Entity {
+public:
+	//Constructor
+	explicit EntityWithTexture();
+	void render(const glm::mat4& modelViewMat) const override;
+protected:
+	Texture* mTexture;
+	bool mModulate=false;
+
+};
+
+class Ground :public EntityWithTexture
+{
+public:
+	//Constructor
+	Ground(GLdouble lenght);
+
+	void render(const glm::mat4& modelViewMat) const override;
+	void rotate();
+
+};
+
 
 #endif //_H_Entities_H_

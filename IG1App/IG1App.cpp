@@ -72,12 +72,16 @@ IG1App::init()
 	mScenes.push_back(new Scene1);
 	mScenes.push_back(new Scene2);
 	mScenes.push_back(new Scene3);
+	mScenes.push_back(new Scene4);
+
 	mCamera->set2D();
 	mScenes[0]->init();
 	mScenes[0]->load();
 	mScenes[1]->init();
 	mScenes[2]->init();
 	mScenes[3]->init();
+	mScenes[4]->init();
+
 
 }
 

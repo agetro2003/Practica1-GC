@@ -17,6 +17,8 @@ public:
 	static Mesh* generateCube(GLdouble length); //generates cube mesh (TRIANGLE_STRIP)
 	static Mesh* generateCube2(GLdouble length); //generates cube mesh (TRIANGLES)
 	static Mesh* generateRGBCubeTriangles(GLdouble length);//cube with RGB faces
+	static Mesh* generateGround(GLdouble lenght);//ground -Ap18
+	static Mesh* generateRectangleTexCor(GLdouble w, GLdouble h); //Ground con textura -Ap20
 
 	Mesh();
 	virtual ~Mesh();
@@ -39,6 +41,7 @@ protected:
 	GLuint mNumVertices = 0; // number of elements ( = vVertices.size())
 	std::vector<glm::vec3> vVertices; // vertex array
 	std::vector<glm::vec4> vColors;   // color array
+	std::vector<glm::vec2> vTexCoords; //vector de coordenadas
 	virtual void draw() const;
 
 	GLuint mVAO;  // vertex array object
@@ -46,6 +49,7 @@ protected:
 private:
 	GLuint mVBO;  // vertex buffer object
 	GLuint mCBO;  // color buffer object
+	GLuint mTCO; // texture coordinates object
 };
 
 #endif //_H_Scene_H_

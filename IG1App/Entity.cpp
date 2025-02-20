@@ -83,7 +83,7 @@ RegularPolygon::RegularPolygon(GLuint num, GLdouble r, glm::dvec4 mColor)
 	RegularPolygon::setColor(mColor);
 	mShader = Shader::get("simple");
 	mMesh = Mesh::generateRegularPolygon(num, r);
-	load();
+	//load();
 }
 
 
@@ -96,9 +96,7 @@ RGBTriangle::RGBTriangle(GLdouble l)
 	//rellenar el triangulo
 	mMesh = Mesh::generateRGBTriangle(l);
 
-	
-
-	load();
+//	load();
 
 }
 
@@ -164,7 +162,7 @@ RGBRectangle::RGBRectangle(GLdouble w, GLdouble h)
 {
 	mShader = Shader::get("vcolors");
 	mMesh = Mesh::generateRGBRectangle(w, h);
-	load();
+	//load();
 }
 
 void RGBRectangle::render(const glm::mat4& modelViewMat) const
@@ -194,7 +192,7 @@ Cube::Cube(GLdouble lenght, glm::dvec4 mColor)
 	mMesh = Mesh::generateCube(lenght);	//Cubo generado con 14 vértices y GL_TRIANGLE_STRIP como primitiva, usado en el apartado 15 de la práctica 1
 	//mMesh = Mesh::generateCube2(lenght);	//Cubo generado con 36 vértices GL_TRIANGLES como primitiva, usado en el apartado 16 de la práctica 1
 
-	load();
+	//load();
 
 }
 
@@ -231,7 +229,7 @@ RGBCube::RGBCube(GLdouble l)
 	//create RGB Cube
 	mMesh = Mesh::generateRGBCubeTriangles(l);
 
-	load();
+	//load();
 
 }
 
@@ -313,3 +311,80 @@ void RGBCube::update() {
 		alpha += 2;
 	}
 }
+
+
+EntityWithTexture::EntityWithTexture()
+{
+	mShader = Shader::get("texture");
+}
+
+void EntityWithTexture::render(mat4 const& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+			mMesh->render();
+			mTexture->unbind();
+		}
+		else {
+			mMesh->render();
+		}
+
+	}
+}
+
+
+Ground::Ground(GLdouble lenght) {
+
+	mShader = Shader::get("texture");
+	//create Ground
+	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
+	mTexture=new Texture();
+	mTexture->load("Recuerda poner la URL");
+
+}
+
+
+void Ground::render(const glm::mat4& modelViewMat) const {
+
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+		glEnable(GL_CULL_FACE);
+		
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+	}
+	
+	
+}
+
+void Ground::rotate() {
+
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMat = rotateMat * mModelMat;
+}
+
