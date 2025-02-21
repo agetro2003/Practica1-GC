@@ -19,6 +19,9 @@ public:
 	static Mesh* generateRGBCubeTriangles(GLdouble length);//cube with RGB faces
 	static Mesh* generateGround(GLdouble lenght);//ground -Ap18
 	static Mesh* generateRectangleTexCor(GLdouble w, GLdouble h); //Ground con textura -Ap20
+	static Mesh* generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh); //Ground textura repetida -Ap21
+	static Mesh* generateBoxOutline(GLdouble length); //Caja sin tapas -Ap22
+	static Mesh* generateBoxOutlineTexCor(GLdouble length); //Caja con textura -Ap24
 
 	Mesh();
 	virtual ~Mesh();

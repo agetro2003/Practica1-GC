@@ -194,7 +194,7 @@ Mesh*
 Mesh::generateCube(GLdouble length) 
 {
 	Mesh* mesh = new Mesh();
-	mesh->mPrimitive = 2;
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
 	mesh->mNumVertices = 14;
 	mesh->vVertices.reserve(mesh->mNumVertices);
 	GLdouble l = length * 0.5;
@@ -378,9 +378,77 @@ Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 	mesh->vTexCoords.emplace_back(1, 0);
 	mesh->vTexCoords.emplace_back(0, 0);
 
-	//(w * 0.5, h * 0.5);
-	//(-w * 0.5, h * 0.5);
-	//(w * 0.5, -h * 0.5);
-	//(-w * 0.5, -h * 0.5);
+
+	return mesh;
+}
+
+Mesh*
+Mesh::generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
+	Mesh* mesh = generateRectangle(w, h);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	// Agregar texturas a los vértices creado en generateRectangle
+	mesh->vTexCoords.emplace_back(rw, rh);
+	mesh->vTexCoords.emplace_back(0, rh);
+	mesh->vTexCoords.emplace_back(rw, 0);
+	mesh->vTexCoords.emplace_back(0, 0);
+
+
+	return mesh;
+}
+
+//cubo sin tapas sin textura Ap23
+Mesh* 
+Mesh::generateBoxOutline(GLdouble length) {
+
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 10;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	GLdouble l = length * 0.5;
+
+	//Cara x+ (3-1-4 + 1-4-5)
+	mesh->vVertices.emplace_back(l, -l, l);	//3
+	mesh->vVertices.emplace_back(l, l, l);	//1
+	mesh->vVertices.emplace_back(l, -l, -l);//4
+	mesh->vVertices.emplace_back(l, l, -l);	//5
+
+	//Cara z- (4-5-7 + 5-7-6)
+	mesh->vVertices.emplace_back(-l, -l, -l);//7
+	mesh->vVertices.emplace_back(-l, l, -l);//6
+
+	//Cara x- (7-6-2 + 6-2-0)
+	mesh->vVertices.emplace_back(-l, -l, l);//2
+	mesh->vVertices.emplace_back(-l, l, l);	//0
+
+	//Cara z+ (2-0-3 + 0-3-1)
+	mesh->vVertices.emplace_back(l, -l, l);	//3
+	mesh->vVertices.emplace_back(l, l, l);	//1
+	
+
+	return mesh;
+}
+
+//Cubo sin tapa con textura Ap24,25
+Mesh*
+Mesh::generateBoxOutlineTexCor(GLdouble length) {
+	Mesh* mesh = generateBoxOutline(length);
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	//Cara x+ (3-1-4 + 1-4-5)
+	mesh->vTexCoords.emplace_back(0, 1);	//3
+	mesh->vTexCoords.emplace_back(0, 0);	//1
+
+	mesh->vTexCoords.emplace_back(1, 1);	//4
+	mesh->vTexCoords.emplace_back(1, 0);	//5
+	//Cara z- (4-5-7 + 5-7-6)
+	mesh->vTexCoords.emplace_back(2, 1);	//7
+	mesh->vTexCoords.emplace_back(2, 0);	//6
+	//Cara x- (7-6-2 + 6-2-0)
+	mesh->vTexCoords.emplace_back(3, 1); //2
+	mesh->vTexCoords.emplace_back(3, 0);	//0
+	//Cara z+ (2-0-3 + 0-3-1)
+	mesh->vTexCoords.emplace_back(4, 1);	//3
+	mesh->vTexCoords.emplace_back(4, 0);	//1
+
 	return mesh;
 }

@@ -337,7 +337,7 @@ void EntityWithTexture::render(mat4 const& modelViewMat) const
 	}
 }
 
-// Constructor de la clase Ground
+// Constructor de la clase Ground para el apartado 20
 Ground::Ground(GLdouble lenght) {
 
 	mShader = Shader::get("texture");
@@ -390,3 +390,106 @@ void Ground::rotate() {
 	mModelMat = rotateMat * mModelMat;
 }
 
+
+// Constructor de la clase Ground para el apartado 21
+Ground2::Ground2(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
+
+	mShader = Shader::get("texture");
+	//create Ground
+	mMesh = Mesh::generaRectangleTexCor(w, h, rw, rh);
+	mTexture = new Texture();
+	//ruta relativa de la imagen
+	mTexture->load("../assets/images/baldosaC.png");
+
+}
+
+void Ground2::render(const glm::mat4& modelViewMat) const {
+
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+	}
+
+
+}
+
+void Ground2::rotate() {
+
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMat = rotateMat * mModelMat;
+}
+
+//Constructor caja sin tapa apartados 22-25
+BoxOutline::BoxOutline(GLdouble lenght, glm::dvec4 mColor)
+{
+
+	mShader = Shader::get("texture");
+	//create cubo sin tapas
+	mMesh = Mesh::generateBoxOutlineTexCor(lenght);
+	mTexture = new Texture();
+	mInsideTexture = new Texture();
+
+	//ruta relativa de la imagen
+	mTexture->load("../assets/images/container.jpg");
+	mInsideTexture->load("../assets/images/papelE.png");
+
+}
+
+void BoxOutline::render(const glm::mat4& modelViewMat) const {
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+	
+
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->bind();
+		}
+		mMesh->render();
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+
+	}
+
+}

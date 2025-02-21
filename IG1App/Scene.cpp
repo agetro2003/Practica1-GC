@@ -90,10 +90,18 @@ Scene4::init()
 {
 	setGL(); // OpenGL settings
 	gObjects.push_back(new RGBAxes(400.0));
-	Ground* ground = new Ground(300.0);
+	//Ground* ground = new Ground(300.0);  //Ap20
+	//Ap21
+	/*
+	Ground2* ground = new Ground2(300.0, 300.0, 4,4); 
 	//Rotar el Ground para que descanse sobre el plano Y = 0
 	ground->rotate();
 	gObjects.push_back(ground);
+	*/
+	//Ap22-23
+	BoxOutline* box = new BoxOutline(250.0);
+	gObjects.push_back(box);
+
 }
 
 Scene::~Scene()

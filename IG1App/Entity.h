@@ -162,5 +162,26 @@ public:
 
 };
 
+class Ground2 : public EntityWithTexture
+{
+public:
+	//constructor
+	Ground2(GLdouble w, GLdouble h, GLuint rw, GLuint rh );
+
+	void render(const glm::mat4& modelViewMat) const override;
+	void rotate();
+
+};
+
+class BoxOutline : public EntityWithTexture
+{
+public:
+	// Constructor
+	BoxOutline(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
+	void render(const glm::mat4& modelViewMat) const override;
+	Texture* mInsideTexture;
+
+};
+
 
 #endif //_H_Entities_H_
