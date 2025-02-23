@@ -91,6 +91,7 @@ Scene4::init()
 	setGL(); // OpenGL settings
 	gObjects.push_back(new RGBAxes(400.0));
 	//Ground* ground = new Ground(300.0);  //Ap20
+	
 	//Ap21
 	/*
 	Ground2* ground = new Ground2(300.0, 300.0, 4,4); 
@@ -98,10 +99,15 @@ Scene4::init()
 	ground->rotate();
 	gObjects.push_back(ground);
 	*/
-	//Ap22-23
+
+	//Ap22-25
+	/*
 	BoxOutline* box = new BoxOutline(250.0);
 	gObjects.push_back(box);
-
+	*/
+	//Ap26
+	Star3D* star = new Star3D(180, 8, 100);
+	gObjects.push_back(star);
 }
 
 Scene::~Scene()

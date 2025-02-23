@@ -493,3 +493,29 @@ void BoxOutline::render(const glm::mat4& modelViewMat) const {
 	}
 
 }
+
+//Constructor estrella apartado 26
+Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
+	mShader = Shader::get("vcolors");
+	//create 3DStar
+	mMesh = Mesh::generateStar3D(re, np, h);
+
+}
+
+
+void Star3D::render(const glm::mat4& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+		glDisable(GL_CULL_FACE);
+	}
+}

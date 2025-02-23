@@ -444,11 +444,41 @@ Mesh::generateBoxOutlineTexCor(GLdouble length) {
 	mesh->vTexCoords.emplace_back(2, 1);	//7
 	mesh->vTexCoords.emplace_back(2, 0);	//6
 	//Cara x- (7-6-2 + 6-2-0)
-	mesh->vTexCoords.emplace_back(3, 1); //2
+	mesh->vTexCoords.emplace_back(3, 1);	//2
 	mesh->vTexCoords.emplace_back(3, 0);	//0
 	//Cara z+ (2-0-3 + 0-3-1)
 	mesh->vTexCoords.emplace_back(4, 1);	//3
 	mesh->vTexCoords.emplace_back(4, 0);	//1
 
+	return mesh;
+}
+
+//Estrella apartado 26
+Mesh* 
+Mesh::generateStar3D(GLdouble re, GLuint np, GLdouble h) {
+
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_FAN;
+	mesh->mNumVertices = np*2 +2;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	GLdouble ri = re / 2;
+
+	GLfloat grados = 360 / np;
+	GLfloat grados_ext = 0;
+	GLfloat grados_int = grados / 2;
+
+	mesh->vVertices.emplace_back(0, 0, 0); //Vértice central de la estrella
+
+	//re = sqrt(x*x + y*y)
+	//cos(grados_ext)=x/re -> x=cos(grados_ext) *re
+	//sin(grados_ext)=y/re -> y=sin(grados_ext) *re
+
+	for (int i = 0; i < np; i++) {
+		mesh->vVertices.emplace_back(cos(glm::radians(grados_ext)) * re, sin(glm::radians(grados_ext))* re, h);		//Vértice exterior
+		mesh->vVertices.emplace_back(cos(glm::radians(grados_int)) * ri, sin(glm::radians(grados_int)) * ri, h);	//Vértice interior
+		grados_ext += grados;
+		grados_int += grados;
+	}
+	mesh->vVertices.emplace_back(cos(glm::radians(grados_ext)) * re, sin(glm::radians(grados_ext)) * re, h);		//Vértice exterior final para cerrar la figura
 	return mesh;
 }

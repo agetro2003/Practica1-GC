@@ -22,6 +22,7 @@ public:
 	static Mesh* generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh); //Ground textura repetida -Ap21
 	static Mesh* generateBoxOutline(GLdouble length); //Caja sin tapas -Ap22
 	static Mesh* generateBoxOutlineTexCor(GLdouble length); //Caja con textura -Ap24
+	static Mesh* generateStar3D(GLdouble re, GLuint np, GLdouble h); //Estrella -Ap26
 
 	Mesh();
 	virtual ~Mesh();
