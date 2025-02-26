@@ -106,7 +106,7 @@ Scene4::init()
 	gObjects.push_back(box);
 	*/
 	//Ap26
-	Star3D* star = new Star3D(180, 8, 100);
+	Star3D* star = new Star3D(180, 8, 175);
 	gObjects.push_back(star);
 }
 

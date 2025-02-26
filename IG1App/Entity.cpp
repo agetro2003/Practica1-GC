@@ -500,7 +500,7 @@ Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
 	//create 3DStar
 	mMesh = Mesh::generateStar3D(re, np, h);
 
-}
+} 
 
 
 void Star3D::render(const glm::mat4& modelViewMat) const
@@ -510,12 +510,53 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 		mShader->use();
 		upload(aMat);
 		glEnable(GL_CULL_FACE);
+
 		glCullFace(GL_BACK);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
 		glCullFace(GL_FRONT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
+
+		aMat = modelViewMat * glm::rotate(glm::mat4(1.0), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)) * mModelMat;
+		//aMat = modelViewMat * glm::translate(glm::mat4(1.0), -glm::vec3(mModelMat[3])) * mModelMat;
+		upload(aMat);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		mMesh->render();
+
 		glDisable(GL_CULL_FACE);
 	}
+}
+
+void Star3D::rotateZ() {
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMat = rotateMat * mModelMat;	
+}
+
+void Star3D::rotateY() {
+	//glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//mModelMat = rotateMat * mModelMat;
+
+	//Move to the origin
+	glm::vec3 initialPos = glm::vec3(mModelMat[3]);
+	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+	//Rotate clockwise
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//Move back to the initial position
+	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
+
+	mModelMat = toPos * rotateMat * toOrigin * mModelMat;
+}
+
+//update the Stars
+void Star3D::update()
+{
+	//rotateY();
+	rotateZ();
+	
 }

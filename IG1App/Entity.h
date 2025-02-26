@@ -189,6 +189,10 @@ public:
 	//constructor
 	Star3D(GLdouble re, GLuint np, GLdouble h);
 	void render(const glm::mat4& modelViewMat) const override;
+	void rotateZ();
+	void rotateY();
+	void update();
+
 };
 
 
