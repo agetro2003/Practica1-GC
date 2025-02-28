@@ -183,7 +183,7 @@ public:
 
 };
 
-class Star3D : public SingleColorEntity
+class Star3D : public EntityWithTexture
 {
 public:
 	//constructor
@@ -193,6 +193,14 @@ public:
 	void rotateY();
 	void update();
 
+};
+
+class GlassParapet : public EntityWithTexture
+{
+public:
+	// Constructor
+	GlassParapet(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
+	void render(const glm::mat4& modelViewMat) const override;
 };
 
 

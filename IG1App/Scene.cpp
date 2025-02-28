@@ -89,7 +89,11 @@ void
 Scene4::init()
 {
 	setGL(); // OpenGL settings
+
+
+
 	gObjects.push_back(new RGBAxes(400.0));
+
 	//Ground* ground = new Ground(300.0);  //Ap20
 	
 	//Ap21
@@ -105,9 +109,16 @@ Scene4::init()
 	BoxOutline* box = new BoxOutline(250.0);
 	gObjects.push_back(box);
 	*/
-	//Ap26
+
+
+	//Ap26-29
 	Star3D* star = new Star3D(180, 8, 175);
 	gObjects.push_back(star);
+
+	//Ap32
+	//GlassParapet* glass = new GlassParapet(250.0);
+	//gObjects.push_back(glass);
+
 }
 
 Scene::~Scene()

@@ -482,3 +482,55 @@ Mesh::generateStar3D(GLdouble re, GLuint np, GLdouble h) {
 	mesh->vVertices.emplace_back(cos(glm::radians(grados_ext)) * re, sin(glm::radians(grados_ext)) * re, h);		//Vértice exterior final para cerrar la figura
 	return mesh;
 }
+
+Mesh* 
+Mesh::generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h) {
+	Mesh* mesh = Mesh::generateStar3D(re, np, h);
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+
+	mesh->vTexCoords.emplace_back(0.5, 0.5);
+
+	double x = 0, y = 0;
+
+	for (int i = 0; i < np; i++) {
+		mesh->vTexCoords.emplace_back(x,y); //Vértice exterior
+		if (x == 0 and y < 1) {
+			y += 0.25;
+		}
+		else if (y == 1 and x < 1) {
+			x += 0.25;
+		}
+		else if (x == 1 and y > 0) {
+			y -= 0.25;
+		}
+		else if (y == 0 and x > 0) {
+			x -= 0.25;
+		}
+		mesh->vTexCoords.emplace_back(x,y); //Vértice interior
+		if (x == 0 and y < 1) {
+			y += 0.25;
+		}
+		else if (y == 1 and x < 1) {
+			x += 0.25;
+		}
+		else if (x == 1 and y > 0) {
+			y -= 0.25;
+		}
+		else if (y == 0 and x > 0) {
+			x -= 0.25;
+		}
+		
+	}
+	mesh->vTexCoords.emplace_back(0, 0);
+
+	return mesh;
+
+}
+
+//Caja translúcida Ap32
+Mesh* 
+Mesh::generateGlassParapet(GLdouble length) {
+	Mesh* mesh = Mesh::generateBoxOutlineTexCor(length);
+	return mesh;
+
+}

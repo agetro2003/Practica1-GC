@@ -494,11 +494,17 @@ void BoxOutline::render(const glm::mat4& modelViewMat) const {
 
 }
 
-//Constructor estrella apartado 26
+//Constructor estrella apartado 26-29
 Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
-	mShader = Shader::get("vcolors");
+	mShader = Shader::get("texture");
 	//create 3DStar
-	mMesh = Mesh::generateStar3D(re, np, h);
+	//mMesh = Mesh::generateStar3D(re, np, h);
+	mMesh = Mesh::generateStar3DTexCor(re, np, h);
+	mTexture = new Texture();
+
+	//ruta relativa de la imagen
+	mTexture->load("../assets/images/baldosaP.png");
+
 
 } 
 
@@ -512,22 +518,38 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 		glEnable(GL_CULL_FACE);
 
 		glCullFace(GL_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
 		mMesh->render();
 		glCullFace(GL_FRONT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		mMesh->render();
 
-		aMat = modelViewMat * glm::rotate(glm::mat4(1.0), glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f)) * mModelMat;
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+
+		
+		aMat = modelViewMat * glm::rotate(glm::mat4(1.0), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * mModelMat;
 		//aMat = modelViewMat * glm::translate(glm::mat4(1.0), -glm::vec3(mModelMat[3])) * mModelMat;
 		upload(aMat);
 
 		glCullFace(GL_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
 		mMesh->render();
 		glCullFace(GL_FRONT);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		mMesh->render();
+
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		
 
 		glDisable(GL_CULL_FACE);
 	}
@@ -541,7 +563,7 @@ void Star3D::rotateZ() {
 void Star3D::rotateY() {
 	//glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	//mModelMat = rotateMat * mModelMat;
-
+	/*
 	//Move to the origin
 	glm::vec3 initialPos = glm::vec3(mModelMat[3]);
 	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
@@ -550,13 +572,72 @@ void Star3D::rotateY() {
 	//Move back to the initial position
 	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
 
-	mModelMat = toPos * rotateMat * toOrigin * mModelMat;
+	mModelMat = toPos * rotateMat * toOrigin * mModelMat;*/
+
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	mModelMat = rotateMat * mModelMat;
 }
 
 //update the Stars
 void Star3D::update()
 {
-	//rotateY();
+	rotateY();
 	rotateZ();
 	
+}
+
+
+//Constructor caja sin tapa apartados 32
+GlassParapet::GlassParapet(GLdouble lenght, glm::dvec4 mColor)
+{
+
+	mShader = Shader::get("texture:texture_alpha");
+	//create cubo sin tapas
+	mMesh = Mesh::generateGlassParapet(lenght);
+	mTexture = new Texture();
+
+	//ruta relativa de la imagen
+	mTexture->load("../assets/images/windowV.jpg", 100);
+
+}
+
+void GlassParapet::render(const glm::mat4& modelViewMat) const {
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	
+		glEnable(GL_CULL_FACE);
+		
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+
+
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
+	
+
+
+
+	}
+
 }
