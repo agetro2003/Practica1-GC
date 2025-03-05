@@ -97,28 +97,38 @@ Scene4::init()
 	//Ground* ground = new Ground(300.0);  //Ap20
 	
 	//Ap21
-	/*
-	Ground2* ground = new Ground2(300.0, 300.0, 4,4); 
+	
+	Ground2* ground = new Ground2(400.0, 400.0, 4,4); 
 	//Rotar el Ground para que descanse sobre el plano Y = 0
 	ground->rotate();
 	gObjects.push_back(ground);
-	*/
+	
+	
 
 	//Ap22-25
-	/*
-	BoxOutline* box = new BoxOutline(250.0);
+	//BoxOutline* box = new BoxOutline(250.0);
+	BoxOutline* box = new BoxOutline(50.0);
+	box->rearrange(glm::vec3(100, 30, 100));
 	gObjects.push_back(box);
-	*/
-
+	
 
 	//Ap26-29
-	Star3D* star = new Star3D(180, 8, 175);
+	//Star3D* star = new Star3D(180, 8, 175);
+	Star3D* star = new Star3D(36, 8, 35);
+	star->rearrange(glm::vec3(100, 110, 100));
 	gObjects.push_back(star);
+	
 
 	//Ap32
 	//GlassParapet* glass = new GlassParapet(250.0);
-	//gObjects.push_back(glass);
+	GlassParapet* glass = new GlassParapet(420.0);
+	gObjects.push_back(glass);
 
+	//Ap35
+	Photo* photo = new Photo(75);
+	photo->rotate(glm::vec3(0, 10, 0));
+	gObjects.push_back(photo);
+	
 }
 
 Scene::~Scene()

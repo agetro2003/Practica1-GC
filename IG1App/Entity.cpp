@@ -337,6 +337,11 @@ void EntityWithTexture::render(mat4 const& modelViewMat) const
 	}
 }
 
+void EntityWithTexture::rearrange(glm::vec3 pos) {
+	glm::mat4 translateMat = glm::translate(mModelMat, pos);
+	mModelMat = translateMat * mModelMat;
+}
+
 // Constructor de la clase Ground para el apartado 20
 Ground::Ground(GLdouble lenght) {
 
@@ -532,7 +537,7 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 		}
 
 		
-		aMat = modelViewMat * glm::rotate(glm::mat4(1.0), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f)) * mModelMat;
+		aMat = modelViewMat * mModelMat * glm::rotate(glm::mat4(1.0), glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 		//aMat = modelViewMat * glm::translate(glm::mat4(1.0), -glm::vec3(mModelMat[3])) * mModelMat;
 		upload(aMat);
 
@@ -545,7 +550,7 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 		glCullFace(GL_FRONT);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		mMesh->render();
-
+		
 		if (mTexture != nullptr) {
 			mTexture->unbind();
 		}
@@ -555,35 +560,12 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 	}
 }
 
-void Star3D::rotateZ() {
-	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	mModelMat = rotateMat * mModelMat;	
-}
-
-void Star3D::rotateY() {
-	//glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//mModelMat = rotateMat * mModelMat;
-	/*
-	//Move to the origin
-	glm::vec3 initialPos = glm::vec3(mModelMat[3]);
-	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-	//Rotate clockwise
-	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	//Move back to the initial position
-	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
-
-	mModelMat = toPos * rotateMat * toOrigin * mModelMat;*/
-
-	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	mModelMat = rotateMat * mModelMat;
-}
-
 //update the Stars
 void Star3D::update()
 {
-	rotateY();
-	rotateZ();
-	
+	glm::mat4 rotateMatY = glm::rotate(glm::mat4(1.0), glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotateMatZ = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMat = mModelMat*  rotateMatY * rotateMatZ;
 }
 
 
@@ -634,10 +616,64 @@ void GlassParapet::render(const glm::mat4& modelViewMat) const {
 
 		glDisable(GL_BLEND);
 		glDepthMask(GL_TRUE);
-	
-
-
-
 	}
+}
+
+//Ap-35, foto
+Photo::Photo(GLdouble lenght)
+{
+	mShader = Shader::get("texture");
+	//create foto
+	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
+	mTexture = new Texture();
+	l = 600;
 
 }
+
+
+void Photo::render(const glm::mat4& modelViewMat) const {
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("modulate", mModulate);
+		mTexture->loadColorBuffer(l, l);
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+	}
+}
+
+
+
+void Photo::update() {
+	mTexture->loadColorBuffer(l, l);
+	
+}
+
+void Photo::rotate(glm::vec3 pos) {
+
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 translateMat= glm::translate(mModelMat, pos);
+	mModelMat = translateMat * rotateMat * mModelMat;
+}
+

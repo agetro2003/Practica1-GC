@@ -67,3 +67,29 @@ Texture::setWrap(GLuint wp) // GL_REPEAT, GL_CLAMP_TO_EDGE, ...
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wp);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+//Ap-34
+void
+Texture::loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer) 
+{
+	if (mId == 0)
+		init();
+
+
+	mWidth = width;
+	mHeight = height;
+
+	GLint level = 0;  // Base image level
+	GLint border = 0; // No border
+
+	glReadBuffer(buffer); // por defecto GL_BACK
+
+	glBindTexture(GL_TEXTURE_2D, mId);
+
+	glCopyTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, 0, 0, width, height, border);
+//GLAPI void GLAPIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels);
+//GLAPI void GLAPIENTRY glCopyTexImage2D (GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
+	
+	
+	glBindTexture(GL_TEXTURE_2D, 0);
+}

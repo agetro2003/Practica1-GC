@@ -145,6 +145,7 @@ public:
 	//Constructor
 	explicit EntityWithTexture();
 	void render(const glm::mat4& modelViewMat) const override;
+	void rearrange(glm::vec3 pos);
 protected:
 	Texture* mTexture;
 	bool mModulate=false;
@@ -189,8 +190,6 @@ public:
 	//constructor
 	Star3D(GLdouble re, GLuint np, GLdouble h);
 	void render(const glm::mat4& modelViewMat) const override;
-	void rotateZ();
-	void rotateY();
 	void update();
 
 };
@@ -203,5 +202,18 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 };
 
+class Photo : public EntityWithTexture
+{
+public:
+	Photo(GLdouble lenght);
+
+	void update();	
+	GLsizei l=50;
+
+	void render(const glm::mat4& modelViewMat) const override;
+
+	void rotate(glm::vec3 pos);
+
+};
 
 #endif //_H_Entities_H_
