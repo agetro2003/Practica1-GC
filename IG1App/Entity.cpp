@@ -454,7 +454,7 @@ BoxOutline::BoxOutline(GLdouble lenght, glm::dvec4 mColor)
 
 	mShader = Shader::get("texture");
 	//create cubo sin tapas
-	mMesh = Mesh::generateBoxOutlineTexCor(lenght);
+	mMesh = Mesh::generateBoxOutlineTexCor(lenght, lenght);
 	mTexture = new Texture();
 	mInsideTexture = new Texture();
 
@@ -563,19 +563,27 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 //update the Stars
 void Star3D::update()
 {
+	//Move to the origin
+	glm::vec3 initialPos = glm::vec3(mModelMat[3]);
+	glm::mat4 toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
 	glm::mat4 rotateMatY = glm::rotate(glm::mat4(1.0), glm::radians(1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+
+	//Move back to the initial position
+	glm::mat4 toPos = glm::translate(glm::mat4(1.0), initialPos);
+	
 	glm::mat4 rotateMatZ = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	mModelMat = mModelMat*  rotateMatY * rotateMatZ;
+
+	mModelMat = toPos * rotateMatY * toOrigin * mModelMat *rotateMatZ;
 }
 
 
 //Constructor caja sin tapa apartados 32
-GlassParapet::GlassParapet(GLdouble lenght, glm::dvec4 mColor)
+GlassParapet::GlassParapet(GLdouble width, GLdouble height, glm::dvec4 mColor)
 {
 
 	mShader = Shader::get("texture:texture_alpha");
 	//create cubo sin tapas
-	mMesh = Mesh::generateGlassParapet(lenght);
+	mMesh = Mesh::generateGlassParapet(width, height);
 	mTexture = new Texture();
 
 	//ruta relativa de la imagen

@@ -20,11 +20,12 @@ public:
 	static Mesh* generateGround(GLdouble lenght);//ground -Ap18
 	static Mesh* generateRectangleTexCor(GLdouble w, GLdouble h); //Ground con textura -Ap20
 	static Mesh* generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh); //Ground textura repetida -Ap21
-	static Mesh* generateBoxOutline(GLdouble length); //Caja sin tapas -Ap22
-	static Mesh* generateBoxOutlineTexCor(GLdouble length); //Caja con textura -Ap24
+	static Mesh* generateBoxOutline(GLdouble width, GLdouble height); //Caja sin tapas -Ap22 (bien)
+	static Mesh* generateBoxOutline2(GLdouble length); //Caja sin tapas -Ap22 (deprecated)
+	static Mesh* generateBoxOutlineTexCor(GLdouble width, GLdouble height); //Caja con textura -Ap24
 	static Mesh* generateStar3D(GLdouble re, GLuint np, GLdouble h); //Estrella -Ap26
 	static Mesh* generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h); //Estrella con textura -Ap27
-	static Mesh* generateGlassParapet(GLdouble length); //apartado 32
+	static Mesh* generateGlassParapet(GLdouble width, GLdouble height); //apartado 32
 
 
 	Mesh();

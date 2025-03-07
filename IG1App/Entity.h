@@ -198,7 +198,7 @@ class GlassParapet : public EntityWithTexture
 {
 public:
 	// Constructor
-	GlassParapet(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
+	GlassParapet(GLdouble width, GLdouble height,  glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
 	void render(const glm::mat4& modelViewMat) const override;
 };
 

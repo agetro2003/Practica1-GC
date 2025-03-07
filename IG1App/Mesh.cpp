@@ -399,7 +399,39 @@ Mesh::generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
 
 //cubo sin tapas sin textura Ap23
 Mesh* 
-Mesh::generateBoxOutline(GLdouble length) {
+Mesh::generateBoxOutline(GLdouble width, GLdouble height) {
+
+	Mesh* mesh = new Mesh();
+	mesh->mPrimitive = GL_TRIANGLE_STRIP;
+	mesh->mNumVertices = 10;
+	mesh->vVertices.reserve(mesh->mNumVertices);
+	GLdouble l = width * 0.5;
+	GLdouble h = height * 0.5;
+	//Cara x+ (3-1-4 + 1-4-5)
+	mesh->vVertices.emplace_back(l, -h, l);	//3
+	mesh->vVertices.emplace_back(l, h, l);	//1
+	mesh->vVertices.emplace_back(l, -h, -l);//4
+	mesh->vVertices.emplace_back(l, h, -l);	//5
+
+	//Cara z- (4-5-7 + 5-7-6)
+	mesh->vVertices.emplace_back(-l, -h, -l);//7
+	mesh->vVertices.emplace_back(-l, h, -l);//6
+
+	//Cara x- (7-6-2 + 6-2-0)
+	mesh->vVertices.emplace_back(-l, -h, l);//2
+	mesh->vVertices.emplace_back(-l, h, l);	//0
+
+	//Cara z+ (2-0-3 + 0-3-1)
+	mesh->vVertices.emplace_back(l, -h, l);	//3
+	mesh->vVertices.emplace_back(l, h, l);	//1
+	
+
+	return mesh;
+}
+
+//cubo sin tapas sin textura Ap23 original (deprecated)
+Mesh*
+Mesh::generateBoxOutline2(GLdouble length) {
 
 	Mesh* mesh = new Mesh();
 	mesh->mPrimitive = GL_TRIANGLE_STRIP;
@@ -424,15 +456,15 @@ Mesh::generateBoxOutline(GLdouble length) {
 	//Cara z+ (2-0-3 + 0-3-1)
 	mesh->vVertices.emplace_back(l, -l, l);	//3
 	mesh->vVertices.emplace_back(l, l, l);	//1
-	
+
 
 	return mesh;
 }
 
 //Cubo sin tapa con textura Ap24,25
 Mesh*
-Mesh::generateBoxOutlineTexCor(GLdouble length) {
-	Mesh* mesh = generateBoxOutline(length);
+Mesh::generateBoxOutlineTexCor(GLdouble width, GLdouble height) {
+	Mesh* mesh = generateBoxOutline(width, height);
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
 	//Cara x+ (3-1-4 + 1-4-5)
 	mesh->vTexCoords.emplace_back(0, 1);	//3
@@ -529,8 +561,8 @@ Mesh::generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h) {
 
 //Caja translúcida Ap32
 Mesh* 
-Mesh::generateGlassParapet(GLdouble length) {
-	Mesh* mesh = Mesh::generateBoxOutlineTexCor(length);
+Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
+	Mesh* mesh = Mesh::generateBoxOutlineTexCor( width,  height);
 	return mesh;
 
 }

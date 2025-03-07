@@ -121,7 +121,7 @@ Scene4::init()
 
 	//Ap32
 	//GlassParapet* glass = new GlassParapet(250.0);
-	GlassParapet* glass = new GlassParapet(420.0);
+	GlassParapet* glass = new GlassParapet(420.0, 105.0);
 	gObjects.push_back(glass);
 
 	//Ap35
