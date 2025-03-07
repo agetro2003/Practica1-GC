@@ -107,8 +107,12 @@ Scene4::init()
 
 	//Ap22-25
 	//BoxOutline* box = new BoxOutline(250.0);
-	BoxOutline* box = new BoxOutline(50.0);
-	box->rearrange(glm::vec3(100, 30, 100));
+	BoxOutline* boxOut = new BoxOutline(50.0);
+	boxOut->rearrange(glm::vec3(100, 30, 100));
+	gObjects.push_back(boxOut);
+
+	Box* box = new Box(50.0);
+	box->rearrange(glm::vec3(-100, 30, -100));
 	gObjects.push_back(box);
 	
 

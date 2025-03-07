@@ -499,6 +499,157 @@ void BoxOutline::render(const glm::mat4& modelViewMat) const {
 
 }
 
+
+Box::Box(GLdouble lenght, glm::dvec4 mColor)
+{
+
+	mShader = Shader::get("texture");
+	//create cubo sin tapas
+	mMesh = Mesh::generateBoxOutlineTexCor(lenght, lenght);
+	mMeshTapa = Mesh::generaRectangleTexCor(lenght, lenght, 1,1);
+	mMeshBottom= Mesh::generaRectangleTexCor(lenght, lenght, 1, 1);
+	mTexture = new Texture();
+	mInsideTexture = new Texture();
+
+	//ruta relativa de la imagen
+	mTexture->load("../assets/images/container.jpg");
+	mInsideTexture->load("../assets/images/papelE.png");
+
+	mModelMatTapa = glm::mat4(1.0);
+	glm::mat4 translateMat = glm::translate(mModelMatTapa, glm::vec3(0, lenght*0.5, 0));
+	glm::mat4 rotateMat=glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMatTapa = translateMat * rotateMat * mModelMatTapa;
+
+	mModelMatBottom = glm::mat4(1.0);
+	//translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght*0.5, 0));
+	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	mModelMatBottom= translateMat *rotateMat * mModelMatBottom;
+
+}
+
+void Box::render(const glm::mat4& modelViewMat) const {
+	/*
+	mModelMatTapa = mModelMat;
+	glm::mat4 translateMat = glm::translate(mModelMatTapa, glm::vec3(0, lenght * 0.5, 0));
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMatTapa = translateMat * rotateMat * mModelMatTapa;
+
+	mModelMatBottom = mModelMat;
+	translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght * 0.5, 0));
+	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMatBottom = translateMat * rotateMat * mModelMatBottom;
+	*/
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+	
+		mShader->use();
+		mShader->setUniform("modulate", mModulate);
+		upload(aMat);
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->bind();
+		}
+		mMesh->render();
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+
+	}
+
+	if (mMeshTapa != nullptr) {
+		mat4 aMatTapa = modelViewMat * mModelMatTapa; // glm matrix multiplication
+		
+		mShader->use();
+		mShader->setUniform("modulate", mModulate);
+		upload(aMatTapa);
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->bind();
+		}
+		mMeshTapa->render();
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMeshTapa->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE
+
+	}
+
+	if (mMeshBottom != nullptr) {
+		mat4 aMatBottom = modelViewMat * mModelMatBottom; // glm matrix multiplication
+		
+		mShader->use();
+		mShader->setUniform("modulate", mModulate);
+		upload(aMatBottom);
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		// Condicional para verificar si hay textura
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->bind();
+		}
+		mMeshBottom->render();
+		if (mInsideTexture != nullptr) {
+			mInsideTexture->unbind();
+		}
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMeshBottom->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+		glDisable(GL_CULL_FACE);
+
+	}
+	//
+		//glm::mat4 translateMat = glm::translate(mModelMat, pos);
+		//mModelMat = translateMat * mModelMat;
+
+		//mMeshBottom->render();
+
+	//mMeshTapa->render();
+		//mMeshBottom->render();
+	
+
+}
+/*
+void EntityWithTexture::rearrange(glm::vec3 pos) {
+	glm::mat4 translateMat = glm::translate(mModelMat, pos);
+	mModelMat = translateMat * mModelMat;
+	//mModelMatTapa = translateMat * mModelMat;
+	//mModelMatBottom = translateMat * mModelMatBottom;
+}
+*/
 //Constructor estrella apartado 26-29
 Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
 	mShader = Shader::get("texture");

@@ -82,7 +82,8 @@ Mesh::unload()
 
 void
 Mesh::render() const
-{
+{	
+	//DESCOMENTAR ANTES DE ENTREGAR!!!!!!!!!!!!!!!
 	assert(mVAO != NONE);
 
 	glBindVertexArray(mVAO);

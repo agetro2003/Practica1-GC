@@ -184,6 +184,23 @@ public:
 
 };
 
+class Box : public EntityWithTexture
+{
+public:
+	// Constructor
+
+	Box(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
+	void render(const glm::mat4& modelViewMat) const override;
+	Texture* mInsideTexture;
+protected:
+	Mesh* mMeshTapa = nullptr; 
+	glm::mat4 mModelMatTapa;  // modeling matrix
+	glm::mat4 mModelMatBottom;  // modeling matrix
+	Mesh* mMeshBottom = nullptr; 
+
+};
+
+
 class Star3D : public EntityWithTexture
 {
 public:
