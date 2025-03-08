@@ -517,13 +517,39 @@ Box::Box(GLdouble lenght, glm::dvec4 mColor)
 
 	mModelMatTapa = glm::mat4(1.0);
 	glm::mat4 translateMat = glm::translate(mModelMatTapa, glm::vec3(0, lenght*0.5, 0));
-	glm::mat4 rotateMat=glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	glm::mat4 rotateMat=glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mModelMatTapa = translateMat * rotateMat * mModelMatTapa;
 
 	mModelMatBottom = glm::mat4(1.0);
-	//translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght*0.5, 0));
-	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-	mModelMatBottom= translateMat *rotateMat * mModelMatBottom;
+	translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght*0.5, 0));
+	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	mModelMatBottom = translateMat *  rotateMat * mModelMatBottom;
+
+}
+void
+Box::load()
+{
+	mMesh->load();
+	mMeshTapa->load();
+	mMeshBottom->load();
+}
+
+void 
+Box::unload()
+{
+	mMesh->unload();
+	mMeshTapa->unload();
+	mMeshBottom->unload();
+}
+void
+Box::rearrange(glm::vec3 pos) {
+	
+	
+
+	glm::mat4 translateMat = glm::translate(mModelMat, pos);
+	mModelMat = translateMat * mModelMat;
+
+
 
 }
 
@@ -597,7 +623,7 @@ void Box::render(const glm::mat4& modelViewMat) const {
 		if (mTexture != nullptr) {
 			mTexture->unbind();
 		}
-		glDisable(GL_CULL_FACE
+		glDisable(GL_CULL_FACE);
 
 	}
 

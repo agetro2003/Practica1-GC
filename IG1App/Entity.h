@@ -26,8 +26,8 @@ public:
 	void setModelMat(glm::mat4 const& aMat) { mModelMat = aMat; };
 
 	// load or unload entity data into the GPU
-	void load();
-	void unload();
+	virtual void load();
+	virtual void unload();
 
 	//update the model matrix
 	virtual void update() {};
@@ -145,7 +145,8 @@ public:
 	//Constructor
 	explicit EntityWithTexture();
 	void render(const glm::mat4& modelViewMat) const override;
-	void rearrange(glm::vec3 pos);
+	virtual void rearrange(glm::vec3 pos);
+
 protected:
 	Texture* mTexture;
 	bool mModulate=false;
@@ -192,6 +193,12 @@ public:
 	Box(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
 	void render(const glm::mat4& modelViewMat) const override;
 	Texture* mInsideTexture;
+	GLdouble lenght;
+	void load() override;
+	void unload() override;
+	void rearrange(glm::vec3 pos);
+
+
 protected:
 	Mesh* mMeshTapa = nullptr; 
 	glm::mat4 mModelMatTapa;  // modeling matrix

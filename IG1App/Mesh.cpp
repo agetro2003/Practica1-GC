@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <iostream>
 
 using namespace std;
 using namespace glm;
@@ -58,6 +59,7 @@ Mesh::load()
 			glEnableVertexAttribArray(2);
 		}
 	}
+
 }
 
 void
@@ -83,7 +85,6 @@ Mesh::unload()
 void
 Mesh::render() const
 {	
-	//DESCOMENTAR ANTES DE ENTREGAR!!!!!!!!!!!!!!!
 	assert(mVAO != NONE);
 
 	glBindVertexArray(mVAO);
