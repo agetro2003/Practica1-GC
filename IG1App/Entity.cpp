@@ -544,13 +544,53 @@ Box::unload()
 void
 Box::rearrange(glm::vec3 pos) {
 	
-	
-
 	glm::mat4 translateMat = glm::translate(mModelMat, pos);
 	mModelMat = translateMat * mModelMat;
 
+	mModelMatTapa = translateMat * mModelMatTapa; 
+	mModelMatBottom = translateMat * mModelMatBottom;
 
+}
 
+void 
+Box::update() {
+	//glm::mat4 rotateAbrir;
+
+	glm::vec3 initialPos;
+	glm::mat4 toOrigin, rotateAbrir, toPos, adjust, deadjust;
+
+	//if (alpha <= 180) {
+		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		initialPos = glm::vec3(mModelMatTapa[3]);
+		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+		adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -lenght * 0.5));
+		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		toPos = glm::translate(glm::mat4(1.0), initialPos);
+		deadjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, lenght * 0.5));
+		alpha += 5;
+	//}
+	/*
+	else if (alpha <= 355) {
+		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		initialPos = glm::vec3(mModelMatTapa[3]);
+		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		toPos = glm::translate(glm::mat4(1.0), initialPos);
+		alpha += 5;
+	}
+	else {
+		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		initialPos = glm::vec3(mModelMatTapa[3]);
+		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		toPos = glm::translate(glm::mat4(1.0), initialPos);
+		alpha = 0;
+	}
+	*/
+
+	//mModelMatTapa = toOrigin * mModelMatTapa;
+	//mModelMatTapa = deadjust * toPos * rotateAbrir * adjust * toOrigin* mModelMatTapa;
+	//mModelMatTapa = toPos * rotateAbrir * toOrigin * mModelMatTapa;
 }
 
 void Box::render(const glm::mat4& modelViewMat) const {
@@ -657,25 +697,11 @@ void Box::render(const glm::mat4& modelViewMat) const {
 		glDisable(GL_CULL_FACE);
 
 	}
-	//
-		//glm::mat4 translateMat = glm::translate(mModelMat, pos);
-		//mModelMat = translateMat * mModelMat;
 
-		//mMeshBottom->render();
-
-	//mMeshTapa->render();
-		//mMeshBottom->render();
 	
 
 }
-/*
-void EntityWithTexture::rearrange(glm::vec3 pos) {
-	glm::mat4 translateMat = glm::translate(mModelMat, pos);
-	mModelMat = translateMat * mModelMat;
-	//mModelMatTapa = translateMat * mModelMat;
-	//mModelMatBottom = translateMat * mModelMatBottom;
-}
-*/
+
 //Constructor estrella apartado 26-29
 Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
 	mShader = Shader::get("texture");

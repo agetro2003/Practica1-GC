@@ -189,15 +189,16 @@ class Box : public EntityWithTexture
 {
 public:
 	// Constructor
-
 	Box(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
 	void render(const glm::mat4& modelViewMat) const override;
 	Texture* mInsideTexture;
 	GLdouble lenght;
+	GLdouble alpha = 0;
 	void load() override;
 	void unload() override;
 	void rearrange(glm::vec3 pos);
-
+	void update();
+	
 
 protected:
 	Mesh* mMeshTapa = nullptr; 
