@@ -243,4 +243,11 @@ public:
 
 };
 
+class Grass : public EntityWithTexture
+{
+public:
+	Grass(GLdouble lenght);
+	void render(const glm::mat4& modelViewMat) const override;
+};
+
 #endif //_H_Entities_H_

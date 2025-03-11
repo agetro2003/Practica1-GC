@@ -595,8 +595,6 @@ Box::adjustY() {
 		multiplicador = 0.5 - (multiplicador - 0.5);
 	}
 
-	// print multiplicador
-	std::cout << "multiplicador Y2 " << multiplicador << std::endl;
 	return multiplicador * l;
 }
 
@@ -947,3 +945,39 @@ void Photo::rotate(glm::vec3 pos) {
 	mModelMat = translateMat * rotateMat * mModelMat;
 }
 
+Grass::Grass(GLdouble lenght)
+{
+	mShader = Shader::get("texture:texture_alpha");
+	//create foto
+	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
+	mTexture = new Texture();
+	mTexture->load("../assets/images/grass_alpha.png");
+}
+void
+Grass::render(const glm::mat4& modelViewMat) const {
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+
+		if (mTexture != nullptr) {
+			mTexture->bind();
+		}
+		mMesh->render();
+
+		aMat = modelViewMat * mModelMat * glm::rotate(glm::mat4(1.0), glm::radians(120.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		//aMat = modelViewMat * glm::translate(glm::mat4(1.0), -glm::vec3(mModelMat[3])) * mModelMat;
+		upload(aMat);
+
+		mMesh->render();
+
+		aMat = modelViewMat * mModelMat * glm::rotate(glm::mat4(1.0), glm::radians(240.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		upload(aMat);
+
+		mMesh->render();
+
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+	}
+}

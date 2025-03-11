@@ -132,6 +132,11 @@ Scene4::init()
 	Photo* photo = new Photo(75);
 	photo->rotate(glm::vec3(0, 10, 0));
 	gObjects.push_back(photo);
+
+	//Ap33
+	Grass* grass = new Grass(50.0);
+	grass->rearrange(glm::vec3(-120, 25, 120));
+	gObjects.push_back(grass);
 	
 }
 

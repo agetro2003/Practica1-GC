@@ -374,10 +374,10 @@ Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
 	// Agregar texturas a los vértices creado en generateRectangle
-	mesh->vTexCoords.emplace_back(1, 1);
-	mesh->vTexCoords.emplace_back(0, 1);
-	mesh->vTexCoords.emplace_back(1, 0);
 	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 1);
+	mesh->vTexCoords.emplace_back(1, 1);
 
 
 	return mesh;
