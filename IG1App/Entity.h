@@ -192,12 +192,14 @@ public:
 	Box(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
 	void render(const glm::mat4& modelViewMat) const override;
 	Texture* mInsideTexture;
-	GLdouble lenght;
+	GLdouble l;
 	GLdouble alpha = 0;
 	void load() override;
 	void unload() override;
 	void rearrange(glm::vec3 pos);
 	void update();
+	GLdouble adjustY();
+	GLdouble adjustZ();
 	
 
 protected:

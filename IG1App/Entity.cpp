@@ -2,6 +2,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+
+#include <cmath>
 
 using namespace glm;
 
@@ -502,7 +505,7 @@ void BoxOutline::render(const glm::mat4& modelViewMat) const {
 
 Box::Box(GLdouble lenght, glm::dvec4 mColor)
 {
-
+	l = lenght;
 	mShader = Shader::get("texture");
 	//create cubo sin tapas
 	mMesh = Mesh::generateBoxOutlineTexCor(lenght, lenght);
@@ -551,6 +554,52 @@ Box::rearrange(glm::vec3 pos) {
 	mModelMatBottom = translateMat * mModelMatBottom;
 
 }
+// ajustar la posicion de la tapa en z de acuerdo al angulo
+/*
+* Angulo 0 = en z 0
+* Angulo 180 = z -L
+* Angulo -90 = z: -0.5 L 
+* Angulo - 180 = z: 0
+
+*/
+GLdouble
+Box::adjustZ() {
+	GLdouble multiplicador;
+	if (alpha >= 0) {
+		multiplicador = (alpha * l) / 180;
+	}
+	else {
+		//multiplicador = 1 - ((-alpha * l) / 180);
+		multiplicador = (l * (alpha + 180)) / 180;
+	}
+
+	return multiplicador;
+}
+
+GLdouble
+Box::adjustY() {
+	GLdouble multiplicador = 0;
+	multiplicador = abs(alpha) / 180;
+	std::cout << "multiplicador Y1 " << multiplicador << std::endl;
+
+	//print alpha 
+/*	std::cout << "Alpha: " << alpha << std::endl;
+	if ((alpha >= -190 and alpha <= -90) or (alpha >= 0 and alpha <= 90)) {
+		multiplicador = (alpha * 0.5 * l) / 90;
+	}
+	else if ( (alpha > -90 and alpha < 0 ) or (alpha >90 and alpha <= 190) ){
+		multiplicador = (-0.5 * l * (alpha - 180)) / 90;
+	}*/
+
+	if (multiplicador > 0.5) {
+		multiplicador = 0.5 - (multiplicador - 0.5);
+	}
+
+	// print multiplicador
+	std::cout << "multiplicador Y2 " << multiplicador << std::endl;
+	return multiplicador * l;
+}
+
 
 void 
 Box::update() {
@@ -558,39 +607,49 @@ Box::update() {
 
 	glm::vec3 initialPos;
 	glm::mat4 toOrigin, rotateAbrir, toPos, adjust, deadjust;
+	deadjust = glm::translate(glm::mat4(1.0), glm::vec3(0, -adjustY(), -adjustZ()));
+	mModelMatTapa = deadjust * mModelMatTapa;
 
-	//if (alpha <= 180) {
+	if (alpha < 180 and alpha >= 0) {
+		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		initialPos = glm::vec3(mModelMatTapa[3].x, mModelMatTapa[3].y, mModelMatTapa[3].z);
+		//print initialPos
+		//std::cout << "InitialPos: " << initialPos.x << " " << initialPos.y << " " << initialPos.z << std::endl;
+		//print mModelMatTapa
+		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
+		adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -l * 0.5));
+		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		toPos = glm::translate(glm::mat4(1.0), initialPos);
+		alpha += 5;
+		mModelMatTapa = toPos  * rotateAbrir  * toOrigin  * mModelMatTapa ;
+	}
+	else if (alpha < 0 and alpha >= -180) {
 		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		initialPos = glm::vec3(mModelMatTapa[3]);
 		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-		adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -lenght * 0.5));
-		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(-5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		toPos = glm::translate(glm::mat4(1.0), initialPos);
-		deadjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, lenght * 0.5));
-		alpha += 5;
-	//}
-	/*
-	else if (alpha <= 355) {
-		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		initialPos = glm::vec3(mModelMatTapa[3]);
-		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		toPos = glm::translate(glm::mat4(1.0), initialPos);
-		alpha += 5;
+		alpha -= 5;
+		mModelMatTapa = toPos * rotateAbrir * toOrigin  * mModelMatTapa;
+	}
+	else if (alpha == 180) {
+		alpha = -5;
 	}
 	else {
-		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		initialPos = glm::vec3(mModelMatTapa[3]);
-		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		toPos = glm::translate(glm::mat4(1.0), initialPos);
 		alpha = 0;
 	}
-	*/
 
-	//mModelMatTapa = toOrigin * mModelMatTapa;
-	//mModelMatTapa = deadjust * toPos * rotateAbrir * adjust * toOrigin* mModelMatTapa;
-	//mModelMatTapa = toPos * rotateAbrir * toOrigin * mModelMatTapa;
+	adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, adjustY(), adjustZ()));
+
+	mModelMatTapa = adjust * mModelMatTapa;
+
+	
+
+	/*mModelMatTapa = toOrigin * mModelMatTapa;
+	mModelMatTapa = deadjust * toPos * rotateAbrir * adjust * toOrigin* mModelMatTapa;
+	mModelMatTapa = toPos * rotateAbrir * toOrigin * mModelMatTapa;*/
+	
 }
 
 void Box::render(const glm::mat4& modelViewMat) const {
