@@ -371,6 +371,22 @@ Mesh::generateGround(GLdouble lenght) {
 
 //Rectángulo con texturas, Ap20
 Mesh*
+Mesh::generatePhotoTexCor(GLdouble w, GLdouble h) {
+	Mesh* mesh = generateRectangle(w, h);
+
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+	// Agregar texturas a los vértices creado en generateRectangle
+	mesh->vTexCoords.emplace_back(1, 0);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(0, 1);
+
+
+	return mesh;
+}
+
+//Rectángulo con texturas, Ap20
+Mesh*
 Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 	Mesh* mesh = generateRectangle(w, h);
 

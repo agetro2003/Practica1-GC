@@ -877,7 +877,7 @@ Photo::Photo(GLdouble lenght)
 {
 	mShader = Shader::get("texture");
 	//create foto
-	mMesh = Mesh::generateRectangleTexCor(lenght, lenght);
+	mMesh = Mesh::generatePhotoTexCor(lenght, lenght);
 	mTexture = new Texture();
 	l = 600;
 
