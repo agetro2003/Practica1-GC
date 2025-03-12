@@ -569,7 +569,6 @@ Box::adjustZ() {
 		multiplicador = (alpha * l) / 180;
 	}
 	else {
-		//multiplicador = 1 - ((-alpha * l) / 180);
 		multiplicador = (l * (alpha + 180)) / 180;
 	}
 
@@ -580,17 +579,8 @@ GLdouble
 Box::adjustY() {
 	GLdouble multiplicador = 0;
 	multiplicador = abs(alpha) / 180;
-	std::cout << "multiplicador Y1 " << multiplicador << std::endl;
 
-	//print alpha 
-/*	std::cout << "Alpha: " << alpha << std::endl;
-	if ((alpha >= -190 and alpha <= -90) or (alpha >= 0 and alpha <= 90)) {
-		multiplicador = (alpha * 0.5 * l) / 90;
-	}
-	else if ( (alpha > -90 and alpha < 0 ) or (alpha >90 and alpha <= 190) ){
-		multiplicador = (-0.5 * l * (alpha - 180)) / 90;
-	}*/
-
+	
 	if (multiplicador > 0.5) {
 		multiplicador = 0.5 - (multiplicador - 0.5);
 	}
@@ -609,21 +599,16 @@ Box::update() {
 	mModelMatTapa = deadjust * mModelMatTapa;
 
 	if (alpha < 180 and alpha >= 0) {
-		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		initialPos = glm::vec3(mModelMatTapa[3].x, mModelMatTapa[3].y, mModelMatTapa[3].z);
-		//print initialPos
-		//std::cout << "InitialPos: " << initialPos.x << " " << initialPos.y << " " << initialPos.z << std::endl;
-		//print mModelMatTapa
+		
 		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
 		adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -l * 0.5));
 		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		toPos = glm::translate(glm::mat4(1.0), initialPos);
 		alpha += 5;
 		mModelMatTapa = toPos  * rotateAbrir  * toOrigin  * mModelMatTapa ;
 	}
 	else if (alpha < 0 and alpha >= -180) {
-		//rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		initialPos = glm::vec3(mModelMatTapa[3]);
 		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
 		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(-5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -644,24 +629,11 @@ Box::update() {
 
 	
 
-	/*mModelMatTapa = toOrigin * mModelMatTapa;
-	mModelMatTapa = deadjust * toPos * rotateAbrir * adjust * toOrigin* mModelMatTapa;
-	mModelMatTapa = toPos * rotateAbrir * toOrigin * mModelMatTapa;*/
 	
 }
 
 void Box::render(const glm::mat4& modelViewMat) const {
-	/*
-	mModelMatTapa = mModelMat;
-	glm::mat4 translateMat = glm::translate(mModelMatTapa, glm::vec3(0, lenght * 0.5, 0));
-	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	mModelMatTapa = translateMat * rotateMat * mModelMatTapa;
 
-	mModelMatBottom = mModelMat;
-	translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght * 0.5, 0));
-	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	mModelMatBottom = translateMat * rotateMat * mModelMatBottom;
-	*/
 	if (mMesh != nullptr) {
 		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 	

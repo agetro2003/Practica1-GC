@@ -27,6 +27,8 @@ public:
 
 	void loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer = GL_FRONT);//Ap-34
 
+	void download(const std::string& filename); //Ap-36
+
 protected:
 	void init();
 

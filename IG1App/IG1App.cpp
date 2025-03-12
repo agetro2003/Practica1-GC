@@ -170,6 +170,8 @@ IG1App::resize(int newWidth, int newHeight)
 void
 IG1App::key(unsigned int key)
 {
+	Texture* textura = new Texture();
+
 	bool need_redisplay = true;
 
 	switch (key) {
@@ -189,6 +191,12 @@ IG1App::key(unsigned int key)
 		case 'u':
 			mUpdateEnabled = !mUpdateEnabled;
 			break;
+			//capture the scene
+		case 'f':
+			//creamos textura
+			textura->loadColorBuffer(mWinW, mWinH);
+			textura->download("../assets/images/captura.bmp");
+			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";
@@ -199,6 +207,8 @@ IG1App::key(unsigned int key)
 
 	if (need_redisplay)
 		mNeedsRedisplay = true;
+	delete textura;
+
 }
 
 void

@@ -87,9 +87,29 @@ Texture::loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer)
 	glBindTexture(GL_TEXTURE_2D, mId);
 
 	glCopyTexImage2D(GL_TEXTURE_2D, level, GL_RGBA, 0, 0, width, height, border);
-//GLAPI void GLAPIENTRY glTexImage2D (GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void *pixels);
-//GLAPI void GLAPIENTRY glCopyTexImage2D (GLenum target, GLint level, GLenum internalFormat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border);
-	
+
 	
 	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void 
+Texture::download(const std::string& filename)
+{
+	GLint level = 0;  // Base image level
+
+// guardar pixeles en formato  glm::u8vec4;
+	glm::u8vec4* pixels = new glm::u8vec4[mWidth * mHeight];
+	glBindTexture(GL_TEXTURE_2D, mId);
+
+	glGetTexImage(GL_TEXTURE_2D, level, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+	// download image
+	Image image;
+	image.load(pixels, mWidth, mHeight);
+	image.save(filename);
+		
+
+	
+	
 }
