@@ -105,12 +105,15 @@ Texture::download(const std::string& filename)
 	glGetTexImage(GL_TEXTURE_2D, level, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+	// Voltear la imagen en el eje Y (reflejarla verticalmente)
+	for (GLsizei y = 0; y < mHeight / 2; ++y) {
+		for (GLsizei x = 0; x < mWidth; ++x) {
+			std::swap(pixels[y * mWidth + x], pixels[(mHeight - 1 - y) * mWidth + x]);
+		}
+	}
+
 	// download image
 	Image image;
 	image.load(pixels, mWidth, mHeight);
 	image.save(filename);
-		
-
-	
-	
 }
