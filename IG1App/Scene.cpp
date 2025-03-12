@@ -116,11 +116,6 @@ Scene4::init()
 	star->rearrange(glm::vec3(100, 110, 100));
 	gObjects.push_back(star);
 
-	//Ap32, caja sin tapas con textura translúcida
-	//GlassParapet* glass = new GlassParapet(250.0);
-	GlassParapet* glass = new GlassParapet(420.0, 105.0);
-	gObjects.push_back(glass);
-
 	//Ap35, foto de la escena
 	Photo* photo = new Photo(75);
 	photo->rotate(glm::vec3(0, 10, 0));
@@ -131,6 +126,11 @@ Scene4::init()
 	grass->rearrange(glm::vec3(-120, 25, 120));
 	gObjects.push_back(grass);
 	
+	//Ap32, caja sin tapas con textura translúcida
+	//GlassParapet* glass = new GlassParapet(250.0);
+	GlassParapet* glass = new GlassParapet(420.0, 105.0);
+	gObjects.push_back(glass);
+
 }
 
 Scene::~Scene()
