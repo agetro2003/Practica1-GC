@@ -191,10 +191,11 @@ IG1App::key(unsigned int key)
 		case 'u':
 			mUpdateEnabled = !mUpdateEnabled;
 			break;
-			//capture the scene
+			//Ap 36 -> capture the scene
 		case 'f':
 			//creamos textura
 			textura->loadColorBuffer(mWinW, mWinH);
+			//la guardamos en imagen .bpm
 			textura->download("../assets/images/captura.bmp");
 			break;
 		default:

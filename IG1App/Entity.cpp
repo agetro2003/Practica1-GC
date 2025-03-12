@@ -340,6 +340,7 @@ void EntityWithTexture::render(mat4 const& modelViewMat) const
 	}
 }
 
+//Método para situar entidades con textura en posiciones distintas al centro de la escena
 void EntityWithTexture::rearrange(glm::vec3 pos) {
 	glm::mat4 translateMat = glm::translate(mModelMat, pos);
 	mModelMat = translateMat * mModelMat;
@@ -467,6 +468,7 @@ BoxOutline::BoxOutline(GLdouble lenght, glm::dvec4 mColor)
 
 }
 
+//En el render se emplea una textura para el front y otra para el back
 void BoxOutline::render(const glm::mat4& modelViewMat) const {
 	if (mMesh != nullptr) {
 		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
@@ -502,15 +504,15 @@ void BoxOutline::render(const glm::mat4& modelViewMat) const {
 
 }
 
-
+//Contructor de la caja con tapas que se abre apartaods opcionales 30-31
 Box::Box(GLdouble lenght, glm::dvec4 mColor)
 {
 	l = lenght;
 	mShader = Shader::get("texture");
 	//create cubo sin tapas
-	mMesh = Mesh::generateBoxOutlineTexCor(lenght, lenght);
-	mMeshTapa = Mesh::generaRectangleTexCor(lenght, lenght, 1,1);
-	mMeshBottom= Mesh::generaRectangleTexCor(lenght, lenght, 1, 1);
+	mMesh = Mesh::generateBoxOutlineTexCor(lenght, lenght);	//Mesh de la caja
+	mMeshTapa = Mesh::generaRectangleTexCor(lenght, lenght, 1,1); //Mesh de la tapa
+	mMeshBottom= Mesh::generaRectangleTexCor(lenght, lenght, 1, 1); //Mesh del fondo
 	mTexture = new Texture();
 	mInsideTexture = new Texture();
 
@@ -518,17 +520,21 @@ Box::Box(GLdouble lenght, glm::dvec4 mColor)
 	mTexture->load("../assets/images/container.jpg");
 	mInsideTexture->load("../assets/images/papelE.png");
 
+	//ModelMat de la tapa, situada horizontalmente en la parte superior de la caja
 	mModelMatTapa = glm::mat4(1.0);
 	glm::mat4 translateMat = glm::translate(mModelMatTapa, glm::vec3(0, lenght*0.5, 0));
 	glm::mat4 rotateMat=glm::rotate(glm::mat4(1.0), glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mModelMatTapa = translateMat * rotateMat * mModelMatTapa;
 
+	//ModelMat del fondo, situado horizontalmente en la parte inferior de la caja
 	mModelMatBottom = glm::mat4(1.0);
 	translateMat = glm::translate(mModelMatBottom, glm::vec3(0, -lenght*0.5, 0));
 	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mModelMatBottom = translateMat *  rotateMat * mModelMatBottom;
 
 }
+
+//Se cargan y descargan las tres mallas
 void
 Box::load()
 {
@@ -544,6 +550,7 @@ Box::unload()
 	mMeshTapa->unload();
 	mMeshBottom->unload();
 }
+
 void
 Box::rearrange(glm::vec3 pos) {
 	
@@ -554,13 +561,14 @@ Box::rearrange(glm::vec3 pos) {
 	mModelMatBottom = translateMat * mModelMatBottom;
 
 }
-// ajustar la posicion de la tapa en z de acuerdo al angulo
+// Ajustar la posición de la tapa en z de acuerdo al ángulo de apertura
+// Un ciclo completo crece de 0 a 180, de 180 pasa a 0 (-5 en realidad) y de ahí decrece a -180. Para reiniciar, de -180 pasa a 0
 /*
-* Angulo 0 = en z 0
-* Angulo 180 = z -L
-* Angulo -90 = z: -0.5 L 
-* Angulo - 180 = z: 0
-
+* Ángulo 0 => z=0
+* Ángulo 90 => z= -0.5*L 
+* Ángulo 180 => z=-L
+* Ángulo -90 => z= -0.5*L 
+* Ángulo -180 => z=0
 */
 GLdouble
 Box::adjustZ() {
@@ -574,7 +582,14 @@ Box::adjustZ() {
 
 	return multiplicador;
 }
-
+//Ajustar la posición de la tapa en y de acuerdo al ángulo de apertura 
+/*
+* Ángulo 0 => y=0
+* Ángulo 90 => y= 0.5*L 
+* Ángulo 180 => y=0
+* Ángulo -90 => y=0.5*L
+* Ángulo -180 => y=0
+*/
 GLdouble
 Box::adjustY() {
 	GLdouble multiplicador = 0;
@@ -588,26 +603,28 @@ Box::adjustY() {
 	return multiplicador * l;
 }
 
-
+//Update de la caja con tapa, la tapa se abre y cierra
+//Se lleva cuenta del ángulo de apertura en alpha, los 180 grados de la apertura se consideran positivos y los del cierre negativos
+//Para que la tapa se abra correctamente se lleva la malla al origen, se alinea con el eje x, se rota sobre el eje x, se desalinea con el eje x y se devuelve a su posición
 void 
 Box::update() {
-	//glm::mat4 rotateAbrir;
-
 	glm::vec3 initialPos;
 	glm::mat4 toOrigin, rotateAbrir, toPos, adjust, deadjust;
+	//Matriz de desalineado con el eje x
 	deadjust = glm::translate(glm::mat4(1.0), glm::vec3(0, -adjustY(), -adjustZ()));
 	mModelMatTapa = deadjust * mModelMatTapa;
 
+	//Los 180 grados de la apertura se rota en positivo sobre x
 	if (alpha < 180 and alpha >= 0) {
 		initialPos = glm::vec3(mModelMatTapa[3].x, mModelMatTapa[3].y, mModelMatTapa[3].z);
-		
 		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
-		adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, 0, -l * 0.5));
 		rotateAbrir = glm::rotate(glm::mat4(1.0), glm::radians(5.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 		toPos = glm::translate(glm::mat4(1.0), initialPos);
 		alpha += 5;
 		mModelMatTapa = toPos  * rotateAbrir  * toOrigin  * mModelMatTapa ;
 	}
+
+	//Los 180 grados del cierre se rotan en negativo sobre x
 	else if (alpha < 0 and alpha >= -180) {
 		initialPos = glm::vec3(mModelMatTapa[3]);
 		toOrigin = glm::translate(glm::mat4(1.0), -initialPos);
@@ -623,15 +640,14 @@ Box::update() {
 		alpha = 0;
 	}
 
+	//Matriz de alineado con el eje x
 	adjust = glm::translate(glm::mat4(1.0), glm::vec3(0, adjustY(), adjustZ()));
 
 	mModelMatTapa = adjust * mModelMatTapa;
 
-	
-
-	
 }
 
+//Se renderizan las tres mallas por separado con sus correspondientes matrices de posición
 void Box::render(const glm::mat4& modelViewMat) const {
 
 	if (mMesh != nullptr) {
@@ -726,9 +742,6 @@ void Box::render(const glm::mat4& modelViewMat) const {
 		glDisable(GL_CULL_FACE);
 
 	}
-
-	
-
 }
 
 //Constructor estrella apartado 26-29
@@ -745,7 +758,7 @@ Star3D::Star3D(GLdouble re, GLuint np, GLdouble h) {
 
 } 
 
-
+//Reder de la estrella doble: primero se renderiza la malla una vez, luego se rota 180 grados y se vuelve a renderizar para generar la estrella doble
 void Star3D::render(const glm::mat4& modelViewMat) const
 {
 	if (mMesh != nullptr) {
@@ -792,7 +805,7 @@ void Star3D::render(const glm::mat4& modelViewMat) const
 	}
 }
 
-//update the Stars
+//update de las estrellas: rotación en y sobre el centro de la estrella y rotación en z sobre si misma
 void Star3D::update()
 {
 	//Move to the origin
@@ -809,7 +822,7 @@ void Star3D::update()
 }
 
 
-//Constructor caja sin tapa apartados 32
+//Constructor caja sin tapa con paredes translúcidas, apartado 32
 GlassParapet::GlassParapet(GLdouble width, GLdouble height, glm::dvec4 mColor)
 {
 
@@ -859,7 +872,7 @@ void GlassParapet::render(const glm::mat4& modelViewMat) const {
 	}
 }
 
-//Ap-35, foto
+//Ap-35, constructor de la foto, captura en su textura la imagen del contenido de la escena (600x600)
 Photo::Photo(GLdouble lenght)
 {
 	mShader = Shader::get("texture");
@@ -903,8 +916,6 @@ void Photo::render(const glm::mat4& modelViewMat) const {
 	}
 }
 
-
-
 void Photo::update() {
 	mTexture->loadColorBuffer(l, l);
 	
@@ -917,6 +928,8 @@ void Photo::rotate(glm::vec3 pos) {
 	mModelMat = translateMat * rotateMat * mModelMat;
 }
 
+
+//Hierba del apartado opcional 33, emplea la imagen grass_alpha.png como textura
 Grass::Grass(GLdouble lenght)
 {
 	mShader = Shader::get("texture:texture_alpha");
@@ -925,6 +938,8 @@ Grass::Grass(GLdouble lenght)
 	mTexture = new Texture();
 	mTexture->load("../assets/images/grass_alpha.png");
 }
+
+//La malla del rectángulo de hierba original se renderiza un vez, luego se rota 120 grados, se renderiza de nuevo, se rota otros 120 grados y se renderiza una última vez para crear la hierba
 void
 Grass::render(const glm::mat4& modelViewMat) const {
 	if (mMesh != nullptr) {

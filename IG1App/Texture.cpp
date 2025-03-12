@@ -68,7 +68,7 @@ Texture::setWrap(GLuint wp) // GL_REPEAT, GL_CLAMP_TO_EDGE, ...
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-//Ap-34
+//Ap-34, carga como textura una ventana de la escena con simensiones width x height
 void
 Texture::loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer) 
 {
@@ -92,6 +92,7 @@ Texture::loadColorBuffer(GLsizei width, GLsizei height, GLuint buffer)
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+//Ap-36, descarga de la imagen
 void 
 Texture::download(const std::string& filename)
 {

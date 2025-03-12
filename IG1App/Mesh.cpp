@@ -362,12 +362,14 @@ Mesh::generateRGBCubeTriangles(GLdouble length) {
 
 }
 
+//Rectángulo sin texturas, Ap18
 Mesh *
 Mesh::generateGround(GLdouble lenght) {
 	Mesh* mesh = generateRectangle(lenght, lenght);
 	return mesh;
 }
 
+//Rectángulo con texturas, Ap20
 Mesh*
 Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 	Mesh* mesh = generateRectangle(w, h);
@@ -383,6 +385,7 @@ Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 	return mesh;
 }
 
+//Rectángulo con texturas que se repiten, Ap21
 Mesh*
 Mesh::generaRectangleTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
 	Mesh* mesh = generateRectangle(w, h);
@@ -430,7 +433,7 @@ Mesh::generateBoxOutline(GLdouble width, GLdouble height) {
 	return mesh;
 }
 
-//cubo sin tapas sin textura Ap23 original (deprecated)
+//cubo sin tapas sin textura Ap23 original (deprecated, siempre es un cubo)
 Mesh*
 Mesh::generateBoxOutline2(GLdouble length) {
 
@@ -502,10 +505,13 @@ Mesh::generateStar3D(GLdouble re, GLuint np, GLdouble h) {
 
 	mesh->vVertices.emplace_back(0, 0, 0); //Vértice central de la estrella
 
-	//re = sqrt(x*x + y*y)
-	//cos(grados_ext)=x/re -> x=cos(grados_ext) *re
-	//sin(grados_ext)=y/re -> y=sin(grados_ext) *re
+	//Ecuación del radio del círculo -> re = sqrt(x*x + y*y)
+	//Coordenadas x e y de un punto en su radio:
+	//	cos(grados_ext)=x/re -> x=cos(grados_ext) *re
+	//	sin(grados_ext)=y/re -> y=sin(grados_ext) *re
 
+	//Para generar la estrella, se pone un vértice exterior y uno interior en sucesión tantas veces como puntas tenga la estrella
+	//Cada uno se une al vértice central y al que sea el anterior para ir formando la estrella
 	for (int i = 0; i < np; i++) {
 		mesh->vVertices.emplace_back(cos(glm::radians(grados_ext)) * re, sin(glm::radians(grados_ext))* re, h);		//Vértice exterior
 		mesh->vVertices.emplace_back(cos(glm::radians(grados_int)) * ri, sin(glm::radians(grados_int)) * ri, h);	//Vértice interior
@@ -516,45 +522,47 @@ Mesh::generateStar3D(GLdouble re, GLuint np, GLdouble h) {
 	return mesh;
 }
 
+//Cada lado de la textura de la estrella se divide en 4 y se van recorriendo lados (en orden superior, derecho, inferior e izquierdo)
+//y asignando puntos consecutivos a un vértce exterior seguido de un vértice interior (seguido de un vértice exterior seguido de un vértice interior, etc.)
 Mesh* 
 Mesh::generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h) {
 	Mesh* mesh = Mesh::generateStar3D(re, np, h);
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
 
-	mesh->vTexCoords.emplace_back(0.5, 0.5);
+	mesh->vTexCoords.emplace_back(0.5, 0.5); //Se asigna el centro de la textura al vértice central
 
 	double x = 0, y = 0;
 
 	for (int i = 0; i < np; i++) {
 		mesh->vTexCoords.emplace_back(x,y); //Vértice exterior
-		if (x == 0 and y < 1) {
+		if (x == 0 and y < 1) {			//Lado superior de la imagen de la textura
 			y += 0.25;
 		}
-		else if (y == 1 and x < 1) {
+		else if (y == 1 and x < 1) {	//Lado derecho de la imagen de la textura
 			x += 0.25;
 		}
-		else if (x == 1 and y > 0) {
+		else if (x == 1 and y > 0) {	//Lado inferior de la imagen de la textura
 			y -= 0.25;
 		}
-		else if (y == 0 and x > 0) {
+		else if (y == 0 and x > 0) {	//Lado izquierdo de la imagen de la textura
 			x -= 0.25;
 		}
 		mesh->vTexCoords.emplace_back(x,y); //Vértice interior
-		if (x == 0 and y < 1) {
+		if (x == 0 and y < 1) {			//Lado superior de la imagen de la textura
 			y += 0.25;
 		}
-		else if (y == 1 and x < 1) {
+		else if (y == 1 and x < 1) {	//Lado derecho de la imagen de la textura
 			x += 0.25;
 		}
-		else if (x == 1 and y > 0) {
+		else if (x == 1 and y > 0) {	//Lado inferior de la imagen de la textura
 			y -= 0.25;
 		}
-		else if (y == 0 and x > 0) {
+		else if (y == 0 and x > 0) {	//Lado izquierdo de la imagen de la textura
 			x -= 0.25;
 		}
 		
 	}
-	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(0, 0); //Vértice exteriror que cierra la figura
 
 	return mesh;
 
