@@ -165,3 +165,22 @@ Camera::changePrj() {
 	
 	setPM();
 }
+
+void
+Camera::yawReal(GLfloat cs) {// Up/Down
+	mLook += mRight * cs;
+	setVM();
+}
+
+
+void
+Camera::pitchReal(GLfloat cs) {// Up/Down
+	mLook += mUpward * cs;
+	setVM();
+}
+
+void 
+Camera::rollReal(GLfloat cs) {
+	mUp += mUpward * cs;
+	setVM();
+}

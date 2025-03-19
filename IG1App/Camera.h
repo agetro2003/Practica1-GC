@@ -47,6 +47,9 @@ public:
 	
 	void changePrj();
 
+	void pitchReal(GLfloat cs);
+	void yawReal(GLfloat cs);
+	void rollReal(GLfloat cs);
 
 protected:
 	glm::dvec3 mEye = {0.0, 0.0, 500.0}; // camera's position

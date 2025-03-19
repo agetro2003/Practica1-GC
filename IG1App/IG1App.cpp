@@ -249,22 +249,28 @@ IG1App::specialkey(int key, int scancode, int action, int mods)
 			glfwSetWindowShouldClose(mWindow, true); // stops main loop
 			break;
 		case GLFW_KEY_RIGHT:
-			if (mods == GLFW_MOD_CONTROL)
-				mCamera->pitch(-1); // rotates -1 on the X axis
+			if (mods & GLFW_MOD_CONTROL)
+				//mCamera->pitch(-1); // rotates -1 on the X axis
+				mCamera->rollReal(-1);
 			else
-				mCamera->pitch(1); // rotates 1 on the X axis
+				//mCamera->pitch(1); // rotates 1 on the X axis
+				mCamera->yawReal(1);
 			break;
 		case GLFW_KEY_LEFT:
-			if (mods == GLFW_MOD_CONTROL)
-				mCamera->yaw(1); // rotates 1 on the Y axis
+			if (mods & GLFW_MOD_CONTROL)
+				//mCamera->yaw(1); // rotates 1 on the Y axis
+				mCamera->rollReal(1);
 			else
-				mCamera->yaw(-1); // rotate -1 on the Y axis
+				//mCamera->yaw(-1); // rotate -1 on the Y axis
+				mCamera->yawReal(-1);
 			break;
 		case GLFW_KEY_UP:
-			mCamera->roll(1); // rotates 1 on the Z axis
+			//mCamera->roll(1); // rotates 1 on the Z axis
+			mCamera->pitchReal(1);
 			break;
 		case GLFW_KEY_DOWN:
-			mCamera->roll(-1); // rotates -1 on the Z axis
+			//mCamera->roll(-1); // rotates -1 on the Z axis
+			mCamera->pitchReal(-1);
 			break;
 		default:
 			need_redisplay = false;
