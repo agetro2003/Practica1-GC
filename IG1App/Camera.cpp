@@ -39,6 +39,8 @@ Camera::set2D()
 	mEye = {0, 0, 500};
 	mLook = {0, 0, 0};
 	mUp = {0, 1, 0};
+	mAng = -90;
+	mRadio = mEye[2];
 	setVM();
 }
 
@@ -48,6 +50,8 @@ Camera::set3D()
 	mEye = {500, 500, 500};
 	mLook = {0, 10, 0};
 	mUp = {0, 1, 0};
+	mAng = -90;
+	mRadio = mEye[2];
 	setVM();
 }
 
@@ -166,6 +170,7 @@ Camera::changePrj() {
 	setPM();
 }
 
+//Ap45
 void
 Camera::yawReal(GLfloat cs) {// Up/Down
 	mLook += mRight * cs;
@@ -181,6 +186,17 @@ Camera::pitchReal(GLfloat cs) {// Up/Down
 
 void 
 Camera::rollReal(GLfloat cs) {
-	mUp += mUpward * cs;
+	glm::mat4 roll_mat = glm::rotate(glm::mat4(1.0f), glm::radians(cs), mFront);
+	mUp += glm::mat3(roll_mat) * mUp;;
+	setVM();
+}
+
+//Ap46-47
+void 
+Camera::orbit(GLdouble incAng, GLdouble incY) {
+	mAng += incAng;
+	mEye.x = mLook.x + cos(radians(mAng)) * mRadio;
+	mEye.z = mLook.z - sin(radians(mAng)) * mRadio;
+	mEye.y += incY;
 	setVM();
 }

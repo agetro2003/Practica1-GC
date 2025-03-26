@@ -50,6 +50,10 @@ public:
 	void pitchReal(GLfloat cs);
 	void yawReal(GLfloat cs);
 	void rollReal(GLfloat cs);
+	
+	void orbit(GLdouble incAng, GLdouble incY);
+	GLfloat mAng;
+	GLfloat mRadio;
 
 protected:
 	glm::dvec3 mEye = {0.0, 0.0, 500.0}; // camera's position

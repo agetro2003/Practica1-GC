@@ -219,6 +219,9 @@ IG1App::key(unsigned int key)
 		case 'p':
 			mCamera->changePrj();
 			break;
+		case 't':
+			mCamera->orbit(1,0);
+			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";
