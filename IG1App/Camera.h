@@ -55,6 +55,8 @@ public:
 	GLfloat mAng;
 	GLfloat mRadio;
 
+	void setCenital();
+
 protected:
 	glm::dvec3 mEye = {0.0, 0.0, 500.0}; // camera's position
 	glm::dvec3 mLook = {0.0, 0.0, 0.0};  // target's position

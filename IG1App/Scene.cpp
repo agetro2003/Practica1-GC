@@ -129,6 +129,16 @@ Scene4::init()
 	//Ap32, caja sin tapas con textura translúcida
 	//GlassParapet* glass = new GlassParapet(250.0);
 	GlassParapet* glass = new GlassParapet(420.0, 105.0);
+	/*
+	glass->mTexture = new Texture(); 
+	glass->mTexture->load("../assets/images/windowV.jpg", 100);
+	gTextures.push_back(glass->mTexture);
+
+	Texture* mTexture_glass = new Texture();
+	mTexture_glass->load("../assets/images/windowV.jpg", 100);
+	glass->mTexture = mTexture_glass;
+	gTextures.push_back(mTexture_glass);
+	*/
 	gObjects.push_back(glass);
 
 }
@@ -147,6 +157,11 @@ Scene::destroy()
 		delete el;
 
 	gObjects.clear();
+
+	for (Texture* el : gTextures)
+		delete el;
+
+	gTextures.clear();
 }
 
 void

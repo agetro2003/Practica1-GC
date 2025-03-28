@@ -146,9 +146,10 @@ public:
 	explicit EntityWithTexture();
 	void render(const glm::mat4& modelViewMat) const override;
 	virtual void rearrange(glm::vec3 pos);
+	Texture* mTexture;	
 
 protected:
-	Texture* mTexture;
+	
 	bool mModulate=false;
 
 };

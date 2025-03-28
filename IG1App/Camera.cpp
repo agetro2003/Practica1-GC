@@ -48,9 +48,9 @@ void
 Camera::set3D()
 {
 	mEye = {500, 500, 500};
-	mLook = {0, 10, 0};
+	mLook = {0, 0, 0};
 	mUp = {0, 1, 0};
-	mAng = -90;
+	mAng = -45;
 	mRadio = mEye[2];
 	setVM();
 }
@@ -187,7 +187,7 @@ Camera::pitchReal(GLfloat cs) {// Up/Down
 void 
 Camera::rollReal(GLfloat cs) {
 	glm::mat4 roll_mat = glm::rotate(glm::mat4(1.0f), glm::radians(cs), mFront);
-	mUp += glm::mat3(roll_mat) * mUp;;
+	mUp = glm::mat3(roll_mat) * mUp;
 	setVM();
 }
 
@@ -199,4 +199,19 @@ Camera::orbit(GLdouble incAng, GLdouble incY) {
 	mEye.z = mLook.z - sin(radians(mAng)) * mRadio;
 	mEye.y += incY;
 	setVM();
+}
+
+//Ap48, la cámara cenital interactúa raro con la órbita
+void
+Camera::setCenital() {
+	mEye = {1, 500, 1};
+	mLook = { 0, 0, 0 };
+	mUp = { 0, 1, 0 };
+
+	mAng = 0;
+	mRadio = mEye[2];
+
+	rollReal(-45);
+	
+	//setVM();
 }

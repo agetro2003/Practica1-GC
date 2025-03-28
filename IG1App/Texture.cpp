@@ -116,4 +116,5 @@ Texture::download(const std::string& filename)
 	Image image;
 	image.load(pixels, mWidth, mHeight);
 	image.save(filename);
+	free(pixels);
 }
