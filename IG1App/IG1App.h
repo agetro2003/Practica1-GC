@@ -54,6 +54,8 @@ public:
 	bool mbOrto2 = true;
 	bool mbOrto3 = true;
 	bool mbOrto4 = true;
+	bool mUpdate = false;
+	bool mUpdate2 = false;
 
 
 protected:

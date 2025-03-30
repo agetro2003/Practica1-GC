@@ -39,13 +39,24 @@ IG1App::run() // enters the main event processing loop
 		}
 
 		// Update the objects of the scene
-		if (mUpdateEnabled && glfwGetTime() > mNextUpdate) {
+		if ((mUpdateEnabled || mUpdate || mUpdate2) && glfwGetTime() > mNextUpdate) {
 			double time = glfwGetTime();
-			mScenes[mCurrentScene]->update();
+			if (m2Escenas) {
+				if (mUpdate) {
+					mScenes[4]->update();
+				}
+				if (mUpdate2) {
+					mScenes[2]->update();
+				}
+			}
+			else {
+				mScenes[mCurrentScene]->update();
+
+			}
 			mNextUpdate = time + FRAME_DURATION;
 			mNeedsRedisplay = true;
 		}
-		if (mUpdateEnabled)
+		if (mUpdateEnabled || mUpdate || mUpdate2)
 			glfwWaitEventsTimeout(mNextUpdate - glfwGetTime());
 		else
 		{
@@ -159,11 +170,9 @@ IG1App::display() const
 		Viewport auxVP = *mViewPort;
 		mViewPort->setSize(mWinW / 2, mWinH);
 		auxCam.setSize(mViewPort->width(), mViewPort->height());
-		//*mViewPort = auxVP;
 		mViewPort->setPos(0, 0);
 		auxCam.set3D();
 		if (!mbOrto3) {
-			printf("Cambio de proyección 1\n");
 			auxCam.changePrj();
 		}
 		mScenes[mCurrentScene]->render(auxCam);
@@ -173,7 +182,6 @@ IG1App::display() const
 		mViewPort->setPos(mWinW / 2, 0);
 		auxCam.setCenital();
 		if (!mbOrto4) {
-			printf("Cambio de proyección 2\n");
 			auxCam.changePrj();
 		}
 		mScenes[mCurrentScene]->render(auxCam);
@@ -197,7 +205,6 @@ IG1App::display() const
 			mScenes[4]->load();
 		}
 		if (!mbOrto1) {
-			printf("Cambio de proyección 1\n");
 			auxCam.changePrj();
 		}
 		mScenes[4]->render(auxCam);
@@ -213,7 +220,6 @@ IG1App::display() const
 			mScenes[2]->load();
 		}
 		if (!mbOrto2) {
-			printf("Cambio de proyección 2\n");
 			auxCam.changePrj();
 		}
 		mScenes[2]->render(auxCam);
@@ -273,7 +279,20 @@ IG1App::key(unsigned int key)
 			break;
 			//update the scene
 		case 'u':
-			mUpdateEnabled = !mUpdateEnabled;
+			if (m2Escenas) {
+				if (mMouseCoord.x < mWinW / 2) {
+					printf("1\n");
+					mUpdate = !mUpdate;
+				}
+				else {
+					printf("2\n");
+					mUpdate2 = !mUpdate2;
+				}
+			}
+			else {
+				mUpdateEnabled = !mUpdateEnabled;
+
+			}
 			break;
 			//Ap 36 -> capture the scene
 		case 'f':
