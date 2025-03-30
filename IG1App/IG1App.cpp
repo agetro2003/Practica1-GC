@@ -119,6 +119,10 @@ IG1App::iniWinOpenGL()
 	glfwSetKeyCallback(mWindow, s_specialkey);
 	glfwSetWindowRefreshCallback(mWindow, s_display);
 
+	glfwSetMouseButtonCallback(mWindow, s_mouse);
+	//glfwSetCursorPosCallback(mWindow, s_motion);
+	//glfwSetScrollCallback(mWindow, s_mouseWheel);
+
 	// Error message callback (all messages)
 	glEnable(GL_DEBUG_OUTPUT);
 	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0u, 0, GL_TRUE);
@@ -149,9 +153,33 @@ IG1App::display() const
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clears the back buffer
 
-	mScenes[mCurrentScene]->render(*mCamera); // uploads the viewport and camera to the GPU
+	//Ap49
+
+	if (m2Vistas) {
+		Camera auxCam = *mCamera; // copiando mCamera
+		Viewport auxVP = *mViewPort;
+		mViewPort->setSize(mWinW / 2, mWinH);
+		auxCam.setSize(mViewPort->width(), mViewPort->height());
+		//*mViewPort = auxVP;
+		mViewPort->setPos(0, 0);
+		auxCam.set3D();
+		mScenes[mCurrentScene]->render(auxCam);
+		mViewPort->setPos(mWinW / 2, 0);
+		auxCam.setCenital();
+		//auxCam.setCenital();
+		mScenes[mCurrentScene]->render(auxCam);
+
+		*mViewPort = auxVP;
+
+	}
+	else {
+		mScenes[mCurrentScene]->render(*mCamera); // uploads the viewport and camera to the GPU
+	}
+
 
 	glfwSwapBuffers(mWindow); // swaps the front and back buffer
+
+
 }
 
 void
@@ -225,6 +253,9 @@ IG1App::key(unsigned int key)
 		case 'T':
 			mCamera->setCenital();
 			break;
+		case 'k':
+			m2Vistas = !m2Vistas; 
+			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";
@@ -257,10 +288,10 @@ IG1App::specialkey(int key, int scancode, int action, int mods)
 		case GLFW_KEY_RIGHT:
 			if (mods & GLFW_MOD_CONTROL)
 				//mCamera->pitch(-1); // rotates -1 on the X axis
-				mCamera->rollReal(-1);
+				mCamera->rollReal(-2);
 			else
 				//mCamera->pitch(1); // rotates 1 on the X axis
-				mCamera->yawReal(1);
+				mCamera->yawReal(2);
 			break;
 		case GLFW_KEY_LEFT:
 			if (mods & GLFW_MOD_CONTROL)
@@ -272,11 +303,20 @@ IG1App::specialkey(int key, int scancode, int action, int mods)
 			break;
 		case GLFW_KEY_UP:
 			//mCamera->roll(1); // rotates 1 on the Z axis
-			mCamera->pitchReal(1);
+			mCamera->pitchReal(2);
 			break;
 		case GLFW_KEY_DOWN:
 			//mCamera->roll(-1); // rotates -1 on the Z axis
-			mCamera->pitchReal(-1);
+			mCamera->pitchReal(-2);
+			break;
+		case GLFW_MOUSE_BUTTON_LEFT:
+			mouse(key, action, mods);
+			break;
+		case GLFW_MOUSE_BUTTON_RIGHT:
+			mouse(key, action, mods);
+			break;
+		case GLFW_MOUSE_BUTTON_MIDDLE:
+			mouse(key, action, mods);
 			break;
 		default:
 			need_redisplay = false;
@@ -311,4 +351,12 @@ IG1App::changeScene(size_t sceneNr)
 	}
 
 	return true;
+}
+
+
+void 
+IG1App::mouse(int button, int state, int mods) {
+	glfwGetCursorPos(mWindow, &mMouseCoord.x, &mMouseCoord.y);
+	mMouseButt = button;
+	printf("%d %f %f\n", mMouseButt, mMouseCoord.x, mMouseCoord.y);
 }

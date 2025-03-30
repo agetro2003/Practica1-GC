@@ -181,6 +181,7 @@ Camera::yawReal(GLfloat cs) {// Up/Down
 void
 Camera::pitchReal(GLfloat cs) {// Up/Down
 	mLook += mUpward * cs;
+	mUp = mUpward;
 	setVM();
 }
 
@@ -204,7 +205,7 @@ Camera::orbit(GLdouble incAng, GLdouble incY) {
 //Ap48, la cámara cenital interactúa raro con la órbita
 void
 Camera::setCenital() {
-	mEye = {1, 500, 1};
+	mEye = { 1, 500, 1 };
 	mLook = { 0, 0, 0 };
 	mUp = { 0, 1, 0 };
 
@@ -212,6 +213,15 @@ Camera::setCenital() {
 	mRadio = mEye[2];
 
 	rollReal(-45);
-	
+	mEye = { 1, 500, 1 };
+	mLook = { 0, 0, 0 };
+	mUp = { 0, 1, 0 };
+
+	mAng = 0;
+	mRadio = mEye[2];
+
+	rollReal(-45);
+
 	//setVM();
 }
+

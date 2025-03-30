@@ -39,6 +39,15 @@ public:
 	void run();   // the main event processing loop
 	void close(); // the application
 
+	bool m2Vistas=false;
+
+	glm::dvec2 mMouseCoord;
+	int mMouseButt;
+
+	void mouse(int button, int state, int mods);
+	//void motion(double x, double y);
+	//void mouseWheel(double dx, double dy);
+
 protected:
 	IG1App() = default;
 	~IG1App() { close(); };
@@ -57,6 +66,11 @@ protected:
 	static void s_resize(GLFWwindow*, int newWidth, int newHeight) { s_ig1app.resize(newWidth, newHeight); };
 	static void s_key(GLFWwindow* win, unsigned int codepoint) { s_ig1app.key(codepoint); };
 	static void s_specialkey(GLFWwindow* win, int key, int scancode, int action, int mods) { s_ig1app.specialkey(key, scancode, action, mods); };
+
+	//Ap51
+	static void s_mouse(GLFWwindow* win, int button, int action, int mods) { s_ig1app.mouse(button, action, mods); };
+	//static void s_motion(GLFWwindow* win, double x, double y) { s_ig1app.motion(x,y) ; };
+	//static void s_mouseWheel(GLFWwindow* win, double dx, double dy) { s_ig1app.mouseWheel(dx, dy); };
 
 	// Viewport position and size
 	Viewport* mViewPort = nullptr;
