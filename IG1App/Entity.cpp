@@ -321,6 +321,12 @@ EntityWithTexture::EntityWithTexture()
 	mShader = Shader::get("texture");
 }
 
+EntityWithTexture::~EntityWithTexture()
+{
+	delete mTexture;
+	mTexture = nullptr;
+}
+
 void EntityWithTexture::render(mat4 const& modelViewMat) const
 {
 	if (mMesh != nullptr) {
@@ -468,6 +474,13 @@ BoxOutline::BoxOutline(GLdouble lenght, glm::dvec4 mColor)
 
 }
 
+//Destructor de la caja sin tapas
+BoxOutline::~BoxOutline() {
+	delete mMesh;
+	mMesh = nullptr;
+	delete mInsideTexture;
+}
+
 //En el render se emplea una textura para el front y otra para el back
 void BoxOutline::render(const glm::mat4& modelViewMat) const {
 	if (mMesh != nullptr) {
@@ -532,6 +545,15 @@ Box::Box(GLdouble lenght, glm::dvec4 mColor)
 	rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	mModelMatBottom = translateMat *  rotateMat * mModelMatBottom;
 
+}
+
+//destructor de la caja con tapas
+Box::~Box() {
+	delete mMeshTapa;
+	mMeshTapa = nullptr;
+	delete mMeshBottom;
+	mMeshBottom = nullptr;
+	delete mInsideTexture;
 }
 
 //Se cargan y descargan las tres mallas

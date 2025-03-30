@@ -147,6 +147,8 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 	virtual void rearrange(glm::vec3 pos);
 	Texture* mTexture;	
+	//destructor
+	~EntityWithTexture();
 
 protected:
 	
@@ -183,6 +185,8 @@ public:
 	BoxOutline(GLdouble lenght, glm::dvec4 mColor = glm::dvec4(0.0, 0.0, 0.0, 1.0));
 	void render(const glm::mat4& modelViewMat) const override;
 	Texture* mInsideTexture;
+	//destructors
+	~BoxOutline();
 
 };
 
@@ -201,13 +205,15 @@ public:
 	void update();
 	GLdouble adjustY();
 	GLdouble adjustZ();
-	
+	//destructors
+	~Box();
 
 protected:
 	Mesh* mMeshTapa = nullptr; 
 	glm::mat4 mModelMatTapa;  // modeling matrix
 	glm::mat4 mModelMatBottom;  // modeling matrix
 	Mesh* mMeshBottom = nullptr; 
+
 
 };
 

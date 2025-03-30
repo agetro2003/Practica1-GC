@@ -153,8 +153,18 @@ void
 Scene::destroy()
 { // release memory and resources
 
-	for (Abs_Entity* el : gObjects)
+	for (Abs_Entity* el : gObjects) {	/*
+		auto* objWithTexture = dynamic_cast<EntityWithTexture*>(el);
+		if (objWithTexture) {
+			delete objWithTexture->mTexture;
+			auto* objWithInsideTexture = dynamic_cast<BoxOutline*>(el);
+			if (objWithInsideTexture) {
+				delete objWithInsideTexture->mInsideTexture;
+			}
+		}*/
 		delete el;
+	}
+		
 
 	gObjects.clear();
 
