@@ -120,8 +120,8 @@ IG1App::iniWinOpenGL()
 	glfwSetWindowRefreshCallback(mWindow, s_display);
 
 	glfwSetMouseButtonCallback(mWindow, s_mouse);
-	//glfwSetCursorPosCallback(mWindow, s_motion);
-	//glfwSetScrollCallback(mWindow, s_mouseWheel);
+	glfwSetCursorPosCallback(mWindow, s_motion);
+	glfwSetScrollCallback(mWindow, s_mouseWheel);
 
 	// Error message callback (all messages)
 	glEnable(GL_DEBUG_OUTPUT);
@@ -166,7 +166,6 @@ IG1App::display() const
 		mScenes[mCurrentScene]->render(auxCam);
 		mViewPort->setPos(mWinW / 2, 0);
 		auxCam.setCenital();
-		//auxCam.setCenital();
 		mScenes[mCurrentScene]->render(auxCam);
 
 		*mViewPort = auxVP;
@@ -247,12 +246,14 @@ IG1App::key(unsigned int key)
 		case 'p':
 			mCamera->changePrj();
 			break;
+		/*
 		case 't':
 			mCamera->orbit(1,0);
 			break;
 		case 'T':
 			mCamera->setCenital();
 			break;
+		*/
 		case 'k':
 			m2Vistas = !m2Vistas; 
 			break;
@@ -353,10 +354,54 @@ IG1App::changeScene(size_t sceneNr)
 	return true;
 }
 
-
+//Ap51
+//Captura de posición y botón del ratón pulsado
 void 
 IG1App::mouse(int button, int state, int mods) {
 	glfwGetCursorPos(mWindow, &mMouseCoord.x, &mMouseCoord.y);
-	mMouseButt = button;
-	printf("%d %f %f\n", mMouseButt, mMouseCoord.x, mMouseCoord.y);
+
+	//conversión de la variable mMouseCoord.y
+	int height;
+	glfwGetWindowSize(mWindow, nullptr, &height);
+	mMouseCoord.y = height - mMouseCoord.y;
+	
+	//Se distingue entre pulsar el ratón y despulsarlo para los eventos de movimiento
+	if (state) {
+		mMouseButt = button;
+	}
+	else {
+		mMouseButt = 10;
+	}
+	//printf("%d %f %f %d\n", mMouseButt, mMouseCoord.x, mMouseCoord.y, state);
+}
+
+//Movimientos de la cámara con el ratón, mientras se mantienen pulsados, el botón izquierdo (0) orbita la cámara y el derecho (1) la desplaza
+void
+IG1App::motion(double x, double y) {
+	glm::dvec2 input = { x, y };
+	glm::dvec2 mp = mMouseCoord - input;
+	mMouseCoord = input;
+	if (mMouseButt==0) {
+		mCamera->orbit(mp.x * 0.05, -mp.y);
+	}
+	else if (mMouseButt == 1) {
+		mCamera->moveUD(-mp.y *0.25);
+		mCamera->moveLR(mp.x *0.25);
+	}
+	mNeedsRedisplay = true;
+}
+
+
+//Movimiento de la rueda, manteniendo pulsado CONTROL escala la escena, sin pulsar CONTROL mueve el FB de la cámara
+void
+IG1App::mouseWheel(double dx, double dy) {
+	//printf("%f %f %d %d\n", dx, dy, glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL), glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL));
+	
+	if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+		mCamera->setScale(dy*0.05);
+	}
+	else {
+		mCamera->moveFB(dy*5);
+	}
+	mNeedsRedisplay = true;
 }

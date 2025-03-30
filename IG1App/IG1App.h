@@ -42,11 +42,11 @@ public:
 	bool m2Vistas=false;
 
 	glm::dvec2 mMouseCoord;
-	int mMouseButt;
+	int mMouseButt=10;
 
 	void mouse(int button, int state, int mods);
-	//void motion(double x, double y);
-	//void mouseWheel(double dx, double dy);
+	void motion(double x, double y);
+	void mouseWheel(double dx, double dy);
 
 protected:
 	IG1App() = default;
@@ -69,8 +69,8 @@ protected:
 
 	//Ap51
 	static void s_mouse(GLFWwindow* win, int button, int action, int mods) { s_ig1app.mouse(button, action, mods); };
-	//static void s_motion(GLFWwindow* win, double x, double y) { s_ig1app.motion(x,y) ; };
-	//static void s_mouseWheel(GLFWwindow* win, double dx, double dy) { s_ig1app.mouseWheel(dx, dy); };
+	static void s_motion(GLFWwindow* win, double x, double y) { s_ig1app.motion(x,y) ; };
+	static void s_mouseWheel(GLFWwindow* win, double dx, double dy) { s_ig1app.mouseWheel(dx, dy); };
 
 	// Viewport position and size
 	Viewport* mViewPort = nullptr;
