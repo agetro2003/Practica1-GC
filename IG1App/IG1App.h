@@ -42,13 +42,19 @@ public:
 	bool m2Vistas=false;
 
 	glm::dvec2 mMouseCoord;
-	int mMouseButt=10;
+	int mMouseButt=-1;
 
 	void mouse(int button, int state, int mods);
 	void motion(double x, double y);
 	void mouseWheel(double dx, double dy);
 
 	bool m2Escenas = false;
+
+	bool mbOrto1 = true;
+	bool mbOrto2 = true;
+	bool mbOrto3 = true;
+	bool mbOrto4 = true;
+
 
 protected:
 	IG1App() = default;

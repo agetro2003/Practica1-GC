@@ -162,10 +162,24 @@ IG1App::display() const
 		//*mViewPort = auxVP;
 		mViewPort->setPos(0, 0);
 		auxCam.set3D();
+		if (!mbOrto3) {
+			printf("Cambio de proyección 1\n");
+			auxCam.changePrj();
+		}
 		mScenes[mCurrentScene]->render(auxCam);
+		if (!mbOrto3) {
+			auxCam.changePrj();
+		}
 		mViewPort->setPos(mWinW / 2, 0);
 		auxCam.setCenital();
+		if (!mbOrto4) {
+			printf("Cambio de proyección 2\n");
+			auxCam.changePrj();
+		}
 		mScenes[mCurrentScene]->render(auxCam);
+		if (!mbOrto4) {
+			auxCam.changePrj();
+		}
 
 		*mViewPort = auxVP;
 
@@ -182,8 +196,14 @@ IG1App::display() const
 		if (mCurrentScene != 4) {
 			mScenes[4]->load();
 		}
+		if (!mbOrto1) {
+			printf("Cambio de proyección 1\n");
+			auxCam.changePrj();
+		}
 		mScenes[4]->render(auxCam);
-
+		if (!mbOrto1) {
+			auxCam.changePrj();
+		}
 		Viewport *secondViewport= mViewPort;
 		secondViewport->setSize(mWinW / 2, mWinH);
 		auxCam.setSize(secondViewport->width(), secondViewport->height());
@@ -192,7 +212,14 @@ IG1App::display() const
 		if (mCurrentScene != 2) {
 			mScenes[2]->load();
 		}
+		if (!mbOrto2) {
+			printf("Cambio de proyección 2\n");
+			auxCam.changePrj();
+		}
 		mScenes[2]->render(auxCam);
+		if (!mbOrto2) {
+			auxCam.changePrj();
+		}
 		if (mCurrentScene != 4) {
 			mScenes[4]->unload();
 		}
@@ -274,7 +301,27 @@ IG1App::key(unsigned int key)
 			mCamera->moveFB(-1);
 			break;
 		case 'p':
-			mCamera->changePrj();
+			if (m2Escenas) {
+				if(mMouseCoord.x < mWinW / 2) {
+					mbOrto1 = !mbOrto1;
+				}
+				else {
+					mbOrto2 = !mbOrto2;
+				}
+			}
+			else if (m2Vistas) {
+				if (mMouseCoord.x < mWinW / 2) {
+					mbOrto3 = !mbOrto3;
+				}
+				else {
+					mbOrto4 = !mbOrto4;
+				}
+			}
+			else
+			{
+				mCamera->changePrj();
+			}
+			
 			break;
 		/*
 		case 't':
@@ -409,7 +456,7 @@ IG1App::mouse(int button, int state, int mods) {
 		mMouseButt = button;
 	}
 	else {
-		mMouseButt = 10;
+		mMouseButt = -1;
 	}
 	//printf("%d %f %f %d\n", mMouseButt, mMouseCoord.x, mMouseCoord.y, state);
 }
