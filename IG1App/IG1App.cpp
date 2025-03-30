@@ -153,9 +153,8 @@ IG1App::display() const
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clears the back buffer
 
-	//Ap49
-
-	if (m2Vistas) {
+	//Ap49, 2 vistas de la misma escena
+	if (m2Vistas && !m2Escenas) {
 		Camera auxCam = *mCamera; // copiando mCamera
 		Viewport auxVP = *mViewPort;
 		mViewPort->setSize(mWinW / 2, mWinH);
@@ -170,6 +169,37 @@ IG1App::display() const
 
 		*mViewPort = auxVP;
 
+	}
+	//Ap 52, 2 vistas de escenas distintas (la 4 a la izquierda y la 2 a la derecha)
+	else if (!m2Vistas && m2Escenas) {
+		Camera auxCam = *mCamera; // copiando mCamera
+		Viewport auxVP = *mViewPort;
+		mViewPort->setSize(mWinW / 2, mWinH);
+		auxCam.setSize(mViewPort->width(), mViewPort->height());
+		//*mViewPort = auxVP;
+		mViewPort->setPos(0, 0);
+		auxCam.set3D();
+		if (mCurrentScene != 4) {
+			mScenes[4]->load();
+		}
+		mScenes[4]->render(auxCam);
+
+		Viewport *secondViewport= mViewPort;
+		secondViewport->setSize(mWinW / 2, mWinH);
+		auxCam.setSize(secondViewport->width(), secondViewport->height());
+		secondViewport->setPos(mWinW / 2, 0);
+		auxCam.set2D();
+		if (mCurrentScene != 2) {
+			mScenes[2]->load();
+		}
+		mScenes[2]->render(auxCam);
+		if (mCurrentScene != 4) {
+			mScenes[4]->unload();
+		}
+		if (mCurrentScene != 2) {
+			mScenes[2]->unload();
+		}
+		*mViewPort = auxVP;
 	}
 	else {
 		mScenes[mCurrentScene]->render(*mCamera); // uploads the viewport and camera to the GPU
@@ -256,6 +286,15 @@ IG1App::key(unsigned int key)
 		*/
 		case 'k':
 			m2Vistas = !m2Vistas; 
+			if (m2Escenas) {
+				m2Escenas = !m2Escenas;
+			}
+			break;
+		case 'K':
+			m2Escenas = !m2Escenas;
+			if (m2Vistas) {
+				m2Vistas = !m2Vistas;
+			}
 			break;
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))

@@ -48,6 +48,8 @@ public:
 	void motion(double x, double y);
 	void mouseWheel(double dx, double dy);
 
+	bool m2Escenas = false;
+
 protected:
 	IG1App() = default;
 	~IG1App() { close(); };
