@@ -93,6 +93,26 @@ IG1App::init()
 	mScenes[3]->init();
 	mScenes[4]->init();
 
+	//se deben tener en mCameras tantas como el tamaño de mScenes +1
+	for (int i = 0; i < mScenes.size() + 1; i++) {
+		mCameras.push_back(new Camera(mViewPort));
+		mCameras[i]->set2D();
+	}
+	/*mCameras.push_back(new Camera(mViewPort));
+	mCameras.push_back(new Camera(mViewPort));
+	mCameras.push_back(new Camera(mViewPort));
+	mCameras.push_back(new Camera(mViewPort));
+	mCameras.push_back(new Camera(mViewPort));
+	mCameras.push_back(new Camera(mViewPort));
+
+	mCameras[0]->set2D();
+	mCameras[1]->set2D();
+	mCameras[2]->set2D();
+	mCameras[3]->set2D();
+	mCameras[4]->set2D();
+	mCameras[5]->set2D();
+	*/
+
 
 }
 
@@ -150,6 +170,10 @@ IG1App::destroy()
 		delete scene;
 	mScenes.clear();
 
+	for (Camera* camera : mCameras)
+		delete camera;
+	mCameras.clear();
+
 	delete mCamera;
 	mCamera = nullptr;
 	delete mViewPort;
@@ -166,65 +190,76 @@ IG1App::display() const
 
 	//Ap49, 2 vistas de la misma escena
 	if (m2Vistas && !m2Escenas) {
-		Camera auxCam = *mCamera; // copiando mCamera
+		//Vista izquierda, 3D
 		Viewport auxVP = *mViewPort;
 		mViewPort->setSize(mWinW / 2, mWinH);
-		auxCam.setSize(mViewPort->width(), mViewPort->height());
+		mCameras[mCurrentCamera]->setSize(mViewPort->width(), mViewPort->height());
 		mViewPort->setPos(0, 0);
-		auxCam.set3D();
-		if (!mbOrto3) {
-			auxCam.changePrj();
+		if (mCameras[mCurrentCamera]->viewType != 2) {
+			mCameras[mCurrentCamera]->set3D();
 		}
-		mScenes[mCurrentScene]->render(auxCam);
 		if (!mbOrto3) {
-			auxCam.changePrj();
+			mCameras[mCurrentCamera]->changePrj();
 		}
+		mScenes[mCurrentScene]->render(*mCameras[mCurrentCamera]);
+		if (!mbOrto3) {
+			mCameras[mCurrentCamera]->changePrj();
+		}
+
+		//Vista derecha, cenital
+		mCameras[mCurrentCamera+1]->setSize(mViewPort->width(), mViewPort->height());
 		mViewPort->setPos(mWinW / 2, 0);
-		auxCam.setCenital();
-		if (!mbOrto4) {
-			auxCam.changePrj();
+		if (mCameras[mCurrentCamera+1]->viewType != 3) {
+			mCameras[mCurrentCamera+1]->setCenital();
 		}
-		mScenes[mCurrentScene]->render(auxCam);
 		if (!mbOrto4) {
-			auxCam.changePrj();
+			mCameras[mCurrentCamera+1]->changePrj();
+		}
+		mScenes[mCurrentScene]->render(*mCameras[mCurrentCamera+1]);
+		if (!mbOrto4) {
+			mCameras[mCurrentCamera+1]->changePrj();
 		}
 
 		*mViewPort = auxVP;
 
 	}
-	//Ap 52, 2 vistas de escenas distintas (la 4 a la izquierda y la 2 a la derecha)
+	//Ap 52 y 53, 2 vistas de escenas distintas (la 4 a la izquierda y la 2 a la derecha)
 	else if (!m2Vistas && m2Escenas) {
-		Camera auxCam = *mCamera; // copiando mCamera
+		//Escena izquierda
 		Viewport auxVP = *mViewPort;
 		mViewPort->setSize(mWinW / 2, mWinH);
-		auxCam.setSize(mViewPort->width(), mViewPort->height());
-		//*mViewPort = auxVP;
+		mCameras[4]->setSize(mViewPort->width(), mViewPort->height());
 		mViewPort->setPos(0, 0);
-		auxCam.set3D();
+		if (mCameras[4]->viewType != 2) {
+			mCameras[4]->set3D();
+		}
 		if (mCurrentScene != 4) {
 			mScenes[4]->load();
 		}
 		if (!mbOrto1) {
-			auxCam.changePrj();
+			mCameras[4]->changePrj();
 		}
-		mScenes[4]->render(auxCam);
+		mScenes[4]->render(*mCameras[4]);
 		if (!mbOrto1) {
-			auxCam.changePrj();
+			mCameras[4]->changePrj();
 		}
+		//Escena derecha
 		Viewport *secondViewport= mViewPort;
 		secondViewport->setSize(mWinW / 2, mWinH);
-		auxCam.setSize(secondViewport->width(), secondViewport->height());
+		mCameras[2]->setSize(mViewPort->width(), mViewPort->height());
 		secondViewport->setPos(mWinW / 2, 0);
-		auxCam.set2D();
+		if (mCameras[2]->viewType != 1) {
+			mCameras[2]->set2D();
+		}
 		if (mCurrentScene != 2) {
 			mScenes[2]->load();
 		}
 		if (!mbOrto2) {
-			auxCam.changePrj();
+			mCameras[2]->changePrj();
 		}
-		mScenes[2]->render(auxCam);
+		mScenes[2]->render(*mCameras[2]);
 		if (!mbOrto2) {
-			auxCam.changePrj();
+			mCameras[2]->changePrj();
 		}
 		if (mCurrentScene != 4) {
 			mScenes[4]->unload();
@@ -281,11 +316,9 @@ IG1App::key(unsigned int key)
 		case 'u':
 			if (m2Escenas) {
 				if (mMouseCoord.x < mWinW / 2) {
-					printf("1\n");
 					mUpdate = !mUpdate;
 				}
 				else {
-					printf("2\n");
 					mUpdate2 = !mUpdate2;
 				}
 			}
@@ -320,6 +353,8 @@ IG1App::key(unsigned int key)
 			mCamera->moveFB(-1);
 			break;
 		case 'p':
+			//Cambia la perspectiva
+			//en cada escena
 			if (m2Escenas) {
 				if(mMouseCoord.x < mWinW / 2) {
 					mbOrto1 = !mbOrto1;
@@ -328,6 +363,7 @@ IG1App::key(unsigned int key)
 					mbOrto2 = !mbOrto2;
 				}
 			}
+			//en cada vista
 			else if (m2Vistas) {
 				if (mMouseCoord.x < mWinW / 2) {
 					mbOrto3 = !mbOrto3;
@@ -336,8 +372,7 @@ IG1App::key(unsigned int key)
 					mbOrto4 = !mbOrto4;
 				}
 			}
-			else
-			{
+			else{
 				mCamera->changePrj();
 			}
 			
@@ -351,15 +386,25 @@ IG1App::key(unsigned int key)
 			break;
 		*/
 		case 'k':
+			//Cambia a 2 vistas y borra la flag de 2 escenas si está activa
 			m2Vistas = !m2Vistas; 
 			if (m2Escenas) {
 				m2Escenas = !m2Escenas;
 			}
+			//limpia los estados de las cámaras
+			for (int i = 0; i < mCameras.size(); i++) {
+				mCameras[i]->viewType = 0;
+			}
 			break;
 		case 'K':
+			//Cambia a 2 escenas y borra la flag de 2 vistas si está activa
 			m2Escenas = !m2Escenas;
 			if (m2Vistas) {
 				m2Vistas = !m2Vistas;
+			}
+			//limpia los estados de las cámaras
+			for (int i = 0; i < mCameras.size(); i++) {
+				mCameras[i]->viewType = 0;
 			}
 			break;
 		default:
@@ -444,6 +489,7 @@ IG1App::changeScene(size_t sceneNr)
 	if (sceneNr != mCurrentScene) {
 		mScenes[mCurrentScene]->unload();
 		mCurrentScene = sceneNr;
+		mCurrentCamera = sceneNr;
 		mScenes[mCurrentScene]->load();
 
 		//Para que se refresque al cambiar de escena
@@ -486,12 +532,58 @@ IG1App::motion(double x, double y) {
 	glm::dvec2 input = { x, y };
 	glm::dvec2 mp = mMouseCoord - input;
 	mMouseCoord = input;
-	if (mMouseButt==0) {
-		mCamera->orbit(mp.x * 0.05, -mp.y);
+
+	//Movimiento para 2 escenas, ap 53
+	if (m2Escenas) {
+		if (mMouseCoord.x < mWinW / 2) {
+			if (mMouseButt == 0) {
+				mCameras[4]->orbit(mp.x * 0.05, -mp.y);
+			}
+			else if (mMouseButt == 1) {
+				mCameras[4]->moveUD(-mp.y * 0.25);
+				mCameras[4]->moveLR(mp.x * 0.25);
+			}
+		}
+		else {
+			if (mMouseButt == 0) {
+				mCameras[2]->orbit(mp.x * 0.05, -mp.y);
+			}
+			else if (mMouseButt == 1) {
+				mCameras[2]->moveUD(-mp.y * 0.25);
+				mCameras[2]->moveLR(mp.x * 0.25);
+			}
+		}
 	}
-	else if (mMouseButt == 1) {
-		mCamera->moveUD(-mp.y *0.25);
-		mCamera->moveLR(mp.x *0.25);
+	//Movimiento para 2 vistas, la orbita no está pensada para usarse en la vista cenital, ap 53
+	else if (m2Vistas) {
+		if (mMouseCoord.x < mWinW / 2) {
+			if (mMouseButt == 0) {
+				mCameras[mCurrentCamera]->orbit(mp.x * 0.05, -mp.y);
+			}
+			else if (mMouseButt == 1) {
+				mCameras[mCurrentCamera]->moveUD(-mp.y * 0.25);
+				mCameras[mCurrentCamera]->moveLR(mp.x * 0.25);
+			}
+		}
+		else {
+			if (mMouseButt == 0) {
+				mCameras[mCurrentCamera+1]->orbit(mp.x * 0.05, -mp.y);
+			}
+			else if (mMouseButt == 1) {
+				mCameras[mCurrentCamera+1]->moveUD(-mp.y * 0.25);
+				mCameras[mCurrentCamera+1]->moveLR(mp.x * 0.25);
+			}
+		}
+	}
+	//Movimiento básico, ap 51
+	else {
+		if (mMouseButt == 0) {
+			mCamera->orbit(mp.x * 0.05, -mp.y);
+		}
+		else if (mMouseButt == 1) {
+			mCamera->moveUD(-mp.y * 0.25);
+			mCamera->moveLR(mp.x * 0.25);
+		}
 	}
 	mNeedsRedisplay = true;
 }
@@ -502,11 +594,52 @@ void
 IG1App::mouseWheel(double dx, double dy) {
 	//printf("%f %f %d %d\n", dx, dy, glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL), glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL));
 	
-	if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
-		mCamera->setScale(dy*0.05);
+	//Movimiento para 2 escenas, ap 53
+	if (m2Escenas) {
+		if (mMouseCoord.x < mWinW / 2) {
+			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+				mCameras[4]->setScale(dy * 0.05);
+			}
+			else {
+				mCameras[4]->moveFB(dy * 5);
+			}
+		}
+		else {
+			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+				mCameras[2]->setScale(dy * 0.05);
+			}
+			else {
+				mCameras[2]->moveFB(dy * 5);
+			}
+		}
 	}
+	//Movimiento para 2 vistas, ap 53
+	else if (m2Vistas) {
+		if (mMouseCoord.x < mWinW / 2) {
+			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+				mCameras[mCurrentCamera]->setScale(dy * 0.05);
+			}
+			else {
+				mCameras[mCurrentCamera]->moveFB(dy * 5);
+			}
+		}
+		else {
+			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+				mCameras[mCurrentCamera+1]->setScale(dy * 0.05);
+			}
+			else {
+				mCameras[mCurrentCamera+1]->moveFB(dy * 5);
+			}
+		}
+	}
+	//Movimiento básico, ap 51
 	else {
-		mCamera->moveFB(dy*5);
+		if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+			mCamera->setScale(dy * 0.05);
+		}
+		else {
+			mCamera->moveFB(dy * 5);
+		}
 	}
 	mNeedsRedisplay = true;
 }

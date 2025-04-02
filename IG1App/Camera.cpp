@@ -41,6 +41,7 @@ Camera::set2D()
 	mUp = {0, 1, 0};
 	mAng = -90;
 	mRadio = mEye[2];
+	viewType = 1;
 	setVM();
 }
 
@@ -52,6 +53,7 @@ Camera::set3D()
 	mUp = {0, 1, 0};
 	mAng = -45;
 	mRadio = mEye[2];
+	viewType = 2;
 	setVM();
 }
 
@@ -210,6 +212,8 @@ Camera::setCenital() {
 
 	mAng = -45;
 	mRadio = mEye[1];
+
+	viewType = 3;
 
 	setVM();
 }

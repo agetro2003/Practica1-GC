@@ -29,7 +29,7 @@ public:
 	bool changeScene(size_t sceneNr);
 
 	// Constant Frame duration in seconds
-	double FRAME_DURATION = 0.01;
+	double FRAME_DURATION = 0.04;
 	// Bool to enable update
 	bool mUpdateEnabled = false;
 	// Next update double
@@ -57,6 +57,7 @@ public:
 	bool mUpdate = false;
 	bool mUpdate2 = false;
 
+	//Implementar array de cámaras
 
 protected:
 	IG1App() = default;
@@ -94,6 +95,9 @@ protected:
 	GLFWwindow* mWindow = nullptr; // window's handle
 	int mWinW = 800;               // window's width
 	int mWinH = 600;               // window's height
+
+	std::vector<Camera*> mCameras;
+	size_t mCurrentCamera = 0;
 };
 
 #endif //_H_IG1App_H_
