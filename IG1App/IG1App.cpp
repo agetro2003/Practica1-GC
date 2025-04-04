@@ -83,6 +83,10 @@ IG1App::init()
 	mScenes.push_back(new Scene2);
 	mScenes.push_back(new Scene3);
 	mScenes.push_back(new Scene4);
+	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene0);
 
 	mCamera->set2D();
 	mScenes[0]->init();
@@ -91,6 +95,10 @@ IG1App::init()
 	mScenes[2]->init();
 	mScenes[3]->init();
 	mScenes[4]->init();
+	mScenes[5]->init();
+	mScenes[6]->init();
+	mScenes[7]->init();
+	mScenes[8]->init();
 
 	//se deben tener en mCameras tantas como el tamaño de mScenes +1
 	for (int i = 0; i < mScenes.size() + 1; i++) {
@@ -438,10 +446,10 @@ IG1App::specialkey(int key, int scancode, int action, int mods)
 		case GLFW_KEY_RIGHT:
 			if (mods & GLFW_MOD_CONTROL)
 				//mCamera->pitch(-1); // rotates -1 on the X axis
-				mCamera->rollReal(-2);
+				mCamera->rollReal(-1);
 			else
 				//mCamera->pitch(1); // rotates 1 on the X axis
-				mCamera->yawReal(2);
+				mCamera->yawReal(1);
 			break;
 		case GLFW_KEY_LEFT:
 			if (mods & GLFW_MOD_CONTROL)

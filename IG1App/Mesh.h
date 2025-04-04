@@ -41,8 +41,11 @@ public:
 	std::vector<glm::vec3> const& vertices() const { return vVertices; };
 	std::vector<glm::vec4> const& colors() const { return vColors; };
 
-	void load();
-	void unload();
+	//void load();
+	//void unload();
+
+	virtual void load();
+	virtual void unload();
 
 protected:
 	GLuint mPrimitive =
@@ -60,5 +63,23 @@ private:
 	GLuint mCBO;  // color buffer object
 	GLuint mTCO; // texture coordinates object
 };
+
+
+class IndexMesh : public Mesh {
+	IndexMesh();
+	virtual ~IndexMesh();
+	std::vector<GLuint> vIndexes;
+	
+
+	void load()  override;
+	void unload()  override;
+	void draw() const override;
+
+	//static IndexMesh* generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nSamples, GLfloat angleMax = 2 * std::numbers::pi);
+
+private:
+	GLuint mIBO;
+};
+
 
 #endif //_H_Scene_H_
