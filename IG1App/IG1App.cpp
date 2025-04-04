@@ -49,7 +49,7 @@ IG1App::run() // enters the main event processing loop
 					mScenes[2]->update();
 				}
 			}
-			else {
+			else if (mUpdateEnabled) {
 				mScenes[mCurrentScene]->update();
 
 			}
@@ -58,8 +58,7 @@ IG1App::run() // enters the main event processing loop
 		}
 		if (mUpdateEnabled || mUpdate || mUpdate2)
 			glfwWaitEventsTimeout(mNextUpdate - glfwGetTime());
-		else
-		{
+		else{
 			// Stop and wait for new events
 			glfwWaitEvents(); 
 		}
