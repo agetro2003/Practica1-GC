@@ -258,6 +258,14 @@ public:
 };
 
 
+class ColorMaterialEntity : public SingleColorEntity
+{
+public:
+	ColorMaterialEntity(glm::dvec4 mColor = glm::dvec4(1.0, 1.0, 1.0, 1.0));
+	void render(const glm::mat4& modelViewMat) const override;
+
+};
+
 class Torus : public SingleColorEntity
 {
 	public: 
