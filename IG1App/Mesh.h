@@ -55,10 +55,12 @@ protected:
 	std::vector<glm::vec3> vVertices; // vertex array
 	std::vector<glm::vec4> vColors;   // color array
 	std::vector<glm::vec2> vTexCoords; //vector de coordenadas
+	std::vector<glm::vec3> vNormals; // normal array
+
 	virtual void draw() const;
 
 	GLuint mVAO;  // vertex array object
-
+	GLuint mNBO;  // normal buffer object
 private:
 	GLuint mVBO;  // vertex buffer object
 	GLuint mCBO;  // color buffer object
