@@ -257,4 +257,13 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 };
 
+
+class Torus : public SingleColorEntity
+{
+	public: 
+		// Constructor
+		Torus(GLdouble R, GLdouble r, GLuint nPoints = 40, GLuint nSamples = 40);
+
+};
+
 #endif //_H_Entities_H_

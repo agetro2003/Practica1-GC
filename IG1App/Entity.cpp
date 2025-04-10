@@ -990,3 +990,17 @@ Grass::render(const glm::mat4& modelViewMat) const {
 		}
 	}
 }
+
+Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
+{
+	std::vector<vec2> profile(nPoints);
+	GLint t0 = 360 / nPoints;
+	GLint ti = t0;
+
+	for (GLint i = 0; i < nPoints; i++)
+	{
+		profile[i] = { r * cos(ti) + R, r * sin(ti) };
+		ti += t0;
+	}
+	mMesh = IndexMesh::generateByRevolution(profile, nSamples);
+}

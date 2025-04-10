@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 
 #include <vector>
+#include <numbers>
 
 class Mesh
 {
@@ -66,6 +67,8 @@ private:
 
 
 class IndexMesh : public Mesh {
+	
+public:
 	IndexMesh();
 	virtual ~IndexMesh();
 	std::vector<GLuint> vIndexes;
@@ -75,7 +78,7 @@ class IndexMesh : public Mesh {
 	void unload()  override;
 	void draw() const override;
 
-	//static IndexMesh* generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nSamples, GLfloat angleMax = 2 * std::numbers::pi);
+	static IndexMesh* generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nSamples, GLfloat angleMax = 2 * std::numbers::pi);
 
 private:
 	GLuint mIBO;

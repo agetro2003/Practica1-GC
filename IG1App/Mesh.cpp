@@ -97,6 +97,13 @@ Mesh::render() const
 
 //Ap54
 
+IndexMesh::IndexMesh()
+	: Mesh()
+	, mIBO(NONE)
+{
+
+}
+
 
 IndexMesh::~IndexMesh()
 {
@@ -139,10 +146,10 @@ IndexMesh::draw() const
 
 
 
-/*
+
 //Ap55
 IndexMesh*
-IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSamples,GLfloat angleMax = 2 * std::numbers::pi){
+IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSamples,GLfloat angleMax){
 
 	IndexMesh* mesh = new IndexMesh;
 	mesh->mPrimitive = GL_TRIANGLES ;
@@ -151,6 +158,8 @@ IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSa
 
 	// Genera los vértices de las muestras
 	GLdouble theta1 = angleMax / nSamples;
+
+
 	for (int i = 0; i <= nSamples; ++i) { // muestra i-ésima
 		GLdouble c = cos(i * theta1), s = sin(i * theta1);
 		for (auto p : profile) // rota el perfil
@@ -161,18 +170,18 @@ IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSa
 		for (int j = 0; j < tamPerfil - 1; ++j) { // una cara
 
 			if (profile[j].x != 0.0) // triángulo inferior
-				for (auto [s, t] : {pair{i, j}, {i, j+1}, {i+1, j}})
+				for (auto [s, t] : { pair{i, j}, pair{i, j+1}, pair{i+1, j}})
 					mesh->vIndexes.push_back(s * tamPerfil + t);
 
 			if (profile[j + 1].x != 0.0) // triángulo superior
-				for (auto [s, t] : {pair{i, j+1}, {i+1, j+1}, {i+1, j}})
+				for (auto [s, t] : {pair{i, j+1}, pair{i+1, j+1}, pair{i+1, j}})
 					mesh->vIndexes.push_back(s * tamPerfil + t);
 		}
 	
 	mesh-> mNumVertices = mesh->vVertices.size();
 	return mesh;
 }
-*/
+
 
 
 
