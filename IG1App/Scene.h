@@ -27,7 +27,7 @@ public:
 	void load();
 	void unload();
 
-	
+	void setNormals();
 
 protected:
 	void destroy();
@@ -36,6 +36,7 @@ protected:
 
 	std::vector<Abs_Entity*> gObjects; // Entities (graphic objects) of the scene
 	std::vector<Texture*> gTextures;
+
 };
 
 //scene0
@@ -91,6 +92,14 @@ public:
 	Scene5() = default;
 	~Scene5() = default;
 	
+	void init() override;
+};
+
+//scene6
+class Scene6 : public Scene {
+public:
+	Scene6() = default;
+	~Scene6() = default;
 	void init() override;
 };
 

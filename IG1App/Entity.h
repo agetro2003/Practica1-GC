@@ -262,7 +262,10 @@ class ColorMaterialEntity : public SingleColorEntity
 {
 public:
 	ColorMaterialEntity(glm::dvec4 mColor = glm::dvec4(1.0, 1.0, 1.0, 1.0));
-//	void render(const glm::mat4& modelViewMat) const override;
+	void render(const glm::mat4& modelViewMat) const override;
+	bool mShowNormals = false;
+	void toggleShowNormals() { mShowNormals = !mShowNormals; }
+	void setShader(Shader* shader) { mShader = shader; }
 
 };
 
@@ -272,6 +275,13 @@ class Torus : public SingleColorEntity
 		// Constructor
 		Torus(GLdouble R, GLdouble r, GLuint nPoints = 40, GLuint nSamples = 40);
 
+};
+
+class IndexedBox : public ColorMaterialEntity
+{
+public:
+	// Constructor
+	IndexedBox(GLdouble lenght);
 };
 
 #endif //_H_Entities_H_

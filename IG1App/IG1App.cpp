@@ -84,7 +84,7 @@ IG1App::init()
 	mScenes.push_back(new Scene3);
 	mScenes.push_back(new Scene4);
 	mScenes.push_back(new Scene5);
-	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene6);
 	mScenes.push_back(new Scene0);
 	mScenes.push_back(new Scene0);
 
@@ -414,6 +414,12 @@ IG1App::key(unsigned int key)
 				mCameras[i]->viewType = 0;
 			}
 			break;
+		case 'n':
+			//Activa las normales de las entidades ColorMaterialEntity de la escena actual
+			mScenes[mCurrentScene]->setNormals();
+			break;
+
+
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";

@@ -996,6 +996,22 @@ ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
 	mShader = Shader::get("simple_light");
 }
 
+void 
+ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+		mShader->setUniform("color", glm::vec4(mColor));
+		mMesh->render();
+
+		if (mShowNormals) {
+			mShader->setUniform("normals", true);
+			mMesh->render();
+		}
+	}
+}
 
 // Apartado 56
 Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
@@ -1010,4 +1026,9 @@ Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 		ti += t0;
 	}
 	mMesh = IndexMesh::generateByRevolution(profile, nSamples);
+}
+
+IndexedBox::IndexedBox(GLdouble lenght)
+{
+	mMesh = IndexMesh::generateIndexedBox(lenght);
 }

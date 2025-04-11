@@ -154,6 +154,17 @@ Scene5::init()
 	gObjects.push_back(torus);
 }
 
+void
+Scene6::init()
+{
+	setGL(); // OpenGL settings
+	gObjects.push_back(new RGBAxes(400.0));
+
+	IndexedBox* box = new IndexedBox(200);
+	box->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
+	gObjects.push_back(box);
+}
+
 Scene::~Scene()
 {
 	destroy();
@@ -231,4 +242,15 @@ Scene::update()
 	//update gObjects
 	for (Abs_Entity* el : gObjects)
 		el->update();
+}
+
+void
+Scene::setNormals()
+{
+	for (Abs_Entity* el : gObjects) {
+		auto* objWithNormals = dynamic_cast<ColorMaterialEntity*>(el);
+		if (objWithNormals) {
+			objWithNormals->toggleShowNormals();
+		}
+	}
 }

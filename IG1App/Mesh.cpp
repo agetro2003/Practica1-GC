@@ -195,9 +195,6 @@ IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSa
 }
 
 
-
-
-
 Mesh*
 Mesh::createRGBAxes(GLdouble l)
 {
@@ -699,3 +696,65 @@ Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
 	return mesh;
 
 }
+
+
+IndexMesh*
+IndexMesh::generateIndexedBox(GLdouble l) {
+	IndexMesh* mesh = new IndexMesh();
+	mesh->mPrimitive = GL_TRIANGLES;
+	GLdouble half = l * 0.5;
+	// indices que definen la caja
+	std::vector<GLuint> indices = {
+		0, 1, 2, 2, 1, 3, 
+		2, 3, 4, 4, 3, 5,
+		4, 5, 6, 6, 5, 7,
+		6, 7, 0, 0, 7, 1,
+		4, 6, 2, 2, 6, 0,
+		1, 7, 3, 3, 7, 5
+	};
+
+	mesh->vIndexes = indices;
+
+
+	// vertices de la caja
+	std::vector<vec3> vertices = {
+		{half, half, -half}, //0
+		{half, -half, -half }, //1 
+		{half, half, half }, //2
+		{half, -half, half }, //3
+		{-half, half, half }, //4
+		{-half, -half, half }, //5
+		{-half, half, -half }, //6
+		{-half, -half, -half }  //7
+	};
+	mesh->vVertices = vertices;
+
+
+	// calculo de las normales
+	// Construir el vector de normales del mismo tamaño que el de vertices
+	mesh->vNormals.resize(vertices.size());
+
+	// Inicializar el vector de normales a cero
+	for (auto& n : mesh->vNormals) {
+		n = vec3(0.0f);
+	}
+	// Calcular la normal de cada triángulo
+	for (size_t k = 0; k < indices.size(); k += 3) {
+		vec3 normal = normalize(cross(
+			mesh->vVertices[indices[k + 1]] - mesh->vVertices[indices[k]],
+			mesh->vVertices[indices[k + 2]] - mesh->vVertices[indices[k]]
+		));
+		mesh->vNormals[indices[k]] += normal;
+		mesh->vNormals[indices[k + 1]] += normal;
+		mesh->vNormals[indices[k + 2]] += normal;
+	}
+
+	// Normalizar las normales
+	for (auto& n : mesh->vNormals) {
+		n = normalize(n);
+	}
+
+	mesh->mNumVertices = mesh->vVertices.size();
+	return mesh;
+}
+
