@@ -995,6 +995,8 @@ ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
 {
 	mShader = Shader::get("simple_light");
 }
+
+
 // Apartado 56
 Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 {
