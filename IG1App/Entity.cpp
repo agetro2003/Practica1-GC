@@ -1014,15 +1014,15 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 }
 
 // Apartado 56
-Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
+Torus::Torus(GLdouble R, GLdouble r, GLdouble nPoints, GLuint nSamples)
 {
 	std::vector<vec2> profile(nPoints);
-	GLint t0 = 360 / nPoints;
-	GLint ti = t0;
+	GLdouble t0 = 360 / nPoints;
+	GLdouble ti = t0;
 
 	for (GLint i = 0; i < nPoints; i++)
 	{
-		profile[i] = { r * cos(ti) + R, r * sin(ti) };
+		profile[i] = { r * cos(radians(ti)) + R, r * sin(radians(ti)) };
 		ti += t0;
 	}
 	mMesh = IndexMesh::generateByRevolution(profile, nSamples);

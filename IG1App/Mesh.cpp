@@ -159,42 +159,6 @@ IndexMesh::draw() const
 
 
 
-//Ap55
-IndexMesh*
-IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile,GLuint nSamples,GLfloat angleMax){
-
-	IndexMesh* mesh = new IndexMesh;
-	mesh->mPrimitive = GL_TRIANGLES ;
-	int tamPerfil = profile.size();
-	mesh->vVertices.reserve(nSamples * tamPerfil);
-
-	// Genera los vértices de las muestras
-	GLdouble theta1 = angleMax / nSamples;
-
-
-	for (int i = 0; i <= nSamples; ++i) { // muestra i-ésima
-		GLdouble c = cos(i * theta1), s = sin(i * theta1);
-		for (auto p : profile) // rota el perfil
-			mesh->vVertices. emplace_back (p.x * c, p.y, - p.x * s);
-	}
-
-	for (int i = 0; i < nSamples; ++i) // caras i a i + 1
-		for (int j = 0; j < tamPerfil - 1; ++j) { // una cara
-
-			if (profile[j].x != 0.0) // triángulo inferior
-				for (auto [s, t] : { pair{i, j}, pair{i, j+1}, pair{i+1, j}})
-					mesh->vIndexes.push_back(s * tamPerfil + t);
-
-			if (profile[j + 1].x != 0.0) // triángulo superior
-				for (auto [s, t] : {pair{i, j+1}, pair{i+1, j+1}, pair{i+1, j}})
-					mesh->vIndexes.push_back(s * tamPerfil + t);
-		}
-	
-	mesh-> mNumVertices = mesh->vVertices.size();
-	return mesh;
-}
-
-
 Mesh*
 Mesh::createRGBAxes(GLdouble l)
 {
@@ -689,6 +653,10 @@ Mesh::generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h) {
 
 }
 
+
+
+
+
 //Caja translúcida Ap32
 Mesh* 
 Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
@@ -697,6 +665,45 @@ Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
 
 }
 
+
+//Ap55
+IndexMesh*
+IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nSamples, GLfloat angleMax) {
+
+	IndexMesh* mesh = new IndexMesh;
+	mesh->mPrimitive = GL_TRIANGLES;
+	int tamPerfil = profile.size();
+	mesh->vVertices.reserve(nSamples * tamPerfil);
+
+	// Genera los vértices de las muestras
+	GLdouble theta1 = angleMax / nSamples;
+
+
+	for (int i = 0; i <= nSamples; ++i) { // muestra i-ésima
+		GLdouble c = cos(i * theta1), s = sin(i * theta1);
+		for (auto p : profile) // rota el perfil
+			mesh->vVertices.emplace_back(p.x * c, p.y, -p.x * s);
+	}
+
+	for (int i = 0; i < nSamples; ++i) // caras i a i + 1
+		for (int j = 0; j < tamPerfil - 1; ++j) { // una cara
+
+			if (profile[j].x != 0.0) // triángulo inferior
+				for (auto [s, t] : { pair{i, j}, pair{i, j + 1}, pair{i + 1, j} })
+					mesh->vIndexes.push_back(s * tamPerfil + t);
+
+			if (profile[j + 1].x != 0.0) // triángulo superior
+				for (auto [s, t] : { pair{i, j + 1}, pair{i + 1, j + 1}, pair{i + 1, j} })
+					mesh->vIndexes.push_back(s * tamPerfil + t);
+		}
+
+
+	mesh->buildNormalVectors();
+	mesh->mNumVertices = mesh->vVertices.size();
+
+	return mesh;
+
+}
 
 IndexMesh*
 IndexMesh::generateIndexedBox(GLdouble l) {
@@ -731,30 +738,37 @@ IndexMesh::generateIndexedBox(GLdouble l) {
 
 
 	// calculo de las normales
-	// Construir el vector de normales del mismo tamaño que el de vertices
-	mesh->vNormals.resize(vertices.size());
-
-	// Inicializar el vector de normales a cero
-	for (auto& n : mesh->vNormals) {
-		n = vec3(0.0f);
-	}
-	// Calcular la normal de cada triángulo
-	for (size_t k = 0; k < indices.size(); k += 3) {
-		vec3 normal = normalize(cross(
-			mesh->vVertices[indices[k + 1]] - mesh->vVertices[indices[k]],
-			mesh->vVertices[indices[k + 2]] - mesh->vVertices[indices[k]]
-		));
-		mesh->vNormals[indices[k]] += normal;
-		mesh->vNormals[indices[k + 1]] += normal;
-		mesh->vNormals[indices[k + 2]] += normal;
-	}
-
-	// Normalizar las normales
-	for (auto& n : mesh->vNormals) {
-		n = normalize(n);
-	}
+	mesh->buildNormalVectors();
 
 	mesh->mNumVertices = mesh->vVertices.size();
 	return mesh;
 }
 
+
+
+void IndexMesh::buildNormalVectors() {
+	// calculo de las normales
+	// Construir el vector de normales del mismo tamaño que el de vertices
+	vNormals.resize(vVertices.size());
+
+	// Inicializar el vector de normales a cero
+	for (auto& n : vNormals) {
+		n = vec3(0.0f);
+	}
+	// Calcular la normal de cada triángulo
+	for (size_t k = 0; k < vIndexes.size(); k += 3) {
+		vec3 normal = normalize(cross(
+			vVertices[vIndexes[k + 1]] - vVertices[vIndexes[k]],
+			vVertices[vIndexes[k + 2]] - vVertices[vIndexes[k]]
+		));
+		vNormals[vIndexes[k]] += normal;
+		vNormals[vIndexes[k + 1]] += normal;
+		vNormals[vIndexes[k + 2]] += normal;
+	}
+
+	// Normalizar las normales
+	for (auto& n : vNormals) {
+		n = normalize(n);
+	}
+
+}

@@ -150,7 +150,7 @@ Scene5::init()
 	gObjects.push_back(new RGBAxes(400.0));
 
 	Torus* torus = new Torus(100, 50);
-	torus->setColor(glm::dvec4(1.0, 0.0, 0.0, 1.0));
+	torus->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
 	gObjects.push_back(torus);
 }
 

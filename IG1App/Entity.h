@@ -269,11 +269,11 @@ public:
 
 };
 
-class Torus : public SingleColorEntity
+class Torus : public ColorMaterialEntity
 {
 	public: 
 		// Constructor
-		Torus(GLdouble R, GLdouble r, GLuint nPoints = 40, GLuint nSamples = 40);
+		Torus(GLdouble R, GLdouble r, GLdouble nPoints = 40, GLuint nSamples = 40);
 
 };
 
