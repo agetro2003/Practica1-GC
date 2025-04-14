@@ -273,8 +273,29 @@ class Torus : public ColorMaterialEntity
 {
 	public: 
 		// Constructor
-		Torus(GLdouble R, GLdouble r, GLdouble nPoints = 40, GLuint nSamples = 40);
+		Torus(GLdouble R, GLdouble r, GLuint nPoints = 40, GLuint nSamples = 40);
 
+};
+
+class Sphere : public ColorMaterialEntity
+{
+public:
+	// Constructor
+	Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians);
+};
+
+class Disk : public ColorMaterialEntity
+{
+public:
+	// Constructor
+	Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples);
+};
+
+class  Cone : public ColorMaterialEntity
+{
+public:
+	// Constructor
+	Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples);
 };
 
 class IndexedBox : public ColorMaterialEntity

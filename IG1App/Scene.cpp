@@ -165,6 +165,23 @@ Scene6::init()
 	gObjects.push_back(box);
 }
 
+void
+Scene7::init()
+{
+	setGL(); // OpenGL settings
+	gObjects.push_back(new RGBAxes(400.0));
+	Sphere* sphere = new Sphere(100, 360, 360);
+	sphere->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
+
+	Disk* disk = new Disk(100, 200, 200, 360);
+	disk->setColor(glm::dvec4(0.0, 0.0, 1.0, 1.0));
+	//  Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
+	Cone* cone = new Cone(160, 10, 20, 200, 200);
+	//gObjects.push_back(disk);
+	//gObjects.push_back(sphere);
+	gObjects.push_back(cone);
+}
+
 Scene::~Scene()
 {
 	destroy();

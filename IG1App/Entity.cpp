@@ -1014,7 +1014,7 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 }
 
 // Apartado 56
-Torus::Torus(GLdouble R, GLdouble r, GLdouble nPoints, GLuint nSamples)
+Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 {
 	std::vector<vec2> profile(nPoints);
 	GLdouble t0 = 360 / nPoints;
@@ -1026,6 +1026,51 @@ Torus::Torus(GLdouble R, GLdouble r, GLdouble nPoints, GLuint nSamples)
 		ti += t0;
 	}
 	mMesh = IndexMesh::generateByRevolution(profile, nSamples);
+}
+
+Sphere::Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians)
+{
+	std::vector<vec2> profile(nParallels);
+	GLdouble t0 = 360 / nParallels;
+	GLdouble ti = t0;
+	for (GLint i = 0; i < nParallels; i++)
+	{
+		profile[i] = { radius * cos(radians(ti)), radius * sin(radians(ti)) };
+		ti += t0;
+	}
+
+	mMesh = IndexMesh::generateByRevolution(profile, nMeridians);
+}
+
+Disk::Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples) {
+	std::vector<vec2> perfil(nRings);
+
+	GLdouble t0 = (R - r) / nRings;
+	GLdouble ti = r;
+	for (GLint i = 0; i < nRings; i++)
+	{
+		perfil[i] = { ti, 0 };
+		ti += t0;
+	}
+
+	mMesh = IndexMesh::generateByRevolution(perfil, nSamples);
+}
+
+Cone::Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
+{
+	std::vector<vec2> perfil(nRings);
+	// Perfil (r, y) para y E [h/2,..., -h/2]
+	GLdouble a = (R * R - r * r)/h;
+	GLdouble b = (R * R + r * r) * 0.5;
+	GLdouble t0 = h / nRings;
+	GLdouble ti = -h / 2;
+	for (GLint i = 0; i < nRings; i++)
+	{
+		perfil[i] = { a*ti + b, ti };
+		ti += t0;
+	}
+
+	mMesh = IndexMesh::generateByRevolution(perfil, nSamples);
 }
 
 IndexedBox::IndexedBox(GLdouble lenght)
