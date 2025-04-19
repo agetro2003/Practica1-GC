@@ -267,7 +267,7 @@ Scene::setNormals()
 	for (Abs_Entity* el : gObjects) {
 		auto* objWithNormals = dynamic_cast<ColorMaterialEntity*>(el);
 		if (objWithNormals) {
-			objWithNormals->toggleShowNormals();
+			objWithNormals->toggleShowNormals();	
 		}
-	}
 }
+	}

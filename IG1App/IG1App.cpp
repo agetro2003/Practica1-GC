@@ -105,6 +105,7 @@ IG1App::init()
 		mCameras.push_back(new Camera(mViewPort));
 		mCameras[i]->set2D();
 	}
+
 	/*mCameras.push_back(new Camera(mViewPort));
 	mCameras.push_back(new Camera(mViewPort));
 	mCameras.push_back(new Camera(mViewPort));
@@ -414,7 +415,7 @@ IG1App::key(unsigned int key)
 				mCameras[i]->viewType = 0;
 			}
 			break;
-		case 'n':
+		case 'N':
 			//Activa las normales de las entidades ColorMaterialEntity de la escena actual
 			mScenes[mCurrentScene]->setNormals();
 			break;
@@ -539,6 +540,17 @@ IG1App::mouse(int button, int state, int mods) {
 	//printf("%d %f %f %d\n", mMouseButt, mMouseCoord.x, mMouseCoord.y, state);
 }
 
+void
+IG1App::motion_aux(glm::dvec2 mp, int cam) {
+	if (mMouseButt == 0) {
+		mCameras[cam]->orbit(mp.x * 0.05, -mp.y);
+	}
+	else if (mMouseButt == 1) {
+		mCameras[cam]->moveUD(-mp.y * 0.25);
+		mCameras[cam]->moveLR(mp.x * 0.25);
+	}
+}
+
 //Movimientos de la cámara con el ratón, mientras se mantienen pulsados, el botón izquierdo (0) orbita la cámara y el derecho (1) la desplaza
 void
 IG1App::motion(double x, double y) {
@@ -549,43 +561,19 @@ IG1App::motion(double x, double y) {
 	//Movimiento para 2 escenas, ap 53
 	if (m2Escenas) {
 		if (mMouseCoord.x < mWinW / 2) {
-			if (mMouseButt == 0) {
-				mCameras[4]->orbit(mp.x * 0.05, -mp.y);
-			}
-			else if (mMouseButt == 1) {
-				mCameras[4]->moveUD(-mp.y * 0.25);
-				mCameras[4]->moveLR(mp.x * 0.25);
-			}
+			motion_aux(mp, 4);
 		}
 		else {
-			if (mMouseButt == 0) {
-				mCameras[2]->orbit(mp.x * 0.05, -mp.y);
-			}
-			else if (mMouseButt == 1) {
-				mCameras[2]->moveUD(-mp.y * 0.25);
-				mCameras[2]->moveLR(mp.x * 0.25);
-			}
+			motion_aux(mp, 2);
 		}
 	}
 	//Movimiento para 2 vistas, la orbita no está pensada para usarse en la vista cenital, ap 53
 	else if (m2Vistas) {
 		if (mMouseCoord.x < mWinW / 2) {
-			if (mMouseButt == 0) {
-				mCameras[mCurrentCamera]->orbit(mp.x * 0.05, -mp.y);
-			}
-			else if (mMouseButt == 1) {
-				mCameras[mCurrentCamera]->moveUD(-mp.y * 0.25);
-				mCameras[mCurrentCamera]->moveLR(mp.x * 0.25);
-			}
+			motion_aux(mp, mCurrentCamera);
 		}
 		else {
-			if (mMouseButt == 0) {
-				mCameras[mCurrentCamera+1]->orbit(mp.x * 0.05, -mp.y);
-			}
-			else if (mMouseButt == 1) {
-				mCameras[mCurrentCamera+1]->moveUD(-mp.y * 0.25);
-				mCameras[mCurrentCamera+1]->moveLR(mp.x * 0.25);
-			}
+			motion_aux(mp, mCurrentCamera + 1);
 		}
 	}
 	//Movimiento básico, ap 51
@@ -601,48 +589,36 @@ IG1App::motion(double x, double y) {
 	mNeedsRedisplay = true;
 }
 
+void
+IG1App::aux_mouseWheel(double dy, int cam) {
+	if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
+		mCameras[cam]->setScale(dy * 0.05);
+	}
+	else {
+		mCameras[cam]->moveFB(dy * 5);
+	}
+}
 
 //Movimiento de la rueda, manteniendo pulsado CONTROL escala la escena, sin pulsar CONTROL mueve el FB de la cámara
 void
 IG1App::mouseWheel(double dx, double dy) {
 	//printf("%f %f %d %d\n", dx, dy, glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL), glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL));
-	
 	//Movimiento para 2 escenas, ap 53
 	if (m2Escenas) {
 		if (mMouseCoord.x < mWinW / 2) {
-			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
-				mCameras[4]->setScale(dy * 0.05);
-			}
-			else {
-				mCameras[4]->moveFB(dy * 5);
-			}
+			aux_mouseWheel(dy, 4);
 		}
 		else {
-			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
-				mCameras[2]->setScale(dy * 0.05);
-			}
-			else {
-				mCameras[2]->moveFB(dy * 5);
-			}
+			aux_mouseWheel(dy, 2);
 		}
 	}
 	//Movimiento para 2 vistas, ap 53
 	else if (m2Vistas) {
 		if (mMouseCoord.x < mWinW / 2) {
-			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
-				mCameras[mCurrentCamera]->setScale(dy * 0.05);
-			}
-			else {
-				mCameras[mCurrentCamera]->moveFB(dy * 5);
-			}
+			aux_mouseWheel(dy, mCurrentCamera);
 		}
 		else {
-			if (glfwGetKey(mWindow, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(mWindow, GLFW_KEY_RIGHT_CONTROL)) {
-				mCameras[mCurrentCamera+1]->setScale(dy * 0.05);
-			}
-			else {
-				mCameras[mCurrentCamera+1]->moveFB(dy * 5);
-			}
+			aux_mouseWheel(dy, mCurrentCamera+1);
 		}
 	}
 	//Movimiento básico, ap 51

@@ -32,6 +32,27 @@ Abs_Entity::unload()
 	mMesh->unload();
 }
 
+
+Mesh*
+Abs_Entity::getMesh() {
+	return mMesh;
+}
+
+glm::mat4 
+Abs_Entity::getModelMat() {
+	return mModelMat;
+}
+
+Shader*
+Abs_Entity::getShader() {
+	return mShader;
+}
+
+void
+Abs_Entity::backdoorUpload(const glm::mat4& mModelViewMat) {
+	upload(mModelViewMat);
+}
+
 EntityWithColors::EntityWithColors()
 {
 	mShader = Shader::get("vcolors");
@@ -80,6 +101,8 @@ void SingleColorEntity::render(const glm::mat4& modelViewMat) const
 		mMesh->render();
 	}
 }
+
+
 // Create a regular polygon with num vertices, radius r and color mColor.
 RegularPolygon::RegularPolygon(GLuint num, GLdouble r, glm::dvec4 mColor)
 {
@@ -990,6 +1013,7 @@ Grass::render(const glm::mat4& modelViewMat) const {
 		}
 	}
 }
+
 // Apartado 58
 ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
 {
@@ -1073,7 +1097,76 @@ Cone::Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
 	mMesh = IndexMesh::generateByRevolution(perfil, nSamples);
 }
 
+//Ap 60
 IndexedBox::IndexedBox(GLdouble lenght)
 {
 	mMesh = IndexMesh::generateIndexedBox(lenght);
 }
+
+//Ap 65 Entidad compuesta
+CompoundEntity::CompoundEntity() {
+
+}
+
+CompoundEntity::~CompoundEntity() {
+	destroy();
+}
+
+void
+CompoundEntity::destroy() {
+	for (Abs_Entity* ae : gObjects) {
+		delete ae;
+	}
+}
+
+void 
+CompoundEntity::addEntity(Abs_Entity* ae) {
+	gObjects.push_back(ae);
+}
+
+void
+CompoundEntity::render(const glm::mat4& modelViewMat)
+{
+	for (Abs_Entity* obj : gObjects) {
+		obj->render(modelViewMat);
+
+		/*mMesh = obj->getMesh();
+		mShader = obj->getShader();
+		mModelMat = obj->getModelMat();
+		
+		if (mMesh != nullptr) {	
+			mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+			mShader->use();
+			obj->backdoorUpload(aMat);
+			mShader->setUniform("color", glm::vec4(mColor));
+			mMesh->render();
+		}
+		*/
+	}	
+		
+}
+
+void
+CompoundEntity::update()
+{
+	for (Abs_Entity* obj : gObjects)
+		obj->update();
+}
+
+void
+CompoundEntity::load()
+{
+	for (Abs_Entity* obj : gObjects)
+		obj->load();
+}
+
+void
+CompoundEntity::unload()
+{
+	for (Abs_Entity* obj : gObjects)
+		obj->unload();
+}
+
+
+
+

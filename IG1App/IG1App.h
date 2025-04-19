@@ -48,6 +48,9 @@ public:
 	void motion(double x, double y);
 	void mouseWheel(double dx, double dy);
 
+	void motion_aux(glm::dvec2 mp, int cam);
+	void aux_mouseWheel(double dy, int cam);
+
 	bool m2Escenas = false;
 
 	bool mbOrto1 = true;

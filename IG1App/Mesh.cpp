@@ -653,10 +653,6 @@ Mesh::generateStar3DTexCor(GLdouble re, GLuint np, GLdouble h) {
 
 }
 
-
-
-
-
 //Caja translúcida Ap32
 Mesh* 
 Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
@@ -664,6 +660,7 @@ Mesh::generateGlassParapet(GLdouble width, GLdouble height) {
 	return mesh;
 
 }
+
 
 
 //Ap55

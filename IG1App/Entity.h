@@ -32,13 +32,22 @@ public:
 	//update the model matrix
 	virtual void update() {};
 
+	Mesh* getMesh();
+    glm::mat4 getModelMat();
+	Shader* getShader();
+
+	void backdoorUpload(const glm::mat4& mModelViewMat);
+	
+
 protected:
+	
 	Mesh* mMesh = nullptr; // the mesh
 	glm::mat4 mModelMat;  // modeling matrix
 	Shader* mShader; // shader
 
 	// transfers modelViewMat to the GPU
 	virtual void upload(const glm::mat4& mModelViewMat) const;
+	
 };
 
 class EntityWithColors : public Abs_Entity
@@ -303,6 +312,24 @@ class IndexedBox : public ColorMaterialEntity
 public:
 	// Constructor
 	IndexedBox(GLdouble lenght);
+};
+
+
+class CompoundEntity : public Abs_Entity
+{
+public:
+	CompoundEntity();
+	~CompoundEntity();
+	void addEntity(Abs_Entity* ae);
+	void load();
+	void unload();
+	void render(const glm::mat4& modelViewMat);
+	void update();
+
+protected:
+	std::vector<Abs_Entity*> gObjects;
+	void destroy();
+
 };
 
 #endif //_H_Entities_H_
