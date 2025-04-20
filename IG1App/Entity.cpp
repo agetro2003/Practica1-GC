@@ -1028,6 +1028,7 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 		mShader->use();
 		upload(aMat);
+
 		mShader->setUniform("color", glm::vec4(mColor));
 		mMesh->render();
 
@@ -1176,35 +1177,40 @@ CompoundEntity::unload()
 //Apartado 66
 
 AdvancedTIE::AdvancedTIE(){
+
+	glm::dvec4 color = glm::dvec4(0.0, 65.0, 106.0, 1.0);
 	Sphere* core = new Sphere(100, 360, 360);
-	core->setColor(glm::dvec4(255.0, 0.0, 0.0, 1.0));
+	core->setColor(color);
     addEntity(core);
 
 	Cone* eje = new Cone(380, 3.5, 3.5, 200, 200);
-	eje->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	//eje->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	eje->setColor(color);
 	eje->rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	addEntity(eje);
 
 	Cone* morro = new Cone(150, 5, 5, 20, 200);
-	morro->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	morro->setColor(color);
 	morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	morro->move(glm::vec3(0.0f, 0.0f, 60.0f));
 	addEntity(morro);
 
 	Disk* tapa_morro = new Disk(25.5, 0, 200, 360);
-	tapa_morro->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	tapa_morro->setColor(color);
 	tapa_morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	tapa_morro->move(glm::vec3(0.0f, 0.0f, 128.0f));
 	addEntity(tapa_morro);
 
 	WingAdvancedTIE* ala_izq = new WingAdvancedTIE(100, 120, 100);
-	ala_izq->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	//ala_izq->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
 	ala_izq->rotate(glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	ala_izq->move(glm::vec3(-75.0f, 0.0f, 0.0f));
+
+	
 	addEntity(ala_izq);
 
 	WingAdvancedTIE* ala_der = new WingAdvancedTIE(100, 120, 100);
-	ala_der->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	//ala_der->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
 	ala_der->rotate(glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	ala_der->move(glm::vec3(75.0f, 0.0f, 0.0f));
 	addEntity(ala_der);
@@ -1212,6 +1218,53 @@ AdvancedTIE::AdvancedTIE(){
 }
 
 WingAdvancedTIE::WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
-	mMesh = IndexMesh::generateWingAdvancedTIE(x, y, z);
+	mShader= Shader::get("texture:texture_alpha");
+	
+	mMesh = IndexMesh::generateWingAdvancedTIETexCor(x, y, z);
+	mTexture = new Texture();
+	mTexture->load("../assets/images/noche.jpg", 150);
+}
+
+
+
+void
+WingAdvancedTIE::render(const glm::mat4& modelViewMat) const
+{
+	if (mMesh != nullptr) {
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
+		mShader->use();
+		upload(aMat);
+
+		glDepthMask(GL_FALSE);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glEnable(GL_CULL_FACE);
+
+		glCullFace(GL_BACK);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mShader->setUniform("modulate", mModulate);
+		if (mTexture != nullptr) {
+			
+			mTexture->bind();
+		}
+		mMesh->render();
+		glCullFace(GL_FRONT);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		mMesh->render();
+		if (mTexture != nullptr) {
+			mTexture->unbind();
+		}
+
+		if (mShowNormals) {
+			mShader->setUniform("normals", true);
+			mMesh->render();
+		}
+
+		glDisable(GL_CULL_FACE);
+		glDisable(GL_BLEND);
+		glDepthMask(GL_TRUE);
+
+	}
 }
 

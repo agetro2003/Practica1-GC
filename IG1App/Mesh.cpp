@@ -765,7 +765,6 @@ IndexMesh::generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
 	mesh->vIndexes = indices;
 
 	std::vector<vec3> vertices = {
-
 		{-x, y, 0}, //0
 		{x, y, 0}, //1
 		{x, my, z}, //2
@@ -779,6 +778,27 @@ IndexMesh::generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
 
 	mesh->vVertices = vertices;
 	mesh->mNumVertices = mesh->vVertices.size();
+	return mesh;
+}
+
+IndexMesh*
+IndexMesh::generateWingAdvancedTIETexCor(GLdouble x, GLdouble y, GLdouble z) {
+	IndexMesh* mesh = IndexMesh::generateWingAdvancedTIE(x, y, z);
+	mesh->vTexCoords.reserve(mesh->mNumVertices);
+
+	std::vector<vec2> vertices = {
+		{0,1}, //0
+		{1,1}, //1
+		{1,0.66}, //2
+		{0,0.66}, //3
+		{1,0.33}, //4
+		{0,0.33}, //5
+		{1,0}, //6
+		{0,0} //7
+
+	};
+
+	mesh->vTexCoords = vertices;
 	return mesh;
 }
 

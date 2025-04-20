@@ -169,6 +169,7 @@ void
 Scene7::init()
 {
 	setGL(); // OpenGL settings
+	
 	gObjects.push_back(new RGBAxes(400.0));
 
 
@@ -184,6 +185,8 @@ Scene7::init()
 	//gObjects.push_back(disk);
 	//gObjects.push_back(sphere);
 	//gObjects.push_back(cone);
+
+	
 
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	gObjects.push_back(adv_tie);

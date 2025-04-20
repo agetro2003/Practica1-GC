@@ -194,7 +194,7 @@ void
 IG1App::display() const
 { // double buffering
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clears the back buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clears the back buffer	
 
 	//Ap49, 2 vistas de la misma escena
 	if (m2Vistas && !m2Escenas) {
@@ -506,14 +506,42 @@ IG1App::changeScene(size_t sceneNr)
 		mCurrentCamera = sceneNr;
 		mScenes[mCurrentScene]->load();
 
-		//Para que se refresque al cambiar de escena
-		mNeedsRedisplay = true;
+		switch (mCurrentScene) {
+			case 2:
+				FRAME_DURATION = 0.08;
+				break;
+			case 7:
+				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color (alpha=1 -> opaque)
+				glEnable(GL_DEPTH_TEST);
+				break;
+			default:
+				glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
+				glEnable(GL_DEPTH_TEST);
+				FRAME_DURATION = 0.04;
+				break;
+		}
+		/*
+		if (mCurrentScene == 7) {
+			glClearColor(0.0, 0.0, 0.0, 1.0); // New background color (alpha=1 -> opaque)
+			glEnable(GL_DEPTH_TEST);
+		}
+		else {
+			glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
+			glEnable(GL_DEPTH_TEST);
+		}
+
+		
 		if (mCurrentScene == 2) {
 			FRAME_DURATION = 0.08;
 		}
 		else {
 			FRAME_DURATION = 0.04;
 		}
+		*/
+
+		//Para que se refresque al cambiar de escena
+		mNeedsRedisplay = true;
+
 	}
 
 	return true;

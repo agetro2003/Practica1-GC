@@ -146,7 +146,6 @@ public:
 
 	void update() override;
 
-
 };
 
 
@@ -276,8 +275,13 @@ public:
 	bool mShowNormals = false;
 	void toggleShowNormals() { mShowNormals = !mShowNormals; }
 	void setShader(Shader* shader) { mShader = shader; }
+	
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	void move(glm::vec3 mov_direccion);
+	Texture* mTexture;
+
+protected:
+	bool mModulate = false;
 };
 
 class Torus : public ColorMaterialEntity
@@ -344,6 +348,7 @@ class WingAdvancedTIE : public ColorMaterialEntity
 {
 public:
 	WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z);
+	void render(const glm::mat4& modelViewMat) const override;
 };
 
 #endif //_H_Entities_H_

@@ -83,6 +83,7 @@ public:
 	static IndexMesh* generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nSamples, GLfloat angleMax = 2 * std::numbers::pi);
 	static IndexMesh* generateIndexedBox(GLdouble l);
 	static IndexMesh* generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z);
+	static IndexMesh* generateWingAdvancedTIETexCor(GLdouble x, GLdouble y, GLdouble z);
 
 private:
 	GLuint mIBO;
