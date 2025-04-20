@@ -741,6 +741,46 @@ IndexMesh::generateIndexedBox(GLdouble l) {
 	return mesh;
 }
 
+//Ap 66
+IndexMesh*
+IndexMesh::generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
+
+	IndexMesh* mesh = new IndexMesh();
+	mesh->mPrimitive = GL_TRIANGLES;
+
+	GLdouble my = y * 0.5; 
+
+	std::vector<GLuint> indices = {
+		//cuadrado superior
+		0, 2, 1, 
+		0, 3, 2,
+		//cuadrado central
+		2, 3, 4,
+		3, 5, 4,
+		//cuadrado inferior
+		4, 5, 6,
+		5, 7, 6	
+	};
+
+	mesh->vIndexes = indices;
+
+	std::vector<vec3> vertices = {
+
+		{-x, y, 0}, //0
+		{x, y, 0}, //1
+		{x, my, z}, //2
+		{-x, my, z}, //3
+		{x, -my, z}, //4
+ 		{-x, -my, z}, //5
+		{x, -y, 0}, //6
+		{-x, -y, 0} //7
+		
+	};
+
+	mesh->vVertices = vertices;
+	mesh->mNumVertices = mesh->vVertices.size();
+	return mesh;
+}
 
 
 void IndexMesh::buildNormalVectors() {

@@ -32,7 +32,7 @@ Abs_Entity::unload()
 	mMesh->unload();
 }
 
-
+/*
 Mesh*
 Abs_Entity::getMesh() {
 	return mMesh;
@@ -52,6 +52,7 @@ void
 Abs_Entity::backdoorUpload(const glm::mat4& mModelViewMat) {
 	upload(mModelViewMat);
 }
+*/
 
 EntityWithColors::EntityWithColors()
 {
@@ -1037,6 +1038,23 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 	}
 }
 
+void
+ColorMaterialEntity::rotate(GLfloat angulo, glm::vec3 eje) {
+
+	glm::vec3 Pos = glm::vec3(mModelMat[3]);
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), angulo, eje);
+	mModelMat = rotateMat * mModelMat;
+}
+
+void
+ColorMaterialEntity::move(glm::vec3 mov_direccion) {
+
+	glm::vec3 Pos = glm::vec3(mModelMat[3]);
+	glm::mat4 translateMat = glm::translate(glm::mat4(1.0), mov_direccion);
+	mModelMat = translateMat * mModelMat;
+}
+
+
 // Apartado 56
 Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 {
@@ -1052,6 +1070,7 @@ Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 	mMesh = IndexMesh::generateByRevolution(profile, nSamples);
 }
 
+//Apartado 64
 Sphere::Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians)
 {
 	std::vector<vec2> profile(nParallels);
@@ -1125,23 +1144,10 @@ CompoundEntity::addEntity(Abs_Entity* ae) {
 }
 
 void
-CompoundEntity::render(const glm::mat4& modelViewMat)
+CompoundEntity::render(const glm::mat4& modelViewMat) const
 {
 	for (Abs_Entity* obj : gObjects) {
 		obj->render(modelViewMat);
-
-		/*mMesh = obj->getMesh();
-		mShader = obj->getShader();
-		mModelMat = obj->getModelMat();
-		
-		if (mMesh != nullptr) {	
-			mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
-			mShader->use();
-			obj->backdoorUpload(aMat);
-			mShader->setUniform("color", glm::vec4(mColor));
-			mMesh->render();
-		}
-		*/
 	}	
 		
 }
@@ -1167,6 +1173,45 @@ CompoundEntity::unload()
 		obj->unload();
 }
 
+//Apartado 66
 
+AdvancedTIE::AdvancedTIE(){
+	Sphere* core = new Sphere(100, 360, 360);
+	core->setColor(glm::dvec4(255.0, 0.0, 0.0, 1.0));
+    addEntity(core);
 
+	Cone* eje = new Cone(380, 3.5, 3.5, 200, 200);
+	eje->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	eje->rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	addEntity(eje);
+
+	Cone* morro = new Cone(150, 5, 5, 20, 200);
+	morro->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	morro->move(glm::vec3(0.0f, 0.0f, 60.0f));
+	addEntity(morro);
+
+	Disk* tapa_morro = new Disk(25.5, 0, 200, 360);
+	tapa_morro->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	tapa_morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	tapa_morro->move(glm::vec3(0.0f, 0.0f, 128.0f));
+	addEntity(tapa_morro);
+
+	WingAdvancedTIE* ala_izq = new WingAdvancedTIE(100, 120, 100);
+	ala_izq->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	ala_izq->rotate(glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	ala_izq->move(glm::vec3(-75.0f, 0.0f, 0.0f));
+	addEntity(ala_izq);
+
+	WingAdvancedTIE* ala_der = new WingAdvancedTIE(100, 120, 100);
+	ala_der->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
+	ala_der->rotate(glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	ala_der->move(glm::vec3(75.0f, 0.0f, 0.0f));
+	addEntity(ala_der);
+
+}
+
+WingAdvancedTIE::WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
+	mMesh = IndexMesh::generateWingAdvancedTIE(x, y, z);
+}
 

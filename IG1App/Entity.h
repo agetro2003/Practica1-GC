@@ -32,12 +32,13 @@ public:
 	//update the model matrix
 	virtual void update() {};
 
+	/*
 	Mesh* getMesh();
     glm::mat4 getModelMat();
 	Shader* getShader();
 
 	void backdoorUpload(const glm::mat4& mModelViewMat);
-	
+	*/
 
 protected:
 	
@@ -275,7 +276,8 @@ public:
 	bool mShowNormals = false;
 	void toggleShowNormals() { mShowNormals = !mShowNormals; }
 	void setShader(Shader* shader) { mShader = shader; }
-
+	void rotate(GLfloat angulo, glm::vec3 eje);
+	void move(glm::vec3 mov_direccion);
 };
 
 class Torus : public ColorMaterialEntity
@@ -321,15 +323,27 @@ public:
 	CompoundEntity();
 	~CompoundEntity();
 	void addEntity(Abs_Entity* ae);
-	void load();
-	void unload();
-	void render(const glm::mat4& modelViewMat);
-	void update();
+	void load() override;
+	void unload() override;
+	void render(const glm::mat4& modelViewMat) const override;
+	void update() override;
 
 protected:
 	std::vector<Abs_Entity*> gObjects;
 	void destroy();
 
+};
+
+class AdvancedTIE : public CompoundEntity
+{
+public:
+	AdvancedTIE();
+};
+
+class WingAdvancedTIE : public ColorMaterialEntity
+{
+public:
+	WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z);
 };
 
 #endif //_H_Entities_H_
