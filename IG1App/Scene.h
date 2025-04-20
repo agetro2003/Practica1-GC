@@ -29,6 +29,10 @@ public:
 
 	void setNormals();
 
+	//int orbit_flag_sc8 = 0;
+	void rotate();
+	void orbit();
+
 protected:
 	void destroy();
 	void setGL();

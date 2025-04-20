@@ -31,6 +31,8 @@ public:
 
 	//update the model matrix
 	virtual void update() {};
+	
+	//int orbit_flag = 0;
 
 	/*
 	Mesh* getMesh();
@@ -352,5 +354,17 @@ public:
 	WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z);
 	void render(const glm::mat4& modelViewMat) const override;
 };
+
+class NodoFicticio : public CompoundEntity {
+
+public:
+	NodoFicticio();
+	//void update() override;
+	void render(const glm::mat4& modelViewMat) const override;
+	void orbit();
+	void rotate();
+	//int orbit_flag = 0;
+};
+
 
 #endif //_H_Entities_H_

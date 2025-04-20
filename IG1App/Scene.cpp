@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <typeinfo>
 
 using namespace glm;
 
@@ -200,16 +201,30 @@ Scene8::init()
 
 	gObjects.push_back(new RGBAxes(400.0));
 
+	//Ap 67
 	Sphere* tatooine = new Sphere(200, 360, 360);
 	tatooine->setColor(glm::dvec4(1.0, 233.0/255.0, 0.0, 1.0));
 	gObjects.push_back(tatooine);
 
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
-	adv_tie->move(glm::vec3(0.0f, 225.0f, 0.0f));
-	gObjects.push_back(adv_tie);
+	//adv_tie->move(glm::vec3(0.0f, 225.0f, 0.0f));
+	//gObjects.push_back(adv_tie);
 
+	//Ap 68
+	NodoFicticio* inventedNode = new NodoFicticio();
+	inventedNode->addEntity(adv_tie);
+	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
+	gObjects.push_back(inventedNode);
 
+	/*
+	NodoFicticio* inventedNode2 = new NodoFicticio();
+	inventedNode->addEntity(inventedNode2);
+	inventedNode2->setModelMat(glm::translate(inventedNode->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
+	inventedNode2->addEntity(adv_tie);
+	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
+	gObjects.push_back(inventedNode);
+	*/
 }
 
 Scene::~Scene()
@@ -287,8 +302,15 @@ void
 Scene::update()
 {
 	//update gObjects
-	for (Abs_Entity* el : gObjects)
+	for (Abs_Entity* el : gObjects) {
+		/*printf(typeid(el).name());
+		printf("\n");
+		if (typeid(el) == typeid(NodoFicticio)) {
+			
+		}
+		el->orbit_flag = orbit_flag_sc8;*/
 		el->update();
+	}
 }
 
 void
@@ -299,5 +321,15 @@ Scene::setNormals()
 		if (objWithNormals) {
 			objWithNormals->toggleShowNormals();	
 		}
-}
 	}
+}
+
+void
+Scene::rotate() {
+	gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
+}
+
+void
+Scene::orbit(){
+	gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(1, 0, 0)));
+}

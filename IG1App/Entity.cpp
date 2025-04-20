@@ -1146,7 +1146,7 @@ void
 CompoundEntity::render(const glm::mat4& modelViewMat) const
 {
 	for (Abs_Entity* obj : gObjects) {
-		obj->render(modelViewMat);
+		obj->render(modelViewMat * mModelMat);
 	}		
 }
 
@@ -1188,6 +1188,45 @@ CompoundEntity::scale(glm::vec3 scale_vec){
 
 }
 
+NodoFicticio::NodoFicticio() {
+	mShader = Shader::get("simple_light");
+}
+
+/*
+void
+NodoFicticio::update() {
+	if (orbit_flag==1) {
+		orbit();
+	}
+	else if(orbit_flag==2){
+		rotate();
+	}
+	else {
+
+	}
+}
+*/
+
+void 
+NodoFicticio::render(const glm::mat4& modelViewMat) const
+{
+	for (Abs_Entity* obj : gObjects) {
+		obj->render(modelViewMat * mModelMat);
+	}
+}
+
+void
+NodoFicticio::orbit() {
+	setModelMat(glm::rotate(modelMat(), glm::radians(3.0f), glm::vec3(1, 0, 0)));
+}
+
+void
+NodoFicticio::rotate() {
+	for (Abs_Entity* obj : gObjects) {
+		glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(3.0f), glm::vec3(0, 1, 0));
+		obj->setModelMat(rotateMat * obj->modelMat());
+	}
+}
 
 //Apartado 66
 AdvancedTIE::AdvancedTIE(){
