@@ -331,6 +331,8 @@ public:
 	void unload() override;
 	void render(const glm::mat4& modelViewMat) const override;
 	void update() override;
+	void move(glm::vec3 mov_direccion);
+	void scale(glm::vec3 scale_vec);
 
 protected:
 	std::vector<Abs_Entity*> gObjects;

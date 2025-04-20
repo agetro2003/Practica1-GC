@@ -86,7 +86,7 @@ IG1App::init()
 	mScenes.push_back(new Scene5);
 	mScenes.push_back(new Scene6);
 	mScenes.push_back(new Scene7);
-	mScenes.push_back(new Scene0);
+	mScenes.push_back(new Scene8);
 
 	mCamera->set2D();
 	mScenes[0]->init();
@@ -511,7 +511,11 @@ IG1App::changeScene(size_t sceneNr)
 				FRAME_DURATION = 0.08;
 				break;
 			case 7:
-				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color (alpha=1 -> opaque)
+				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
+				glEnable(GL_DEPTH_TEST);
+				break;
+			case 8:
+				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
 				glEnable(GL_DEPTH_TEST);
 				break;
 			default:
@@ -520,24 +524,6 @@ IG1App::changeScene(size_t sceneNr)
 				FRAME_DURATION = 0.04;
 				break;
 		}
-		/*
-		if (mCurrentScene == 7) {
-			glClearColor(0.0, 0.0, 0.0, 1.0); // New background color (alpha=1 -> opaque)
-			glEnable(GL_DEPTH_TEST);
-		}
-		else {
-			glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
-			glEnable(GL_DEPTH_TEST);
-		}
-
-		
-		if (mCurrentScene == 2) {
-			FRAME_DURATION = 0.08;
-		}
-		else {
-			FRAME_DURATION = 0.04;
-		}
-		*/
 
 		//Para que se refresque al cambiar de escena
 		mNeedsRedisplay = true;

@@ -172,7 +172,7 @@ Scene7::init()
 	
 	gObjects.push_back(new RGBAxes(400.0));
 
-
+	
 	Sphere* sphere = new Sphere(100, 360, 360);
 	sphere->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
 
@@ -185,11 +185,30 @@ Scene7::init()
 	//gObjects.push_back(disk);
 	//gObjects.push_back(sphere);
 	//gObjects.push_back(cone);
-
 	
-
+	
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	gObjects.push_back(adv_tie);
+
+}
+
+
+void
+Scene8::init()
+{
+	setGL(); // OpenGL settings
+
+	gObjects.push_back(new RGBAxes(400.0));
+
+	Sphere* tatooine = new Sphere(200, 360, 360);
+	tatooine->setColor(glm::dvec4(1.0, 233.0/255.0, 0.0, 1.0));
+	gObjects.push_back(tatooine);
+
+	AdvancedTIE* adv_tie = new AdvancedTIE();
+	adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
+	adv_tie->move(glm::vec3(0.0f, 225.0f, 0.0f));
+	gObjects.push_back(adv_tie);
+
 
 }
 

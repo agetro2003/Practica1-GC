@@ -1042,7 +1042,6 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 void
 ColorMaterialEntity::rotate(GLfloat angulo, glm::vec3 eje) {
 
-	glm::vec3 Pos = glm::vec3(mModelMat[3]);
 	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), angulo, eje);
 	mModelMat = rotateMat * mModelMat;
 }
@@ -1050,7 +1049,6 @@ ColorMaterialEntity::rotate(GLfloat angulo, glm::vec3 eje) {
 void
 ColorMaterialEntity::move(glm::vec3 mov_direccion) {
 
-	glm::vec3 Pos = glm::vec3(mModelMat[3]);
 	glm::mat4 translateMat = glm::translate(glm::mat4(1.0), mov_direccion);
 	mModelMat = translateMat * mModelMat;
 }
@@ -1125,7 +1123,7 @@ IndexedBox::IndexedBox(GLdouble lenght)
 
 //Ap 65 Entidad compuesta
 CompoundEntity::CompoundEntity() {
-
+	mShader = Shader::get("simple_light");
 }
 
 CompoundEntity::~CompoundEntity() {
@@ -1149,8 +1147,7 @@ CompoundEntity::render(const glm::mat4& modelViewMat) const
 {
 	for (Abs_Entity* obj : gObjects) {
 		obj->render(modelViewMat);
-	}	
-		
+	}		
 }
 
 void
@@ -1174,17 +1171,33 @@ CompoundEntity::unload()
 		obj->unload();
 }
 
-//Apartado 66
+void
+CompoundEntity::move(glm::vec3 mov_direccion) {
+	for (Abs_Entity* obj : gObjects) {
+		glm::mat4 translateMat = glm::translate(glm::mat4(1.0), mov_direccion);
+		obj->setModelMat(translateMat * obj->modelMat());
+	}
+}
 
+void 
+CompoundEntity::scale(glm::vec3 scale_vec){
+	for (Abs_Entity* obj : gObjects) {
+		glm::mat4 scaleMat = glm::scale(glm::mat4(1.0), scale_vec);
+		obj->setModelMat( scaleMat * obj->modelMat()); 
+	}
+
+}
+
+
+//Apartado 66
 AdvancedTIE::AdvancedTIE(){
 
-	glm::dvec4 color = glm::dvec4(0.0, 65.0, 106.0, 1.0);
+	glm::dvec4 color = glm::dvec4(0.0, 65.0/255.0, 106.0/255.0, 1.0);
 	Sphere* core = new Sphere(100, 360, 360);
 	core->setColor(color);
     addEntity(core);
 
 	Cone* eje = new Cone(380, 3.5, 3.5, 200, 200);
-	//eje->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
 	eje->setColor(color);
 	eje->rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	addEntity(eje);
@@ -1205,8 +1218,6 @@ AdvancedTIE::AdvancedTIE(){
 	//ala_izq->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));
 	ala_izq->rotate(glm::radians(-90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	ala_izq->move(glm::vec3(-75.0f, 0.0f, 0.0f));
-
-	
 	addEntity(ala_izq);
 
 	WingAdvancedTIE* ala_der = new WingAdvancedTIE(100, 120, 100);
@@ -1224,8 +1235,6 @@ WingAdvancedTIE::WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
 	mTexture = new Texture();
 	mTexture->load("../assets/images/noche.jpg", 150);
 }
-
-
 
 void
 WingAdvancedTIE::render(const glm::mat4& modelViewMat) const
