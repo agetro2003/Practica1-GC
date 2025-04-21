@@ -1185,16 +1185,12 @@ CompoundEntity::unload()
 		obj->unload();
 }
 
-void
-CompoundEntity::move(glm::vec3 mov_direccion) {
-	for (Abs_Entity* obj : gObjects) {
-		glm::mat4 translateMat = glm::translate(glm::mat4(1.0), mov_direccion);
-		obj->setModelMat(translateMat * obj->modelMat());
-	}
-}
+
 
 void 
 CompoundEntity::scale(glm::vec3 scale_vec){
+	
+	
 	for (Abs_Entity* obj : gObjects) {
 		glm::mat4 scaleMat = glm::scale(glm::mat4(1.0), scale_vec);
 		obj->setModelMat( scaleMat * obj->modelMat()); 
@@ -1236,10 +1232,7 @@ NodoFicticio::orbit() {
 
 void
 NodoFicticio::rotate() {
-	for (Abs_Entity* obj : gObjects) {
-		glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), glm::radians(3.0f), glm::vec3(0, 1, 0));
-		obj->setModelMat(rotateMat * obj->modelMat());
-	}
+	setModelMat(glm::rotate(modelMat(), glm::radians(3.0f), glm::vec3(0, 1, 0)));
 }
 
 //Apartado 66

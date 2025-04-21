@@ -21,6 +21,9 @@ public:
 	virtual void init() = 0;
 	//update gObjects 
 	virtual void update();
+
+	virtual bool handleKey(unsigned int key);
+
 	void render(Camera const& cam) const;
 
 	// load or unload scene data into the GPU
@@ -29,9 +32,6 @@ public:
 
 	void setNormals();
 
-	//int orbit_flag_sc8 = 0;
-	void rotate();
-	void orbit();
 
 protected:
 	void destroy();
@@ -121,6 +121,7 @@ public:
 	Scene8() = default;
 	~Scene8() = default;
 	void init() override;
+	bool handleKey(unsigned int key) override;
 };
 
 //scene9

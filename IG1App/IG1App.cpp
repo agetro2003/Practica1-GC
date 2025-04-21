@@ -421,35 +421,12 @@ IG1App::key(unsigned int key)
 			//Activa las normales de las entidades ColorMaterialEntity de la escena actual
 			mScenes[mCurrentScene]->setNormals();
 			break;
-		case 'f':
-			if(mCurrentScene == 8) {
-				/*if (mScenes[mCurrentScene]->orbit_flag_sc8 = !2) {
-					mScenes[mCurrentScene]->orbit_flag_sc8 = 2;
-				}
-				else {
-					mScenes[mCurrentScene]->orbit_flag_sc8 = 0;
-				}*/
-				mScenes[mCurrentScene]->rotate();
-				
-			}
-			break;
-		case 'g':
-			if (mCurrentScene == 8) {
-				/*if(mScenes[mCurrentScene]->orbit_flag_sc8 = !1) {
-					mScenes[mCurrentScene]->orbit_flag_sc8 = 1;
-				}
-				else {
-					mScenes[mCurrentScene]->orbit_flag_sc8 = 0;
-				}*/
-				mScenes[mCurrentScene]->orbit();
-			}
-			break;
 
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";
 			else
-				need_redisplay = false;
+				need_redisplay = mScenes[mCurrentScene]->handleKey(key);
 			break;
 	} // switch
 

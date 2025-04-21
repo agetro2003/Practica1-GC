@@ -209,6 +209,7 @@ Scene8::init()
 
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
+	//adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
 	//adv_tie->move(glm::vec3(0.0f, 225.0f, 0.0f));
 	//gObjects.push_back(adv_tie);
 
@@ -228,6 +229,32 @@ Scene8::init()
 	*/
 }
 
+bool 
+Scene8::handleKey(unsigned int key) {
+
+	// print key
+	printf("key: %c\n", key);
+	if (key == 'f') {
+		for (Abs_Entity* el : gObjects) {
+			NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
+			if (node)
+			node->rotate();
+		}
+		//gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
+		return true;
+	}
+	else if (key == 'g') {
+		for (Abs_Entity* el : gObjects) {
+			NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
+			if (node)
+			node->orbit();
+
+		} 
+		return true;
+	}
+	return false;
+
+}
 //Apartado 69 -> Granjero
 void
 Scene9::init()
@@ -338,12 +365,8 @@ Scene::setNormals()
 	}
 }
 
-void
-Scene::rotate() {
-	gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
-}
 
-void
-Scene::orbit(){
-	gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(1, 0, 0)));
+bool 
+Scene::handleKey(unsigned int key) {
+	return false;
 }
