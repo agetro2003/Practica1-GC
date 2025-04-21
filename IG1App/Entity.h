@@ -308,6 +308,13 @@ public:
 	Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples);
 };
 
+class HalfDisk : public ColorMaterialEntity
+{
+public:
+	// Constructor
+	HalfDisk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples);
+};
+
 class  Cone : public ColorMaterialEntity
 {
 public:
@@ -364,6 +371,12 @@ public:
 	void orbit();
 	void rotate();
 	//int orbit_flag = 0;
+};
+
+class Granjero : public CompoundEntity 
+{
+public:
+	Granjero();
 };
 
 

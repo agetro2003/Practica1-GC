@@ -166,6 +166,7 @@ Scene6::init()
 	gObjects.push_back(box);
 }
 
+//Apartado 66 -> caza TIE
 void
 Scene7::init()
 {
@@ -193,7 +194,7 @@ Scene7::init()
 
 }
 
-
+//Apartados 67-68 -> caza TIE en Tatooine
 void
 Scene8::init()
 {
@@ -225,6 +226,19 @@ Scene8::init()
 	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
 	gObjects.push_back(inventedNode);
 	*/
+}
+
+//Apartado 69 -> Granjero
+void
+Scene9::init()
+{
+	setGL(); // OpenGL settings
+
+	gObjects.push_back(new RGBAxes(400.0));
+
+	Granjero* granjero = new Granjero();
+	gObjects.push_back(granjero);
+
 }
 
 Scene::~Scene()

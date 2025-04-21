@@ -1098,6 +1098,20 @@ Disk::Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples) {
 	mMesh = IndexMesh::generateByRevolution(perfil, nSamples);
 }
 
+HalfDisk::HalfDisk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples) {
+	std::vector<vec2> perfil(nRings);
+
+	GLdouble t0 = (R - r) / nRings;
+	GLdouble ti = r;
+	for (GLint i = 0; i < nRings; i++)
+	{
+		perfil[i] = { ti, 0 };
+		ti += t0;
+	}
+
+	mMesh = IndexMesh::generateByRevolution(perfil, nSamples, std::numbers::pi);
+}
+
 Cone::Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
 {
 	std::vector<vec2> perfil(nRings);
@@ -1316,3 +1330,34 @@ WingAdvancedTIE::render(const glm::mat4& modelViewMat) const
 	}
 }
 
+//Apartado 69
+Granjero::Granjero() {
+
+	Sphere* cabeza = new Sphere(150, 360, 360);
+	cabeza->setColor(glm::dvec4(1.0, 0.5, 0.0, 1.0));
+	addEntity(cabeza);
+
+	Disk* sombrero = new Disk(200, 0, 200, 360);
+	sombrero->setColor(glm::dvec4(1.0, 0.0, 0.0, 1.0));
+	sombrero->move(glm::vec3(0.0f, 110.0f, 0.0f));
+	addEntity(sombrero);
+
+	Cone* ojo_der = new Cone(30, 3.5, 0, 20, 200);
+	ojo_der->setColor(glm::dvec4(0.0, 0.0, 1.0, 1.0));
+	ojo_der->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	ojo_der->move(glm::vec3(50.0f, 60.0f, 135.0f));
+	addEntity(ojo_der);
+
+	Cone* ojo_izq = new Cone(30, 3.5, 0, 20, 200);
+	ojo_izq->setColor(glm::dvec4(0.0, 0.5, 1.0, 1.0));
+	ojo_izq->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	ojo_izq->move(glm::vec3(-50.0f, 60.0f, 135.0f));
+	addEntity(ojo_izq);
+
+	HalfDisk* boca = new HalfDisk(125, 0, 200, 360);
+	boca->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
+	boca->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	boca->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	boca->move(glm::vec3(0.0f, 0.0f, 100.0f));
+	addEntity(boca);
+}
