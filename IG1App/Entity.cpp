@@ -1302,7 +1302,11 @@ WingAdvancedTIE::render(const glm::mat4& modelViewMat) const
 		}
 
 		if (mShowNormals) {
-			mShader->setUniform("normals", true);
+			Shader* mNormalShader = Shader::get("normals");
+			mNormalShader->use();
+			mNormalShader->setUniform("modelView", aMat);
+
+
 			mMesh->render();
 		}
 
