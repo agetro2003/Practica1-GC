@@ -1019,6 +1019,8 @@ Grass::render(const glm::mat4& modelViewMat) const {
 ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
 {
 	mShader = Shader::get("simple_light");
+
+
 }
 
 void 
@@ -1031,9 +1033,12 @@ ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 
 		mShader->setUniform("color", glm::vec4(mColor));
 		mMesh->render();
-
 		if (mShowNormals) {
-			mShader->setUniform("normals", true);
+			Shader* mNormalShader = Shader::get("normals");
+			mNormalShader->use();
+			mNormalShader->setUniform("modelView", aMat);
+
+
 			mMesh->render();
 		}
 	}
@@ -1057,72 +1062,59 @@ ColorMaterialEntity::move(glm::vec3 mov_direccion) {
 // Apartado 56
 Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
 {
-	std::vector<vec2> profile(nPoints);
-	GLdouble t0 = 360 / nPoints;
+	std::vector<vec2> profile;
+	GLdouble t0 = 360.0 / nPoints;
 	GLdouble ti = t0;
 
-	for (GLint i = 0; i < nPoints; i++)
+	for (GLint i = 0; i <= nPoints; i++)
 	{
-		profile[i] = { r * cos(radians(ti)) + R, r * sin(radians(ti)) };
+		profile.push_back ({ r * cos(radians(ti)) + R, r * sin(radians(ti)) });
 		ti += t0;
 	}
 	mMesh = IndexMesh::generateByRevolution(profile, nSamples);
 }
 
 //Apartado 64
-Sphere::Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians)
+Sphere::Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians, GLfloat angleMax)
 {
-	std::vector<vec2> profile(nParallels);
-	GLdouble t0 = 360 / nParallels;
-	GLdouble ti = t0;
-	for (GLint i = 0; i < nParallels; i++)
+	std::vector<vec2> profile;
+	GLdouble t0 = 180.0 / nParallels;
+	GLdouble ti = 90;
+	for (GLint i = 0; i <= nParallels; i++)
 	{
-		profile[i] = { radius * cos(radians(ti)), radius * sin(radians(ti)) };
+		profile.push_back({ radius * cos(radians(ti)), radius * sin(radians(ti)) });
 		ti += t0;
 	}
 
-	mMesh = IndexMesh::generateByRevolution(profile, nMeridians);
+	mMesh = IndexMesh::generateByRevolution(profile, nMeridians, angleMax);
 }
 
-Disk::Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples) {
-	std::vector<vec2> perfil(nRings);
+Disk::Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples, GLfloat angleMax) {
+	std::vector<vec2> perfil;
 
 	GLdouble t0 = (R - r) / nRings;
 	GLdouble ti = r;
-	for (GLint i = 0; i < nRings; i++)
+	for (GLint i = 0; i <= nRings; i++)
 	{
-		perfil[i] = { ti, 0 };
+		perfil.push_back({ ti, 0 });
 		ti += t0;
 	}
 
-	mMesh = IndexMesh::generateByRevolution(perfil, nSamples);
+	mMesh = IndexMesh::generateByRevolution(perfil, nSamples, angleMax);
 }
 
-HalfDisk::HalfDisk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples) {
-	std::vector<vec2> perfil(nRings);
-
-	GLdouble t0 = (R - r) / nRings;
-	GLdouble ti = r;
-	for (GLint i = 0; i < nRings; i++)
-	{
-		perfil[i] = { ti, 0 };
-		ti += t0;
-	}
-
-	mMesh = IndexMesh::generateByRevolution(perfil, nSamples, std::numbers::pi);
-}
 
 Cone::Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
 {
-	std::vector<vec2> perfil(nRings);
+	std::vector<vec2> perfil;
 	// Perfil (r, y) para y E [h/2,..., -h/2]
 	GLdouble a = (R * R - r * r)/h;
 	GLdouble b = (R * R + r * r) * 0.5;
 	GLdouble t0 = h / nRings;
 	GLdouble ti = -h / 2;
-	for (GLint i = 0; i < nRings; i++)
+	for (GLint i = 0; i <= nRings; i++)
 	{
-		perfil[i] = { a*ti + b, ti };
+		perfil.push_back( { a*ti + b, ti });
 		ti += t0;
 	}
 
@@ -1347,7 +1339,7 @@ Granjero::Granjero() {
 	ojo_izq->move(glm::vec3(-50.0f, 60.0f, 135.0f));
 	addEntity(ojo_izq);
 
-	HalfDisk* boca = new HalfDisk(125, 0, 200, 360);
+	Disk* boca = new Disk(125, 0, 200, 360, std::numbers::pi);
 	boca->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
 	boca->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	boca->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));

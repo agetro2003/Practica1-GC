@@ -281,9 +281,10 @@ public:
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	void move(glm::vec3 mov_direccion);
 	Texture* mTexture;
-
 protected:
 	bool mModulate = false;
+
+
 };
 
 class Torus : public ColorMaterialEntity
@@ -298,22 +299,16 @@ class Sphere : public ColorMaterialEntity
 {
 public:
 	// Constructor
-	Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians);
+	Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians, GLfloat angleMax = 2 * std::numbers::pi);
 };
 
 class Disk : public ColorMaterialEntity
 {
 public:
 	// Constructor
-	Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples);
+	Disk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples, GLfloat angleMax = 2 * std::numbers::pi);
 };
 
-class HalfDisk : public ColorMaterialEntity
-{
-public:
-	// Constructor
-	HalfDisk(GLdouble R, GLdouble r, GLuint nRings, GLuint nSamples);
-};
 
 class  Cone : public ColorMaterialEntity
 {
@@ -345,6 +340,7 @@ public:
 protected:
 	std::vector<Abs_Entity*> gObjects;
 	void destroy();
+
 
 };
 

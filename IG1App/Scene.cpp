@@ -203,7 +203,7 @@ Scene8::init()
 	gObjects.push_back(new RGBAxes(400.0));
 
 	//Ap 67
-	Sphere* tatooine = new Sphere(200, 360, 360);
+	Sphere* tatooine = new Sphere(200, 100, 200);
 	tatooine->setColor(glm::dvec4(1.0, 233.0/255.0, 0.0, 1.0));
 	gObjects.push_back(tatooine);
 

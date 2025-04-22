@@ -686,22 +686,67 @@ IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nS
 		for (int j = 0; j < tamPerfil - 1; ++j) { // una cara
 
 			if (profile[j].x != 0.0) // triángulo inferior
-				for (auto [s, t] : { pair{i, j}, pair{i, j + 1}, pair{i + 1, j} })
+				for (auto [s, t] : { pair{i, j}, {i, j + 1}, {i + 1, j} })
 					mesh->vIndexes.push_back(s * tamPerfil + t);
 
 			if (profile[j + 1].x != 0.0) // triángulo superior
-				for (auto [s, t] : { pair{i, j + 1}, pair{i + 1, j + 1}, pair{i + 1, j} })
+				for (auto [s, t] : { pair{i, j + 1}, {i + 1, j + 1}, {i + 1, j} })
 					mesh->vIndexes.push_back(s * tamPerfil + t);
 		}
 
 
-	mesh->buildNormalVectors();
 	mesh->mNumVertices = mesh->vVertices.size();
+	mesh->buildNormalVectors();
 
 	return mesh;
 
 }
 
+IndexMesh*
+IndexMesh::generateIndexedBox(GLdouble l)
+{
+	IndexMesh* mesh = new IndexMesh();
+	mesh->mPrimitive = GL_TRIANGLES;
+	// Indicar el numero de vertices
+	mesh->mNumVertices = 8;
+	// Reservar la capacidad del vector vertices a 8
+	mesh->vVertices.reserve(8);
+
+	GLdouble x = l / 2, y = l / 2, z = l / 2;
+	mesh->vVertices = {
+		vec3(x, -y, -z), vec3(-x, -y, z), vec3(-x, -y, -z), vec3(x, -y, z),
+		vec3(x, y, -z), vec3(x, y, z), vec3(-x, y, z), vec3(-x, y, -z)
+	};
+	mesh->vIndexes = {
+		// Cara de abajo
+		0, 2, 1,
+		0, 1, 3,
+		// Cara mirando desde el eje x
+		0, 5, 4,
+		0, 3, 5,
+		// Cara mirando desde el eje z
+		3, 1, 5,
+		5, 1, 6,
+		// Cara mirando desde el eje x con valor negativo
+		6, 1, 7,
+		1, 2, 7,
+		// Cara mirando desde el eje z con valor negativo
+		2, 0, 7,
+		0, 4, 7,
+		// Cara de arriba
+		4, 5, 7,
+		5, 6, 7
+	};
+
+	mesh->buildNormalVectors();
+
+	for (size_t i = 0; i < mesh->vNormals.size(); ++i) {
+		std::cout << "Normal " << i << ": " << mesh->vNormals[i].x << ", " << mesh->vNormals[i].y << ", " << mesh->vNormals[i].z << std::endl;
+	}
+
+	return mesh;
+}
+/*
 IndexMesh*
 IndexMesh::generateIndexedBox(GLdouble l) {
 	IndexMesh* mesh = new IndexMesh();
@@ -738,9 +783,13 @@ IndexMesh::generateIndexedBox(GLdouble l) {
 	mesh->buildNormalVectors();
 
 	mesh->mNumVertices = mesh->vVertices.size();
+	// imprimir las normales
+	for (size_t i = 0; i < mesh->vNormals.size(); ++i) {
+		std::cout << "Normal " << i << ": " << mesh->vNormals[i].x << ", " << mesh->vNormals[i].y << ", " << mesh->vNormals[i].z << std::endl;
+	}
 	return mesh;
 }
-
+*/
 //Ap 66
 IndexMesh*
 IndexMesh::generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {
@@ -806,17 +855,14 @@ IndexMesh::generateWingAdvancedTIETexCor(GLdouble x, GLdouble y, GLdouble z) {
 void IndexMesh::buildNormalVectors() {
 	// calculo de las normales
 	// Construir el vector de normales del mismo tamaño que el de vertices
-	vNormals.resize(vVertices.size());
+	vNormals.resize(vVertices.size(), vec3(0.0));
 
 	// Inicializar el vector de normales a cero
-	for (auto& n : vNormals) {
-		n = vec3(0.0f);
-	}
 	// Calcular la normal de cada triángulo
 	for (size_t k = 0; k < vIndexes.size(); k += 3) {
 		vec3 normal = normalize(cross(
-			vVertices[vIndexes[k + 1]] - vVertices[vIndexes[k]],
-			vVertices[vIndexes[k + 2]] - vVertices[vIndexes[k]]
+			vVertices[vIndexes[k + 2]] - vVertices[vIndexes[k]],
+			vVertices[vIndexes[k + 1]] - vVertices[vIndexes[k]]
 		));
 		vNormals[vIndexes[k]] += normal;
 		vNormals[vIndexes[k + 1]] += normal;
@@ -824,7 +870,7 @@ void IndexMesh::buildNormalVectors() {
 	}
 
 	// Normalizar las normales
-	for (auto& n : vNormals) {
+	for (vec3& n : vNormals) {
 		n = normalize(n);
 	}
 
