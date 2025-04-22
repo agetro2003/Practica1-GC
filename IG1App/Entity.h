@@ -336,6 +336,7 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 	void update() override;
 	void scale(glm::vec3 scale_vec);
+	void rotate(GLfloat angulo, glm::vec3 eje);
 
 protected:
 	std::vector<Abs_Entity*> gObjects;

@@ -1177,12 +1177,9 @@ CompoundEntity::unload()
 		obj->unload();
 }
 
-
-
 void 
 CompoundEntity::scale(glm::vec3 scale_vec){
-	
-	
+
 	for (Abs_Entity* obj : gObjects) {
 		glm::mat4 scaleMat = glm::scale(glm::mat4(1.0), scale_vec);
 		obj->setModelMat( scaleMat * obj->modelMat()); 
@@ -1190,24 +1187,25 @@ CompoundEntity::scale(glm::vec3 scale_vec){
 
 }
 
+
+void
+CompoundEntity::rotate(GLfloat angulo, glm::vec3 eje) {
+
+	glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), angulo, eje);
+	mModelMat = rotateMat * mModelMat;
+	
+	/*
+	for (Abs_Entity* obj : gObjects) {
+		glm::mat4 rotateMat = glm::rotate(glm::mat4(1.0), angulo, eje);
+		obj->setModelMat(rotateMat * obj->modelMat());
+	}
+	*/
+
+}
+
 NodoFicticio::NodoFicticio() {
 	mShader = Shader::get("simple_light");
 }
-
-/*
-void
-NodoFicticio::update() {
-	if (orbit_flag==1) {
-		orbit();
-	}
-	else if(orbit_flag==2){
-		rotate();
-	}
-	else {
-
-	}
-}
-*/
 
 void 
 NodoFicticio::render(const glm::mat4& modelViewMat) const
