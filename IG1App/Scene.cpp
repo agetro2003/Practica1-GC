@@ -264,6 +264,7 @@ Scene9::init()
 	gObjects.push_back(new RGBAxes(400.0));
 
 	Granjero* granjero = new Granjero();
+	granjero->rotate(glm::radians(45.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	gObjects.push_back(granjero);
 
 }
