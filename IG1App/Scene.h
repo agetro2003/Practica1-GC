@@ -30,7 +30,7 @@ public:
 	void load();
 	void unload();
 
-	void setNormals();
+	//void setNormals();
 
 
 protected:

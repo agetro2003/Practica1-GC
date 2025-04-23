@@ -354,7 +354,7 @@ Scene::update()
 		el->update();
 	}
 }
-
+/*
 void
 Scene::setNormals()
 {
@@ -365,7 +365,7 @@ Scene::setNormals()
 		}
 	}
 }
-
+*/
 
 bool 
 Scene::handleKey(unsigned int key) {
