@@ -273,14 +273,14 @@ class ColorMaterialEntity : public SingleColorEntity
 {
 public:
 	ColorMaterialEntity(glm::dvec4 mColor = glm::dvec4(1.0, 1.0, 1.0, 1.0));
+	~ColorMaterialEntity();
 	void render(const glm::mat4& modelViewMat) const override;
-	bool mShowNormals = false;
-	void toggleShowNormals() { mShowNormals = !mShowNormals; }
+	static bool mShowNormals;
+	static void toggleShowNormals();
 	void setShader(Shader* shader) { mShader = shader; }
-	
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	void move(glm::vec3 mov_direccion);
-	Texture* mTexture;
+	Texture* mTexture = nullptr;
 protected:
 	bool mModulate = false;
 
@@ -362,11 +362,9 @@ class NodoFicticio : public CompoundEntity {
 
 public:
 	NodoFicticio();
-	//void update() override;
 	void render(const glm::mat4& modelViewMat) const override;
 	void orbit();
 	void rotate();
-	//int orbit_flag = 0;
 };
 
 class Granjero : public CompoundEntity 

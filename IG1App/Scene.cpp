@@ -175,7 +175,7 @@ Scene7::init()
 	gObjects.push_back(new RGBAxes(400.0));
 
 	
-	Sphere* sphere = new Sphere(100, 360, 360);
+	/*Sphere* sphere = new Sphere(100, 360, 360);
 	sphere->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
 
 	Disk* disk = new Disk(100, 200, 200, 360);
@@ -184,10 +184,10 @@ Scene7::init()
 	Cone* cone = new Cone(160, 10, 20, 200, 200);
 	cone->setColor(glm::dvec4(0.0, 0.0, 1.0, 1.0));
 	
-	//gObjects.push_back(disk);
-	//gObjects.push_back(sphere);
-	//gObjects.push_back(cone);
-	
+	gObjects.push_back(disk);
+	gObjects.push_back(sphere);
+	gObjects.push_back(cone);
+	*/
 	
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	gObjects.push_back(adv_tie);

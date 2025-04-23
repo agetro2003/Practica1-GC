@@ -1019,8 +1019,21 @@ Grass::render(const glm::mat4& modelViewMat) const {
 ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
 {
 	mShader = Shader::get("simple_light");
+}
 
+ColorMaterialEntity::~ColorMaterialEntity() {
+	if (mTexture != nullptr) {
+		delete mTexture;
+		mTexture = nullptr;
+	}
+}
 
+bool
+ColorMaterialEntity::mShowNormals = false;
+
+void 
+ColorMaterialEntity::toggleShowNormals() {
+	 mShowNormals = !mShowNormals; 
 }
 
 void 
@@ -1079,7 +1092,7 @@ Sphere::Sphere(GLdouble radius, GLuint nParallels, GLuint nMeridians, GLfloat an
 {
 	std::vector<vec2> profile;
 	GLdouble t0 = 180.0 / nParallels;
-	GLdouble ti = 90;
+	GLdouble ti = -90;
 	for (GLint i = 0; i <= nParallels; i++)
 	{
 		profile.push_back({ radius * cos(radians(ti)), radius * sin(radians(ti)) });
@@ -1125,6 +1138,7 @@ Cone::Cone(GLdouble h, GLdouble r, GLdouble R, GLuint nRings, GLuint nSamples)
 IndexedBox::IndexedBox(GLdouble lenght)
 {
 	mMesh = IndexMesh::generateIndexedBox(lenght);
+	mShowNormals = false;
 }
 
 //Ap 65 Entidad compuesta
@@ -1229,25 +1243,26 @@ NodoFicticio::rotate() {
 AdvancedTIE::AdvancedTIE(){
 
 	glm::dvec4 color = glm::dvec4(0.0, 65.0/255.0, 106.0/255.0, 1.0);
-	Sphere* core = new Sphere(100, 360, 360);
+	Sphere* core = new Sphere(100, 180, 180);
 	core->setColor(color);
     addEntity(core);
 
-	Cone* eje = new Cone(380, 3.5, 3.5, 200, 200);
+	Cone* eje = new Cone(380, 3.5, 3.5, 20, 20);
 	eje->setColor(color);
 	eje->rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	addEntity(eje);
 
-	Cone* morro = new Cone(150, 5, 5, 20, 200);
+	Cone* morro = new Cone(150, 5, 5, 20, 20);
 	morro->setColor(color);
 	morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	morro->move(glm::vec3(0.0f, 0.0f, 60.0f));
 	addEntity(morro);
 
-	Disk* tapa_morro = new Disk(25.5, 0, 200, 360);
+	Disk* tapa_morro = new Disk(24.75, 0, 20, 360);
 	tapa_morro->setColor(color);
+	tapa_morro->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	tapa_morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	tapa_morro->move(glm::vec3(0.0f, 0.0f, 128.0f));
+	tapa_morro->move(glm::vec3(0.0f, 0.0f, 135.0f));
 	addEntity(tapa_morro);
 
 	WingAdvancedTIE* ala_izq = new WingAdvancedTIE(100, 120, 100);
@@ -1320,29 +1335,31 @@ WingAdvancedTIE::render(const glm::mat4& modelViewMat) const
 //Apartado 69
 Granjero::Granjero() {
 
-	Sphere* cabeza = new Sphere(150, 360, 360);
+	Sphere* cabeza = new Sphere(150, 180, 180);
 	cabeza->setColor(glm::dvec4(1.0, 0.5, 0.0, 1.0));
 	addEntity(cabeza);
 
-	Disk* sombrero = new Disk(200, 0, 200, 360);
+	Disk* sombrero = new Disk(200, 0, 20, 360);
 	sombrero->setColor(glm::dvec4(1.0, 0.0, 0.0, 1.0));
+	sombrero->rotate(glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	sombrero->move(glm::vec3(0.0f, 110.0f, 0.0f));
 	addEntity(sombrero);
 
-	Cone* ojo_der = new Cone(30, 3.5, 0, 20, 200);
+	Cone* ojo_der = new Cone(30, 3.5, 0, 20, 20);
 	ojo_der->setColor(glm::dvec4(0.0, 0.0, 1.0, 1.0));
 	ojo_der->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	ojo_der->move(glm::vec3(50.0f, 60.0f, 135.0f));
 	addEntity(ojo_der);
 
-	Cone* ojo_izq = new Cone(30, 3.5, 0, 20, 200);
+	Cone* ojo_izq = new Cone(30, 3.5, 0, 20, 20);
 	ojo_izq->setColor(glm::dvec4(0.0, 0.5, 1.0, 1.0));
 	ojo_izq->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	ojo_izq->move(glm::vec3(-50.0f, 60.0f, 135.0f));
 	addEntity(ojo_izq);
 
-	Disk* boca = new Disk(125, 0, 200, 360, std::numbers::pi);
+	Disk* boca = new Disk(125, 0, 20, 360, std::numbers::pi);
 	boca->setColor(glm::dvec4(0.0, 1.0, 0.0, 1.0));
+	boca->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	boca->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	boca->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	boca->move(glm::vec3(0.0f, 0.0f, 100.0f));

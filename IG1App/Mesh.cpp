@@ -461,10 +461,10 @@ Mesh::generateRectangleTexCor(GLdouble w, GLdouble h) {
 
 	mesh->vTexCoords.reserve(mesh->mNumVertices);
 	// Agregar texturas a los vértices creado en generateRectangle
-	mesh->vTexCoords.emplace_back(0, 0);
-	mesh->vTexCoords.emplace_back(1, 0);
 	mesh->vTexCoords.emplace_back(0, 1);
 	mesh->vTexCoords.emplace_back(1, 1);
+	mesh->vTexCoords.emplace_back(0, 0);
+	mesh->vTexCoords.emplace_back(1, 0);
 
 
 	return mesh;
@@ -703,51 +703,6 @@ IndexMesh::generateByRevolution(const std::vector<glm::vec2>& profile, GLuint nS
 }
 
 IndexMesh*
-IndexMesh::generateIndexedBox(GLdouble l)
-{
-	IndexMesh* mesh = new IndexMesh();
-	mesh->mPrimitive = GL_TRIANGLES;
-	// Indicar el numero de vertices
-	mesh->mNumVertices = 8;
-	// Reservar la capacidad del vector vertices a 8
-	mesh->vVertices.reserve(8);
-
-	GLdouble x = l / 2, y = l / 2, z = l / 2;
-	mesh->vVertices = {
-		vec3(x, -y, -z), vec3(-x, -y, z), vec3(-x, -y, -z), vec3(x, -y, z),
-		vec3(x, y, -z), vec3(x, y, z), vec3(-x, y, z), vec3(-x, y, -z)
-	};
-	mesh->vIndexes = {
-		// Cara de abajo
-		0, 2, 1,
-		0, 1, 3,
-		// Cara mirando desde el eje x
-		0, 5, 4,
-		0, 3, 5,
-		// Cara mirando desde el eje z
-		3, 1, 5,
-		5, 1, 6,
-		// Cara mirando desde el eje x con valor negativo
-		6, 1, 7,
-		1, 2, 7,
-		// Cara mirando desde el eje z con valor negativo
-		2, 0, 7,
-		0, 4, 7,
-		// Cara de arriba
-		4, 5, 7,
-		5, 6, 7
-	};
-
-	mesh->buildNormalVectors();
-
-	for (size_t i = 0; i < mesh->vNormals.size(); ++i) {
-		std::cout << "Normal " << i << ": " << mesh->vNormals[i].x << ", " << mesh->vNormals[i].y << ", " << mesh->vNormals[i].z << std::endl;
-	}
-
-	return mesh;
-}
-/*
-IndexMesh*
 IndexMesh::generateIndexedBox(GLdouble l) {
 	IndexMesh* mesh = new IndexMesh();
 	mesh->mPrimitive = GL_TRIANGLES;
@@ -789,7 +744,8 @@ IndexMesh::generateIndexedBox(GLdouble l) {
 	}
 	return mesh;
 }
-*/
+
+
 //Ap 66
 IndexMesh*
 IndexMesh::generateWingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {

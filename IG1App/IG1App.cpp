@@ -73,7 +73,6 @@ IG1App::init()
 {
 	// create an OpenGL Context
 	iniWinOpenGL();
-
 	// create the scene after creating the context
 	// allocate memory and resources
 	mViewPort = new Viewport(mWinW, mWinH);
@@ -419,7 +418,8 @@ IG1App::key(unsigned int key)
 			break;
 		case 'N':
 			//Activa las normales de las entidades ColorMaterialEntity de la escena actual
-			mScenes[mCurrentScene]->setNormals();
+			//mScenes[mCurrentScene]->setNormals();
+			ColorMaterialEntity::toggleShowNormals();
 			break;
 
 		default:
@@ -512,12 +512,16 @@ IG1App::changeScene(size_t sceneNr)
 				FRAME_DURATION = 0.08;
 				break;
 			case 7:
-				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
-				glEnable(GL_DEPTH_TEST);
+				if (!m2Escenas and !m2Vistas) {
+					glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
+					glEnable(GL_DEPTH_TEST);
+				}
 				break;
 			case 8:
-				glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
-				glEnable(GL_DEPTH_TEST);
+				if (!m2Escenas and !m2Vistas) {
+					glClearColor(0.0, 0.0, 0.0, 1.0); // New background color: negro
+					glEnable(GL_DEPTH_TEST);
+				}
 				break;
 			default:
 				glClearColor(0.6, 0.7, 0.8, 1.0); // New background color (alpha=1 -> opaque)
