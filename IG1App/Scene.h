@@ -6,6 +6,7 @@
 
 #include "Camera.h"
 #include "Entity.h"
+#include "Light.h"
 
 #include <vector>
 
@@ -30,6 +31,12 @@ public:
 	void load();
 	void unload();
 
+	void uploadLights(const glm::dmat4& mViewMat) const;
+
+	DirLight *dirLight; 
+	bool lightON = true;
+	Shader *shader = Shader::get("light");
+
 	//void setNormals();
 
 
@@ -40,6 +47,8 @@ protected:
 
 	std::vector<Abs_Entity*> gObjects; // Entities (graphic objects) of the scene
 	std::vector<Texture*> gTextures;
+	std::vector<Light*> gLights;
+
 
 };
 

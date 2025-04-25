@@ -7,6 +7,7 @@
 #include "Mesh.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Material.h"
 
 class Abs_Entity // abstract class
 {
@@ -268,8 +269,19 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 };
 
+class EntityWithMaterial : public Abs_Entity
+{
+public:
+	EntityWithMaterial();
+	void setMaterial(const Material& m) { mMaterial = m; };
+	void render(const glm::mat4& modelViewMat) const override;
 
-class ColorMaterialEntity : public SingleColorEntity
+protected:
+	Material mMaterial;
+
+};
+
+class ColorMaterialEntity : public EntityWithMaterial
 {
 public:
 	ColorMaterialEntity(glm::dvec4 mColor = glm::dvec4(1.0, 1.0, 1.0, 1.0));
@@ -281,8 +293,10 @@ public:
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	void move(glm::vec3 mov_direccion);
 	Texture* mTexture = nullptr;
+	void setColor(glm::dvec4 color) { mColor = color; };
 protected:
 	bool mModulate = false;
+	glm::dvec4 mColor;
 
 
 };
@@ -358,8 +372,8 @@ public:
 	void render(const glm::mat4& modelViewMat) const override;
 };
 
-class NodoFicticio : public CompoundEntity {
-
+class NodoFicticio : public CompoundEntity 
+{
 public:
 	NodoFicticio();
 	void render(const glm::mat4& modelViewMat) const override;
@@ -372,6 +386,8 @@ class Granjero : public CompoundEntity
 public:
 	Granjero();
 };
+
+
 
 
 #endif //_H_Entities_H_

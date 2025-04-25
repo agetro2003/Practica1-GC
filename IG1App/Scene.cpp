@@ -39,6 +39,23 @@ Scene0::init()
 	
 	//Cubo Apartado 15
 	//gObjects.push_back(new Cube(250));
+
+//	dirLight->setDirection( glm::vec4(glm::normalize(cam.viewMat() * glm::vec4(-1.0, -1.0, -1.0, 0.0))))
+	gLights.push_back(dirLight);
+
+	//ap71
+	Sphere* tatooine = new Sphere(110, 100, 200);
+	tatooine->setColor(glm::dvec4(1.0, 233.0 / 255.0, 0.0, 1.0));
+	tatooine->move(glm::vec3(200.0f, 0.0f, 0.0f));
+	gObjects.push_back(tatooine);
+
+	Sphere* tatooine2 = new Sphere(110, 100, 200);
+	Material oro =  Material();
+	oro.setGold();
+	tatooine2->setMaterial(oro);
+	tatooine2->move(glm::vec3(0.0f, 0.0f, 200.0f));
+	gObjects.push_back(tatooine2);
+
 	
 }
 
@@ -312,6 +329,10 @@ Scene::unload()
 {
 	for (Abs_Entity* obj : gObjects)
 		obj->unload();
+
+	shader->use();
+	for (Light* l : gLights)
+		l->disable(*shader);
 }
 
 void
@@ -335,10 +356,26 @@ void
 Scene::render(Camera const& cam) const
 {
 	cam.upload();
+	uploadLights(cam.viewMat());
 
 	for (Abs_Entity* el : gObjects)
-		el->render(cam.viewMat());
+		el->render(cam.viewMat());	
+	
 }
+
+//Apartado 73
+void 
+Scene::uploadLights(const glm::dmat4 & mViewMat) const
+{
+	Shader* shader2 = Shader::get("light");
+	shader2->use();
+	for (Light* l : gLights){
+		l->upload(*shader2, mViewMat);
+		//lightON ? l->enable(*shader) : l->disable(*shader);
+	}
+}
+
+
 
 void 
 Scene::update()

@@ -1365,3 +1365,15 @@ Granjero::Granjero() {
 	boca->move(glm::vec3(0.0f, 0.0f, 100.0f));
 	addEntity(boca);
 }
+
+EntityWithMaterial :: EntityWithMaterial() {
+	mShader = Shader::get("light");
+}
+void
+EntityWithMaterial ::render(const mat4& modelViewMat) const
+{
+	mShader->use();
+	mMaterial.upload(*mShader);
+	upload(modelViewMat * mModelMat);
+	mMesh->render();
+}
