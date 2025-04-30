@@ -422,7 +422,7 @@ IG1App::key(unsigned int key)
 			ColorMaterialEntity::toggleShowNormals();
 			break;
 		case 'r':
-			mScenes[mCurrentScene]->lightON = !mScenes[mCurrentScene]->lightON;
+			mScenes[mCurrentScene]->dirLight->setEnabled(!mScenes[mCurrentScene]->dirLight->enabled());
 		default:
 			if (key >= '0' && key <= '9' && !changeScene(key - '0'))
 				cout << "[NOTE] There is no scene " << char(key) << ".\n";

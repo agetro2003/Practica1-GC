@@ -39,8 +39,12 @@ Scene0::init()
 	
 	//Cubo Apartado 15
 	//gObjects.push_back(new Cube(250));
-
-//	dirLight->setDirection( glm::vec4(glm::normalize(cam.viewMat() * glm::vec4(-1.0, -1.0, -1.0, 0.0))))
+	
+	//apartado 74
+	dirLight->setAmb(glm::vec3(.25, .25, .25));
+	dirLight->setDiff(glm::vec3(.6, .6, .6));
+	dirLight->setSpec(glm::vec3(0, 0.2, 0));
+	//dirLight->setDirection(glm::vec4(glm::normalize(cam.viewMat() * glm::vec4(-1.0, -1.0, -1.0, 0.0))));
 	gLights.push_back(dirLight);
 
 	//ap71
@@ -332,7 +336,7 @@ Scene::unload()
 
 	shader->use();
 	for (Light* l : gLights)
-		l->disable(*shader);
+		l->setEnabled(false);
 }
 
 void

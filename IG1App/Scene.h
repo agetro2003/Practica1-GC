@@ -33,7 +33,7 @@ public:
 
 	void uploadLights(const glm::dmat4& mViewMat) const;
 
-	DirLight *dirLight; 
+	DirLight *dirLight = new DirLight(); 
 	bool lightON = true;
 	Shader *shader = Shader::get("light");
 
