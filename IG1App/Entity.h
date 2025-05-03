@@ -284,7 +284,7 @@ protected:
 class ColorMaterialEntity : public EntityWithMaterial
 {
 public:
-	ColorMaterialEntity(glm::dvec4 mColor = glm::dvec4(1.0, 1.0, 1.0, 1.0));
+	ColorMaterialEntity(glm::vec3 mColor = glm::vec3(1.0, 1.0, 1.0));
 	~ColorMaterialEntity();
 	void render(const glm::mat4& modelViewMat) const override;
 	static bool mShowNormals;
@@ -293,10 +293,10 @@ public:
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	void move(glm::vec3 mov_direccion);
 	Texture* mTexture = nullptr;
-	void setColor(glm::dvec4 color) { mColor = color; };
+	void setColor(glm::vec3 color);
 protected:
 	bool mModulate = false;
-	glm::dvec4 mColor;
+	glm::vec3 mColor;
 
 
 };

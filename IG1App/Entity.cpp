@@ -1015,10 +1015,26 @@ Grass::render(const glm::mat4& modelViewMat) const {
 	}
 }
 
-// Apartado 58
-ColorMaterialEntity::ColorMaterialEntity(glm::dvec4 mColor)
+EntityWithMaterial::EntityWithMaterial() {
+	mShader = Shader::get("light");
+}
+void
+EntityWithMaterial::render(const mat4& modelViewMat) const
 {
-	mShader = Shader::get("simple_light");
+	mShader->use();
+	mMaterial.upload(*mShader);
+	upload(modelViewMat * mModelMat);
+	mMesh->render();
+}
+
+
+// Apartado 58
+ColorMaterialEntity::ColorMaterialEntity(glm::vec3 mColor)
+{
+	mShader = Shader::get("light");
+	mColor = mColor;
+	mMaterial = Material(mColor);
+
 }
 
 ColorMaterialEntity::~ColorMaterialEntity() {
@@ -1040,11 +1056,12 @@ void
 ColorMaterialEntity::render(const glm::mat4& modelViewMat) const
 {
 	if (mMesh != nullptr) {
-		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 		mShader->use();
+		mMaterial.upload(*mShader);
+		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 		upload(aMat);
 
-		mShader->setUniform("color", glm::vec4(mColor));
+	//	mShader->setUniform("color", glm::vec4(mColor));
 		mMesh->render();
 		if (mShowNormals) {
 			Shader* mNormalShader = Shader::get("normals");
@@ -1070,7 +1087,12 @@ ColorMaterialEntity::move(glm::vec3 mov_direccion) {
 	glm::mat4 translateMat = glm::translate(glm::mat4(1.0), mov_direccion);
 	mModelMat = translateMat * mModelMat;
 }
-
+void 
+ColorMaterialEntity::setColor(glm::vec3 color) {
+	mColor = color;
+	mMaterial = Material(color);
+	
+}
 
 // Apartado 56
 Torus::Torus(GLdouble R, GLdouble r, GLuint nPoints, GLuint nSamples)
@@ -1366,14 +1388,3 @@ Granjero::Granjero() {
 	addEntity(boca);
 }
 
-EntityWithMaterial :: EntityWithMaterial() {
-	mShader = Shader::get("light");
-}
-void
-EntityWithMaterial ::render(const mat4& modelViewMat) const
-{
-	mShader->use();
-	mMaterial.upload(*mShader);
-	upload(modelViewMat * mModelMat);
-	mMesh->render();
-}

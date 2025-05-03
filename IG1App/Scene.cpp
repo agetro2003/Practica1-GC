@@ -6,12 +6,24 @@
 
 using namespace glm;
 
-
+void 
+Scene::init()
+{
+	setGL(); // OpenGL settings
+	//apartado 74
+	dirLight->setAmb(glm::vec4(.25, .25, .25, 1));
+	dirLight->setDiff(glm::vec4(.6, .6, .6, 1));
+	dirLight->setSpec(glm::vec4(0, 0.2, 0, 1));
+	dirLight->setEnabled(true);
+	dirLight->setDirection(glm::vec4(-1.0, -1.0, -1.0, 0.0));
+	//dirLight->setDirection(glm::vec4(glm::normalize(cam.viewMat() * glm::vec4(-1.0, -1.0, -1.0, 0.0))));
+	gLights.push_back(dirLight);
+}
 
 void
 Scene0::init()
 {
-	setGL(); // OpenGL settings
+	Scene::init();
 
 	// allocate memory and load resources
 	// Lights
@@ -40,12 +52,7 @@ Scene0::init()
 	//Cubo Apartado 15
 	//gObjects.push_back(new Cube(250));
 	
-	//apartado 74
-	dirLight->setAmb(glm::vec3(.25, .25, .25));
-	dirLight->setDiff(glm::vec3(.6, .6, .6));
-	dirLight->setSpec(glm::vec3(0, 0.2, 0));
-	//dirLight->setDirection(glm::vec4(glm::normalize(cam.viewMat() * glm::vec4(-1.0, -1.0, -1.0, 0.0))));
-	gLights.push_back(dirLight);
+
 
 	//ap71
 	Sphere* tatooine = new Sphere(110, 100, 200);
@@ -66,8 +73,7 @@ Scene0::init()
 void
 Scene1::init()
 {
-	setGL();
-	gObjects.push_back(new RGBAxes(400.0));
+	Scene::init();	gObjects.push_back(new RGBAxes(400.0));
 	//Triangulo cian
 	gObjects.push_back(new RegularPolygon(3, 200.0, glm::dvec4(0.0, 1.0, 1.0, 1.0)));
 	//Circunferencia magenta
@@ -78,7 +84,7 @@ Scene1::init()
 void
 Scene2::init()
 {
-	setGL();
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 	//apartado 10 
 	// declarar triangulo en una variable
@@ -94,7 +100,7 @@ Scene2::init()
 void
 Scene3::init()
 {
-	setGL();
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 	//cubo del apartado 15
 	//gObjects.push_back(new Cube(250));
@@ -110,7 +116,7 @@ Scene3::init()
 void
 Scene4::init()
 {
-	setGL(); // OpenGL settings
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	//Ground* ground = new Ground(300.0);  //Ap20
@@ -168,7 +174,7 @@ Scene4::init()
 void
 Scene5::init()
 {
-	setGL(); // OpenGL settings
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	Torus* torus = new Torus(100, 50);
@@ -179,7 +185,7 @@ Scene5::init()
 void
 Scene6::init()
 {
-	setGL(); // OpenGL settings
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	IndexedBox* box = new IndexedBox(200);
@@ -191,8 +197,7 @@ Scene6::init()
 void
 Scene7::init()
 {
-	setGL(); // OpenGL settings
-	
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	
@@ -219,8 +224,7 @@ Scene7::init()
 void
 Scene8::init()
 {
-	setGL(); // OpenGL settings
-
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	//Ap 67
@@ -280,8 +284,7 @@ Scene8::handleKey(unsigned int key) {
 void
 Scene9::init()
 {
-	setGL(); // OpenGL settings
-
+	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
 	Granjero* granjero = new Granjero();
@@ -336,7 +339,7 @@ Scene::unload()
 
 	shader->use();
 	for (Light* l : gLights)
-		l->setEnabled(false);
+		l->unload(*shader);
 }
 
 void
@@ -371,11 +374,11 @@ Scene::render(Camera const& cam) const
 void 
 Scene::uploadLights(const glm::dmat4 & mViewMat) const
 {
-	Shader* shader2 = Shader::get("light");
-	shader2->use();
+	//Shader* shader2 = Shader::get("light");
+///	shader2->use();
+	shader->use();
 	for (Light* l : gLights){
-		l->upload(*shader2, mViewMat);
-		//lightON ? l->enable(*shader) : l->disable(*shader);
+		l->upload(*shader, mViewMat);
 	}
 }
 
@@ -386,27 +389,10 @@ Scene::update()
 {
 	//update gObjects
 	for (Abs_Entity* el : gObjects) {
-		/*printf(typeid(el).name());
-		printf("\n");
-		if (typeid(el) == typeid(NodoFicticio)) {
-			
-		}
-		el->orbit_flag = orbit_flag_sc8;*/
+	
 		el->update();
 	}
 }
-/*
-void
-Scene::setNormals()
-{
-	for (Abs_Entity* el : gObjects) {
-		auto* objWithNormals = dynamic_cast<ColorMaterialEntity*>(el);
-		if (objWithNormals) {
-			objWithNormals->toggleShowNormals();	
-		}
-	}
-}
-*/
 
 bool 
 Scene::handleKey(unsigned int key) {
