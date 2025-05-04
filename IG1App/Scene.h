@@ -131,6 +131,8 @@ public:
 	~Scene8() = default;
 	void init() override;
 	bool handleKey(unsigned int key) override;
+	PosLight *posLight = new PosLight();
+	SpotLight* spotLight = new SpotLight();
 };
 
 //scene9

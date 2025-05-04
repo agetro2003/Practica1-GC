@@ -227,6 +227,22 @@ Scene8::init()
 	Scene::init();
 	gObjects.push_back(new RGBAxes(400.0));
 
+	//apartado 75
+	posLight->setAmb(glm::vec4(.25, .25, .25, 1));
+	posLight->setDiff(glm::vec4(1.0, 1.0, 1.0, 1));
+	posLight->setSpec(glm::vec4(0, 0.2, 0, 1));
+	posLight->setEnabled(true);
+	posLight->setPosition(glm::vec3(0.0, 0.0, 1500.0));
+	gLights.push_back(posLight);
+
+	//apartado 76
+	spotLight->setAmb(glm::vec4(.25, .25, .25, 1));
+	spotLight->setDiff(glm::vec4(.6, .6, .6, 1));
+	dirLight->setSpec(glm::vec4(0, 0.2, 0, 1));
+	spotLight->setEnabled(true);
+	spotLight->setPosition(glm::vec3(750.0, 0.0, 0.0));
+	gLights.push_back(spotLight);
+
 	//Ap 67
 	Sphere* tatooine = new Sphere(200, 100, 200);
 	tatooine->setColor(glm::dvec4(1.0, 233.0/255.0, 0.0, 1.0));
@@ -259,11 +275,41 @@ Scene8::handleKey(unsigned int key) {
 
 	// print key
 	printf("key: %c\n", key);
+	switch (key) {
+		case 'f':
+			for (Abs_Entity* el : gObjects) {
+				NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
+				if (node)
+					node->rotate();
+			}
+			//gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
+			return true;
+			break;
+		case 'g':
+			for (Abs_Entity* el : gObjects) {
+				NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
+				if (node)
+					node->orbit();
+
+			}
+			return true;
+			break;
+		case 't':
+			posLight->setEnabled(!posLight->enabled());
+			break;
+		case 'y':
+			spotLight->setEnabled(!spotLight->enabled());
+			break;
+		default:
+			return false;
+			break;
+	}
+	/*
 	if (key == 'f') {
 		for (Abs_Entity* el : gObjects) {
 			NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
 			if (node)
-			node->rotate();
+				node->rotate();
 		}
 		//gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
 		return true;
@@ -278,6 +324,7 @@ Scene8::handleKey(unsigned int key) {
 		return true;
 	}
 	return false;
+	*/
 
 }
 //Apartado 69 -> Granjero
