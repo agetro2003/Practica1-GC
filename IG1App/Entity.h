@@ -8,7 +8,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "Material.h"
-
+#include "Light.h"
 class Abs_Entity // abstract class
 {
 public:
@@ -351,6 +351,7 @@ public:
 	void update() override;
 	void scale(glm::vec3 scale_vec);
 	void rotate(GLfloat angulo, glm::vec3 eje);
+	std::vector<Abs_Entity*> getEntities() { return gObjects; };
 
 protected:
 	std::vector<Abs_Entity*> gObjects;
@@ -363,6 +364,9 @@ class AdvancedTIE : public CompoundEntity
 {
 public:
 	AdvancedTIE();
+	void render(const glm::mat4& modelViewMat) const override;
+	SpotLight* foco = new SpotLight({ 0, 0, 0 }, 1);
+	void changeFoco();
 };
 
 class WingAdvancedTIE : public ColorMaterialEntity

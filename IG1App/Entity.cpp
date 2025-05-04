@@ -1263,7 +1263,15 @@ NodoFicticio::rotate() {
 
 //Apartado 66
 AdvancedTIE::AdvancedTIE(){
-
+	mShader = Shader::get("light");
+	foco->setAmb(glm::vec4(.25, .25, .25, 1));
+	foco->setDiff(glm::vec4(.7, .7, .7, 1));
+	foco->setSpec(glm::vec4(0, 0.2, 0, 1));
+	foco->setEnabled(true);
+	foco->setPosition(glm::vec4(0, 0, 0, 1));
+	foco->setDirection(glm::vec3(0, -1, 0));
+	//foco->setCutoff(10, 60);
+	
 	glm::dvec4 color = glm::dvec4(0.0, 65.0/255.0, 106.0/255.0, 1.0);
 	Sphere* core = new Sphere(100, 180, 180);
 	core->setColor(color);
@@ -1299,6 +1307,21 @@ AdvancedTIE::AdvancedTIE(){
 	ala_der->move(glm::vec3(75.0f, 0.0f, 0.0f));
 	addEntity(ala_der);
 
+}
+void
+AdvancedTIE::render(const glm::mat4& modelViewMat) const {
+	mShader->use();
+	foco->upload(*mShader, modelViewMat * mModelMat);
+	
+		for (Abs_Entity* obj : gObjects) {
+			obj->render(modelViewMat * mModelMat);
+		}
+
+}
+
+void
+AdvancedTIE::changeFoco() {
+	foco->setEnabled(!foco->enabled());
 }
 
 WingAdvancedTIE::WingAdvancedTIE(GLdouble x, GLdouble y, GLdouble z) {

@@ -238,15 +238,13 @@ Scene8::init()
 	//apartado 76
 	spotLight->setAmb(glm::vec4(.25, .25, .25, 1));
 	spotLight->setDiff(glm::vec4(.6, .6, .6, 1));
-	dirLight->setSpec(glm::vec4(0, 0.2, 0, 1));
+	spotLight->setSpec(glm::vec4(0, 0.2, 0, 1));
 	spotLight->setEnabled(true);
-	spotLight->setPosition(glm::vec3(750.0, 0.0, 0.0));
+	spotLight->setPosition(glm::vec3(500.0, 0.0, 0.0));
 	gLights.push_back(spotLight);
 
-	//Ap 67
-	Sphere* tatooine = new Sphere(200, 100, 200);
-	tatooine->setColor(glm::dvec4(1.0, 233.0/255.0, 0.0, 1.0));
-	gObjects.push_back(tatooine);
+	
+
 
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
@@ -257,8 +255,14 @@ Scene8::init()
 	//Ap 68
 	NodoFicticio* inventedNode = new NodoFicticio();
 	inventedNode->addEntity(adv_tie);
-	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
+	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 250.0f, 0.0f)));
 	gObjects.push_back(inventedNode);
+
+	//Ap 67
+	Sphere* tatooine = new Sphere(200, 100, 200);
+	tatooine->setColor(glm::dvec4(1.0, 233.0 / 255.0, 0.0, 1.0));
+	gObjects.push_back(tatooine);
+
 
 	/*
 	NodoFicticio* inventedNode2 = new NodoFicticio();
@@ -299,6 +303,17 @@ Scene8::handleKey(unsigned int key) {
 			break;
 		case 'y':
 			spotLight->setEnabled(!spotLight->enabled());
+			break;
+		case 'h':
+			for (Abs_Entity* el : gObjects) {
+				NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
+				if (node)
+					for (Abs_Entity* el2 : node->getEntities()) {
+						AdvancedTIE* adv_tie = dynamic_cast<AdvancedTIE*>(el2);
+						if (adv_tie)
+							adv_tie->changeFoco();
+					}
+			}
 			break;
 		default:
 			return false;
