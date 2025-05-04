@@ -32,28 +32,6 @@ Abs_Entity::unload()
 	mMesh->unload();
 }
 
-/*
-Mesh*
-Abs_Entity::getMesh() {
-	return mMesh;
-}
-
-glm::mat4 
-Abs_Entity::getModelMat() {
-	return mModelMat;
-}
-
-Shader*
-Abs_Entity::getShader() {
-	return mShader;
-}
-
-void
-Abs_Entity::backdoorUpload(const glm::mat4& mModelViewMat) {
-	upload(mModelViewMat);
-}
-*/
-
 EntityWithColors::EntityWithColors()
 {
 	mShader = Shader::get("vcolors");
@@ -157,8 +135,7 @@ void RGBTriangle::orbit()
 //render the RGBTriangle
 void RGBTriangle::render(const glm::mat4& modelViewMat) const
 {
-	
-	
+
 		if (mMesh != nullptr) {
 		mat4 aMat = modelViewMat * mModelMat; // glm matrix multiplication
 		mShader->use();
@@ -171,8 +148,6 @@ void RGBTriangle::render(const glm::mat4& modelViewMat) const
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		mMesh->render();
 		glDisable(GL_CULL_FACE);
-
-
 
 	}
 }
@@ -1270,6 +1245,7 @@ AdvancedTIE::AdvancedTIE(){
 	foco->setEnabled(true);
 	foco->setPosition(glm::vec4(0, 0, 0, 1));
 	foco->setDirection(glm::vec3(0, -1, 0));
+	foco->setCutoff(45, 50);
 	//foco->setCutoff(10, 60);
 	
 	glm::dvec4 color = glm::dvec4(0.0, 65.0/255.0, 106.0/255.0, 1.0);
@@ -1282,18 +1258,24 @@ AdvancedTIE::AdvancedTIE(){
 	eje->rotate(glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	addEntity(eje);
 
+	CompoundEntity* morroCompuesto = new CompoundEntity();
+
 	Cone* morro = new Cone(150, 5, 5, 20, 20);
 	morro->setColor(color);
 	morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	morro->move(glm::vec3(0.0f, 0.0f, 60.0f));
-	addEntity(morro);
+	//addEntity(morro);
+	morroCompuesto->addEntity(morro);
 
 	Disk* tapa_morro = new Disk(24.75, 0, 20, 360);
 	tapa_morro->setColor(color);
 	tapa_morro->rotate(glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	tapa_morro->rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	tapa_morro->move(glm::vec3(0.0f, 0.0f, 135.0f));
-	addEntity(tapa_morro);
+	//addEntity(tapa_morro);
+	morroCompuesto->addEntity(tapa_morro);
+
+	addEntity(morroCompuesto);
 
 	WingAdvancedTIE* ala_izq = new WingAdvancedTIE(100, 120, 100);
 	//ala_izq->setColor(glm::dvec4(0.0, 65.0, 106.0, 1.0));

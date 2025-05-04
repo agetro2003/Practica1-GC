@@ -53,7 +53,6 @@ Scene0::init()
 	//gObjects.push_back(new Cube(250));
 	
 
-
 	//ap71
 	Sphere* tatooine = new Sphere(110, 100, 200);
 	tatooine->setColor(glm::dvec4(1.0, 233.0 / 255.0, 0.0, 1.0));
@@ -157,16 +156,6 @@ Scene4::init()
 	//Ap32, caja sin tapas con textura translúcida
 	//GlassParapet* glass = new GlassParapet(250.0);
 	GlassParapet* glass = new GlassParapet(420.0, 105.0);
-	/*
-	glass->mTexture = new Texture(); 
-	glass->mTexture->load("../assets/images/windowV.jpg", 100);
-	gTextures.push_back(glass->mTexture);
-
-	Texture* mTexture_glass = new Texture();
-	mTexture_glass->load("../assets/images/windowV.jpg", 100);
-	glass->mTexture = mTexture_glass;
-	gTextures.push_back(mTexture_glass);
-	*/
 	gObjects.push_back(glass);
 
 }
@@ -232,7 +221,7 @@ Scene8::init()
 	posLight->setDiff(glm::vec4(1.0, 1.0, 1.0, 1));
 	posLight->setSpec(glm::vec4(0, 0.2, 0, 1));
 	posLight->setEnabled(true);
-	posLight->setPosition(glm::vec3(0.0, 0.0, 1500.0));
+	posLight->setPosition(glm::vec3(1500.0, 0.0, 0.0));
 	gLights.push_back(posLight);
 
 	//apartado 76
@@ -240,11 +229,9 @@ Scene8::init()
 	spotLight->setDiff(glm::vec4(.6, .6, .6, 1));
 	spotLight->setSpec(glm::vec4(0, 0.2, 0, 1));
 	spotLight->setEnabled(true);
-	spotLight->setPosition(glm::vec3(500.0, 0.0, 0.0));
+	spotLight->setPosition(glm::vec3(0.0, 0.0, 500.0));
+	spotLight->setCutoff(10, 12);
 	gLights.push_back(spotLight);
-
-	
-
 
 	AdvancedTIE* adv_tie = new AdvancedTIE();
 	adv_tie->scale(glm::vec3(0.25f, 0.25f, 0.25f));
@@ -262,23 +249,12 @@ Scene8::init()
 	Sphere* tatooine = new Sphere(200, 100, 200);
 	tatooine->setColor(glm::dvec4(1.0, 233.0 / 255.0, 0.0, 1.0));
 	gObjects.push_back(tatooine);
-
-
-	/*
-	NodoFicticio* inventedNode2 = new NodoFicticio();
-	inventedNode->addEntity(inventedNode2);
-	inventedNode2->setModelMat(glm::translate(inventedNode->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
-	inventedNode2->addEntity(adv_tie);
-	adv_tie->setModelMat(glm::translate(adv_tie->modelMat(), glm::vec3(0.0f, 225.0f, 0.0f)));
-	gObjects.push_back(inventedNode);
-	*/
 }
 
 bool 
 Scene8::handleKey(unsigned int key) {
 
-	// print key
-	printf("key: %c\n", key);
+	//printf("key: %c\n", key);
 	switch (key) {
 		case 'f':
 			for (Abs_Entity* el : gObjects) {
@@ -319,29 +295,8 @@ Scene8::handleKey(unsigned int key) {
 			return false;
 			break;
 	}
-	/*
-	if (key == 'f') {
-		for (Abs_Entity* el : gObjects) {
-			NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
-			if (node)
-				node->rotate();
-		}
-		//gObjects[2]->setModelMat(glm::rotate(gObjects[2]->modelMat(), glm::radians(3.0f), glm::vec3(0, 0, 1)));
-		return true;
-	}
-	else if (key == 'g') {
-		for (Abs_Entity* el : gObjects) {
-			NodoFicticio* node = dynamic_cast<NodoFicticio*>(el);
-			if (node)
-			node->orbit();
-
-		} 
-		return true;
-	}
-	return false;
-	*/
-
 }
+
 //Apartado 69 -> Granjero
 void
 Scene9::init()

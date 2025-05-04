@@ -35,14 +35,6 @@ public:
 	
 	//int orbit_flag = 0;
 
-	/*
-	Mesh* getMesh();
-    glm::mat4 getModelMat();
-	Shader* getShader();
-
-	void backdoorUpload(const glm::mat4& mModelViewMat);
-	*/
-
 protected:
 	
 	Mesh* mMesh = nullptr; // the mesh
@@ -352,6 +344,7 @@ public:
 	void scale(glm::vec3 scale_vec);
 	void rotate(GLfloat angulo, glm::vec3 eje);
 	std::vector<Abs_Entity*> getEntities() { return gObjects; };
+
 
 protected:
 	std::vector<Abs_Entity*> gObjects;

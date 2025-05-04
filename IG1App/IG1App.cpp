@@ -89,6 +89,12 @@ IG1App::init()
 	mScenes.push_back(new Scene9);
 
 	mCamera->set2D();
+	for (int i = 0; i <= 9; i++) {
+		mScenes[i]->init();
+	}
+	mScenes[0]->load();
+	
+	/*
 	mScenes[0]->init();
 	mScenes[0]->load();
 	mScenes[1]->init();
@@ -100,6 +106,7 @@ IG1App::init()
 	mScenes[7]->init();
 	mScenes[8]->init();
 	mScenes[9]->init();
+	*/
 
 	//se deben tener en mCameras tantas como el tamaño de mScenes +1
 	for (int i = 0; i < mScenes.size() + 1; i++) {
