@@ -1290,6 +1290,13 @@ AdvancedTIE::AdvancedTIE(){
 	addEntity(ala_der);
 
 }
+
+AdvancedTIE::~AdvancedTIE() {
+	delete foco;
+	foco = nullptr;
+
+}
+
 void
 AdvancedTIE::render(const glm::mat4& modelViewMat) const {
 	mShader->use();

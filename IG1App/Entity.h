@@ -357,6 +357,7 @@ class AdvancedTIE : public CompoundEntity
 {
 public:
 	AdvancedTIE();
+	~AdvancedTIE();
 	void render(const glm::mat4& modelViewMat) const override;
 	SpotLight* foco = new SpotLight({ 0, 0, 0 }, 1);
 	void changeFoco();

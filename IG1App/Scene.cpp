@@ -331,7 +331,11 @@ Scene::destroy()
 		}*/
 		delete el;
 	}
+
+	for (Light* el : gLights)
+		delete el;
 		
+
 
 	gObjects.clear();
 
